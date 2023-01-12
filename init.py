@@ -178,10 +178,9 @@ def update_offline_event(id):
         event = offline_events_dict.get(id)
         event.set_name(update_offline_event_form.name.data)
         event.set_description(update_offline_event_form.description.data)
-        event.set_expiry_date(update_offline_event_form.date.data)
-        event.set_expiry_date(update_offline_event_form.date.data)
-        event.set_expiry_date(update_offline_event_form.date.data)
-
+        event.set_date(update_offline_event_form.date.data)
+        event.set_pax(update_offline_event_form.pax.data)
+        event.set_location(update_offline_event_form.location.data)
 
         db['Offline_Events'] = offline_events_dict
         db.close()
