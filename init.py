@@ -105,6 +105,19 @@ def view_online_event():
 
     return render_template('viewevent.html', count=len(online_event_list), online_event_list=online_event_list)
 
+@app.route('/viewofflineEvent')
+def view_offline_event():
+    offline_events_dict = {}
+    db = shelve.open('event.db', 'r')
+    offline_events_dict = db['Events']
+    db.close()
+
+    offline_event_list = []
+    for key in offline_events_dict:
+        event = offline_events_dict.get(key)
+        offline_event_list.append(event)
+
+    return render_template('viewevent.html', count=len(offline_event_list), offline_event_list=offline_event_list)
 
 @app.route('/viewuser')
 def view_user():
