@@ -1,10 +1,11 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, validators, DateField , IntegerField, EmailField
+from wtforms import Form, StringField, SelectField, TextAreaField, validators, DateField , IntegerField, EmailField, FileField
 
 
 class CreateOnlineEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
+    image = FileField('Image', validators=[validators.DataRequired()])
 
 
 class CreateOfflineEventForm(Form):
