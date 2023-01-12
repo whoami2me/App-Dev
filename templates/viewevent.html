@@ -29,10 +29,10 @@
 <button type="button" class="btn-close" data-dismiss="alert"></button>
 {{ session.pop('online_event_created', None) }} was created.
 </div>
-{% elif 'event_updated' in session %}
+{% elif 'update_online_event_form' in session %}
 <div class="alert alert-warning alert-dismissible">
 <button type="button" class="btn-close" data-dismiss="alert"></button>
-{{ session.pop('event_updated', None) }} was updated.
+{{ session.pop('online_event_updated', None) }} was updated.
 </div>
 {% elif 'event_deleted' in session %}
 <div class="alert alert-danger alert-dismissible">

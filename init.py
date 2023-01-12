@@ -113,7 +113,7 @@ def update_event(id):
         db['Events'] = online_events_dict
         db.close()
 
-        session['event_updated'] = event.get_name()
+        session['online_event_updated'] = event.get_name()
 
         return redirect(url_for('view_online_event'))
 
