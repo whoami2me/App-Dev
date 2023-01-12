@@ -41,6 +41,29 @@ def create_event():
         return redirect(url_for('view_online_event'))
     return render_template('createevent.html', form=create_online_event_form)
 
+@app.route('/createOfflineEvent', methods=['GET', 'POST'])
+def create_event():
+    create_offline_event_form = CreateOfflineEventForm(request.form)
+    if request.method == 'POST' and create_offline_event_form.validate():
+
+        offline_events_dict = {}
+        db = shelve.open('event.db', 'c')
+        try:
+            offline_events_dict = db['Events']
+        except:
+            print("Error in retrieving Events from event.db.")
+
+        offline_event = OfflineEvents.OfflineEvents(create_offline_event_form.name.data, create_offline_event_form.description.data, create_offline_event_form.date.data)
+        offline_events_dict[offline_event.get_event_id()] = offline_event
+        db['Events'] = offline_events_dict
+
+        db.close()
+
+        session['offline_event_created'] = offline_event.get_name()
+
+        return redirect(url_for('view_offline_event'))
+    return render_template('createevent.html', form=create_offline_event_form)
+
 
 @app.route('/createuser', methods=['GET', 'POST'])
 def create_user():
