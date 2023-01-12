@@ -6,10 +6,13 @@ class CreateOnlineEventForm(Form):
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
 
+
 class CreateOfflineEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
+    pax = IntegerField('Pax', [validators.NumberRange(min=0, max=200), validators.DataRequired()])
+
 
 class CreateUserForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
