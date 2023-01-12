@@ -13,7 +13,7 @@ main{
 }
 
 
-.banner{
+.bannerevent{
     height: 65vh;
 	background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),url('img/cr7.jpg');
 	background-position: top;
@@ -22,7 +22,7 @@ main{
 	margin-bottom: 20px;
 }
 
-.banner h1{
+.bannerevent h1{
     padding-top: 100px;
 	font-size: 6.3em;
 	font-weight: 650;
@@ -31,7 +31,7 @@ main{
 }
 
 
-.banner a{
+.bannerevent a{
     margin: 20px 5px 10px 22px;
 	color: #fff;
 	background: #EA6A47 ;
@@ -40,11 +40,11 @@ main{
 	font-weight: 500;
 }
 
-.banner a:hover{
+.bannerevent a:hover{
 	opacity: 0.7;
 }
 
-.banner2{
+.banner2event{
     height: 65vh;
 	background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),url('img/leo-arg.jpg');
 	background-position: top;
@@ -53,7 +53,7 @@ main{
 	margin-bottom: 20px;
 }
 
-.banner2 h1{
+.banner2event h1{
     padding-top: 100px;
 	font-size: 6.3em;
 	font-weight: 650;
@@ -62,7 +62,7 @@ main{
 }
 
 
-.banner2 a{
+.banner2event a{
     margin: 20px 5px 10px 110px;
 	color: #fff;
 	background: #EA6A47;
@@ -71,8 +71,39 @@ main{
 	font-weight: 500;
 }
 
-.banner2 a:hover{
+.banner2event a:hover{
 	opacity: 0.7;
+}
+
+.bannerproduct{
+height: 65vh;
+background-image: linear-gradient(black, white);
+background-position: top;
+background-size:cover;
+background-repeat: no-repeat;
+margin-bottom: 20px;
+}
+
+.bannerproduct h1{
+  padding-top: 100px;
+font-size: 6.3em;
+font-weight: 650;
+color: #fff;
+letter-spacing: 2px;
+}
+
+
+.bannerproduct a{
+  margin: 20px 5px 10px 22px;
+color: #fff;
+background: #EA6A47 ;
+padding:10px 10px;
+font-size: 1.3em;
+font-weight: 500;
+}
+
+.bannerproduct a:hover{
+opacity: 0.7;
 }
 
 /*  navbar css */
