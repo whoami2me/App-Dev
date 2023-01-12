@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from EventForms import CreateEventForm, CreateUserForm
-import shelve, Events, User
+from EventForms import CreateOnlineEventForm, CreateOfflineEventForm, CreateUserForm
+import shelve, Events, User, OnlineEvents, OfflineEvents
 
 app = Flask(__name__)
 app.secret_key = 'any_random_string'
@@ -18,29 +18,28 @@ def staff():
 def admin():
     return render_template('adminevents.html')
 
-@app.route('/createevent', methods=['GET', 'POST'])
+@app.route('/createOnlineEvent', methods=['GET', 'POST'])
 def create_event():
-    create_event_form = CreateEventForm(request.form)
-    if request.method == 'POST' and create_event_form.validate():
+    create_online_event_form = CreateOnlineEventForm(request.form)
+    if request.method == 'POST' and create_online_event_form.validate():
 
-        events_dict = {}
+        online_events_dict = {}
         db = shelve.open('event.db', 'c')
         try:
-            events_dict = db['Events']
+            online_events_dict = db['Events']
         except:
             print("Error in retrieving Events from event.db.")
 
-        event = Events.Events(create_event_form.name.data, create_event_form.types.data, create_event_form.description.data,
-                              create_event_form.vacancies.data, create_event_form.expiry_date.data)
-        events_dict[event.get_event_id()] = event
-        db['Events'] = events_dict
+        online_event = OnlineEvents.OnlineEvents(create_online_event_form.name.data, create_online_event_form.description.data, create_online_event_form.date.data)
+        online_events_dict[online_event.get_event_id()] = online_event
+        db['Events'] = online_events_dict
 
         db.close()
 
-        session['event_created'] = event.get_name()
+        session['online_event_created'] = online_event.get_name()
 
-        return redirect(url_for('view_event'))
-    return render_template('createevent.html', form=create_event_form)
+        return redirect(url_for('view_online_event'))
+    return render_template('createevent.html', form=create_online_event_form)
 
 
 @app.route('/createuser', methods=['GET', 'POST'])
@@ -68,19 +67,19 @@ def create_user():
         return redirect(url_for('view_user'))
     return render_template('createuser.html', form=create_user_form)
 
-@app.route('/viewevent')
-def view_event():
-    events_dict = {}
+@app.route('/viewOnlineEvent')
+def view_online_event():
+    online_events_dict = {}
     db = shelve.open('event.db', 'r')
-    events_dict = db['Events']
+    online_events_dict = db['Events']
     db.close()
 
-    event_list = []
-    for key in events_dict:
-        event = events_dict.get(key)
-        event_list.append(event)
+    online_event_list = []
+    for key in online_events_dict:
+        event = online_events_dict.get(key)
+        online_event_list.append(event)
 
-    return render_template('viewevent.html', count=len(event_list), event_list=event_list)
+    return render_template('viewevent.html', count=len(online_event_list), online_event_list=online_event_list)
 
 
 @app.route('/viewuser')
@@ -95,46 +94,40 @@ def view_user():
         user = users_dict.get(key)
         user_list.append(user)
 
-
-
     return render_template('viewuser.html', count=len(user_list), user_list=user_list)
 
 
-@app.route('/updateEvent/<int:id>/', methods=['GET', 'POST'])
+@app.route('/updateOnlineEvent/<int:id>/', methods=['GET', 'POST'])
 def update_event(id):
-    update_event_form = CreateEventForm(request.form)
-    if request.method == 'POST' and update_event_form.validate():
-        events_dict = {}
+    update_online_event_form = CreateOnlineEventForm(request.form)
+    if request.method == 'POST' and update_online_event_form.validate():
+        online_events_dict = {}
         db = shelve.open('event.db', 'w')
-        events_dict = db['Events']
+        online_events_dict = db['Events']
 
-        event = events_dict.get(id)
-        event.set_name(update_event_form.name.data)
-        event.set_types(update_event_form.types.data)
-        event.set_description(update_event_form.description.data)
-        event.set_vacancies(update_event_form.vacancies.data)
-        event.set_expiry_date(update_event_form.expiry_date.data)
+        event = online_events_dict.get(id)
+        event.set_name(update_online_event_form.name.data)
+        event.set_description(update_online_event_form.description.data)
+        event.set_expiry_date(update_online_event_form.date.data)
 
-        db['Events'] = events_dict
+        db['Events'] = online_events_dict
         db.close()
 
         session['event_updated'] = event.get_name()
 
-        return redirect(url_for('view_event'))
+        return redirect(url_for('view_online_event'))
 
     else:
-        events_dict = {}
+        online_events_dict = {}
         db = shelve.open('event.db', 'r')
-        events_dict = db['Events']
+        online_events_dict = db['Events']
         db.close()
 
-        event = events_dict.get(id)
-        update_event_form.name.data = event.get_name()
-        update_event_form.types.data = event.get_types()
-        update_event_form.description.data = event.get_description()
-        update_event_form.vacancies.data = event.get_vacancies()
-        update_event_form.expiry_date.data = event.get_expiry_date()
-        return render_template('updateevent.html', form=update_event_form)
+        event = online_events_dict.get(id)
+        update_online_event_form.name.data = event.get_name()
+        update_online_event_form.description.data = event.get_description()
+        update_online_event_form.date.data = event.get_date()
+        return render_template('updateevent.html', form=update_online_event_form)
 
 @app.route('/updateUser/<int:id>/', methods=['GET', 'POST'])
 def update_user(id):
@@ -179,17 +172,17 @@ def update_user(id):
 
 @app.route('/deleteEvent/<int:id>', methods=['POST'])
 def delete_event(id):
-    events_dict = {}
+    online_events_dict = {}
     db = shelve.open('event.db', 'w')
-    events_dict = db['Events']
+    online_events_dict = db['Events']
 
-    event = events_dict.pop(id)
-    db['Events'] = events_dict
+    online_event = online_events_dict.pop(id)
+    db['Events'] = online_events_dict
     db.close()
 
-    session['event_deleted'] = event.get_name()
+    session['event_deleted'] = online_event.get_name()
 
-    return redirect(url_for('view_event'))
+    return redirect(url_for('view_online_event'))
 
 
 @app.route('/deleteUser/<int:id>', methods=['POST'])

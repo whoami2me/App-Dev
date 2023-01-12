@@ -8,7 +8,6 @@ class OnlineEvents(Events.Events):
         OnlineEvents.count += 1
         self.__online_event_id = OnlineEvents.count
 
-
     def get_online_event_id(self):
         return self.__online_event_id
 

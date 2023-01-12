@@ -1,13 +1,15 @@
 from wtforms import Form, StringField, SelectField, TextAreaField, validators, DateField , IntegerField, EmailField
 
 
-class CreateEventForm(Form):
+class CreateOnlineEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    types = SelectField('Type', [validators.DataRequired()], choices=[('', 'Select'), ('Off', 'Offline'), ('On', 'Online')],default='')
     description = TextAreaField('Description', [validators.DataRequired()])
-    vacancies = IntegerField('Vacancies', [validators.NumberRange(min=0, max=200), validators.DataRequired()])
-    expiry_date = DateField('Expiry Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
+    date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
 
+class CreateOfflineEventForm(Form):
+    name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    description = TextAreaField('Description', [validators.DataRequired()])
+    date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
 
 class CreateUserForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])

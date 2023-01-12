@@ -24,10 +24,10 @@
 
 
 {% block content %}
-{% if 'event_created' in session %}
+{% if 'online_event_created' in session %}
 <div class="alert alert-success alert-dismissible">
 <button type="button" class="btn-close" data-dismiss="alert"></button>
-{{ session.pop('event_created', None) }} was created.
+{{ session.pop('online_event_created', None) }} was created.
 </div>
 {% elif 'event_updated' in session %}
 <div class="alert alert-warning alert-dismissible">
@@ -60,28 +60,20 @@
         <tr>
             <th>Event ID</th>
             <th>Event Name</th>
-            <th>Type</th>
             <th>Description</th>
-            <th>vacancies</th>
-            <th>Expiry Date</th>
+            <th>Date</th>
             <th>Update</th>
         </tr>
     </thead>
     <tbody>
 
-    {% for event in event_list %}
+    {% for event in online_event_list %}
     <tr>
     <td>{{ event.get_event_id() }}</td>
     <td>{{ event.get_name() }}</td>
-    {% if event.get_types() == "Off" %}
-    <td>Offline</td>
-    {% elif event.get_types() == "On" %}
-    <td>Online</td>
-    {% endif %}
     <td>{{ event.get_description() }}</td>
-    <td>{{ event.get_vacancies() }}</td>
-    <td>{{ event.get_expiry_date() }}</td>
-    <td><a href="/updateEvent/{{event.get_event_id()}}" class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+    <td>{{ event.get_date() }}</td>
+    <td><a href="/updateEvent/{{event.get_online_event_id}}" class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
   <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg></a></td>
 

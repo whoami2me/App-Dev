@@ -8,7 +8,7 @@ class Events:
         self.__event_id = Events.count_id
         self.__name = name
         self.__description = description
-        self.__expiry_date = date
+        self.__date = date
 
     def set_name(self, name):
         self.__name = name
@@ -17,7 +17,7 @@ class Events:
         self.__description = description
 
     def set_date(self, date):
-        self.__expiry_date = date
+        self.__date = date
 
     def get_name(self):
         return self.__name
