@@ -42,7 +42,7 @@ def create_event():
     return render_template('createevent.html', form=create_online_event_form)
 
 @app.route('/createOfflineEvent', methods=['GET', 'POST'])
-def create_event():
+def create_offline_event():
     create_offline_event_form = CreateOfflineEventForm(request.form)
     if request.method == 'POST' and create_offline_event_form.validate():
 
@@ -53,7 +53,8 @@ def create_event():
         except:
             print("Error in retrieving Events from event.db.")
 
-        offline_event = OfflineEvents.OfflineEvents(create_offline_event_form.name.data, create_offline_event_form.description.data, create_offline_event_form.date.data)
+        offline_event = OfflineEvents.OfflineEvents(create_offline_event_form.name.data, create_offline_event_form.description.data, create_offline_event_form.date.data,
+                                                    create_offline_event_form.pax.data, create_offline_event_form.location.data)
         offline_events_dict[offline_event.get_event_id()] = offline_event
         db['Events'] = offline_events_dict
 
@@ -62,7 +63,7 @@ def create_event():
         session['offline_event_created'] = offline_event.get_name()
 
         return redirect(url_for('view_offline_event'))
-    return render_template('createevent.html', form=create_offline_event_form)
+    return render_template('createOfflineEvent.html', form=create_offline_event_form)
 
 
 @app.route('/createuser', methods=['GET', 'POST'])
