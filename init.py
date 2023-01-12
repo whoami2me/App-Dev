@@ -26,13 +26,13 @@ def create_event():
         online_events_dict = {}
         db = shelve.open('event.db', 'c')
         try:
-            online_events_dict = db['Events']
+            online_events_dict = db['Online_Events']
         except:
-            print("Error in retrieving Events from event.db.")
+            print("Error in retrieving Online Events from event.db.")
 
         online_event = OnlineEvents.OnlineEvents(create_online_event_form.name.data, create_online_event_form.description.data, create_online_event_form.date.data)
         online_events_dict[online_event.get_event_id()] = online_event
-        db['Events'] = online_events_dict
+        db['Online_Events'] = online_events_dict
 
         db.close()
 
@@ -49,14 +49,14 @@ def create_offline_event():
         offline_events_dict = {}
         db = shelve.open('event.db', 'c')
         try:
-            offline_events_dict = db['Events']
+            offline_events_dict = db['Offline_Events']
         except:
             print("Error in retrieving Events from event.db.")
 
         offline_event = OfflineEvents.OfflineEvents(create_offline_event_form.name.data, create_offline_event_form.description.data, create_offline_event_form.date.data,
                                                     create_offline_event_form.pax.data, create_offline_event_form.location.data)
         offline_events_dict[offline_event.get_event_id()] = offline_event
-        db['Events'] = offline_events_dict
+        db['Offline_Events'] = offline_events_dict
 
         db.close()
 
@@ -95,7 +95,7 @@ def create_user():
 def view_online_event():
     online_events_dict = {}
     db = shelve.open('event.db', 'r')
-    online_events_dict = db['Events']
+    online_events_dict = db['Online_Events']
     db.close()
 
     online_event_list = []
@@ -109,7 +109,7 @@ def view_online_event():
 def view_offline_event():
     offline_events_dict = {}
     db = shelve.open('event.db', 'r')
-    offline_events_dict = db['Events']
+    offline_events_dict = db['Offline_Events']
     db.close()
 
     offline_event_list = []
@@ -140,12 +140,12 @@ def update_event(id):
     if request.method == 'POST' and update_online_event_form.validate():
         online_events_dict = {}
         db = shelve.open('event.db', 'w')
-        online_events_dict = db['Events']
+        online_events_dict = db['Online_Events']
 
         event = online_events_dict.get(id)
         event.set_name(update_online_event_form.name.data)
         event.set_description(update_online_event_form.description.data)
-        event.set_expiry_date(update_online_event_form.date.data)
+        event.set_date(update_online_event_form.date.data)
 
         db['Events'] = online_events_dict
         db.close()
@@ -157,7 +157,7 @@ def update_event(id):
     else:
         online_events_dict = {}
         db = shelve.open('event.db', 'r')
-        online_events_dict = db['Events']
+        online_events_dict = db['Online_Events']
         db.close()
 
         event = online_events_dict.get(id)
@@ -165,6 +165,42 @@ def update_event(id):
         update_online_event_form.description.data = event.get_description()
         update_online_event_form.date.data = event.get_date()
         return render_template('updateevent.html', form=update_online_event_form)
+
+
+@app.route('/updateofflineEvent/<int:id>/', methods=['GET', 'POST'])
+def update_offline_event(id):
+    update_offline_event_form = CreateOfflineEventForm(request.form)
+    if request.method == 'POST' and update_offline_event_form.validate():
+        offline_events_dict = {}
+        db = shelve.open('event.db', 'w')
+        offline_events_dict = db['Offline_Events']
+
+        event = offline_events_dict.get(id)
+        event.set_name(update_offline_event_form.name.data)
+        event.set_description(update_offline_event_form.description.data)
+        event.set_expiry_date(update_offline_event_form.date.data)
+        event.set_expiry_date(update_offline_event_form.date.data)
+        event.set_expiry_date(update_offline_event_form.date.data)
+
+
+        db['Offline_Events'] = offline_events_dict
+        db.close()
+
+        session['offline_event_updated'] = event.get_name()
+
+        return redirect(url_for('view_offline_event'))
+
+    else:
+        offline_events_dict = {}
+        db = shelve.open('event.db', 'r')
+        offline_events_dict = db['Offline_Events']
+        db.close()
+
+        event = offline_events_dict.get(id)
+        update_offline_event_form.name.data = event.get_name()
+        update_offline_event_form.description.data = event.get_description()
+        update_offline_event_form.date.data = event.get_date()
+        return render_template('updateevent.html', form=update_offline_event_form)
 
 @app.route('/updateUser/<int:id>/', methods=['GET', 'POST'])
 def update_user(id):
@@ -211,10 +247,10 @@ def update_user(id):
 def delete_event(id):
     online_events_dict = {}
     db = shelve.open('event.db', 'w')
-    online_events_dict = db['Events']
+    online_events_dict = db['Online_Events']
 
     online_event = online_events_dict.pop(id)
-    db['Events'] = online_events_dict
+    db['Online_Events'] = online_events_dict
     db.close()
 
     session['event_deleted'] = online_event.get_name()
