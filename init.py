@@ -117,7 +117,7 @@ def view_offline_event():
         event = offline_events_dict.get(key)
         offline_event_list.append(event)
 
-    return render_template('viewevent.html', count=len(offline_event_list), offline_event_list=offline_event_list)
+    return render_template('viewOfflineEvent.html', count=len(offline_event_list), offline_event_list=offline_event_list)
 
 @app.route('/viewuser')
 def view_user():
