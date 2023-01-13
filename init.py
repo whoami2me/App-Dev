@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from EventForms import CreateOnlineEventForm, CreateOfflineEventForm, CreateUserForm
 import shelve, Events, User, OnlineEvents, OfflineEvents
+import Products
+from ProductForms import CreateProduct
 
 app = Flask(__name__)
 app.secret_key = 'any_random_string'
@@ -22,6 +24,11 @@ def staff():
 @app.route('/adminevents')
 def admin():
     return render_template('adminevents.html')
+
+
+@app.route('/adminproducts')
+def product():
+    return render_template('adminproducts.html')
 
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
@@ -280,7 +287,81 @@ def delete_user(id):
 
     session['user_deleted'] = user.get_first_name() + ' ' + user.get_last_name()
 
-    return redirect(url_for('view_user'))
+@app.route('/createProduct', methods=['GET', 'POST'])
+def create_product():
+    create_product_form = CreateProduct(request.form)
+    if request.method == 'POST' and create_product_form.validate():
+        products_dict = {}
+        db = shelve.open('product.db', 'c')
+        try:
+            products_dict = db['Products']
+        except:
+            print("Error in retrieving Product from database")
+        p = Products.Product(create_product_form.name.data,create_product_form.price.data,create_product_form.desc.data,create_product_form.qty.data,create_product_form.grp.data)
+        products_dict[p.get_product_id()] = p
+        db['Products'] = products_dict
+        db.close()
+        return redirect(url_for('retrieve_products'))
+    return render_template('createProduct.html', form=create_product_form)
+
+@app.route('/retrieveProduct')
+def retrieve_products():
+    products_dict = {}
+    db = shelve.open('product.db', 'r')
+    products_dict = db['Products']
+    db.close()
+
+    products_list = []
+    for key in products_dict:
+        p = products_dict.get(key)
+        products_list.append(p)
+    return render_template('retrieveProduct.html', count = len(products_list), products_list = products_list, )
+
+@app.route('/updateProduct/<uuid:id>/', methods=['GET','POST'])
+def update_product(id):
+    update_product_form = CreateProduct(request.form)
+    if request.method == 'POST' and update_product_form.validate():
+
+        products_dict = {}
+        db=shelve.open('product.db','w')
+        products_dict = db['Products']
+        
+
+        product_id = products_dict.get(id)
+        product_id.set_product_name(update_product_form.name.data) 
+        product_id.set_product_price(update_product_form.price.data) 
+        product_id.set_product_desc(update_product_form.desc.data) 
+        product_id.set_product_qty(update_product_form.qty.data) 
+        product_id.set_product_group(update_product_form.grp.data) 
+        db['Products'] = products_dict
+        db.close()
+
+        return redirect(url_for('retrieve_products'))
+    else:
+        products_dict = {}
+        db=shelve.open('product.db','r')
+        products_dict = db['Products']
+        db.close()
+
+        product_id = products_dict[id]
+        update_product_form.name.data = product_id.get_product_name()
+        update_product_form.price.data = product_id.get_product_price()
+        update_product_form.desc.data = product_id.get_product_desc()
+        update_product_form.qty.data = product_id.get_product_qty()
+        update_product_form.grp.data = product_id.get_product_group()
+        return render_template('updateProduct.html', form = update_product_form)
+
+@app.route("/deleteProduct/<uuid:id>/", methods = ["POST"])
+def delete_product(id):
+    products_dict = {}
+    db = shelve.open('product.db','w')
+    products_dict = db['Products']
+    products_dict.pop(id)
+    db['Products'] = products_dict
+    db.close()
+    return redirect(url_for('retrieve_products'))
+
+
 
 
 @app.errorhandler(404)
@@ -289,4 +370,4 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
