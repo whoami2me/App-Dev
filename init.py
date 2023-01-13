@@ -6,23 +6,30 @@ from ProductForms import CreateProduct
 
 app = Flask(__name__)
 app.secret_key = 'any_random_string'
+app.config['UPLOAD_DIRECTORY'] = 'uploads/'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
+app.config['ALLOWED_EXTENSIONS'] = ['.jpg', '.jpeg', '.png', '.gif']
 
 
 @app.route('/')
 def home():
     return render_template('loginevents.html')
 
+
 @app.route('/staff')
 def staff():
     return render_template('staff.html')
+
 
 @app.route('/adminevents')
 def admin():
     return render_template('adminevents.html')
 
+
 @app.route('/adminproducts')
 def product():
     return render_template('adminproducts.html')
+
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
 def create_event():
@@ -36,7 +43,7 @@ def create_event():
         except:
             print("Error in retrieving Online Events from event.db.")
 
-        online_event = OnlineEvents.OnlineEvents(create_online_event_form.name.data, create_online_event_form.description.data, create_online_event_form.date.data)
+        online_event = OnlineEvents.OnlineEvents(create_online_event_form.name.data, create_online_event_form.description.data, create_online_event_form.date.data, create_online_event_form.image.data)
         online_events_dict[online_event.get_event_id()] = online_event
         db['Online_Events'] = online_events_dict
 
@@ -46,6 +53,7 @@ def create_event():
 
         return redirect(url_for('view_online_event'))
     return render_template('createevent.html', form=create_online_event_form)
+
 
 @app.route('/createOfflineEvent', methods=['GET', 'POST'])
 def create_offline_event():
@@ -97,6 +105,7 @@ def create_user():
         return redirect(url_for('view_user'))
     return render_template('createuser.html', form=create_user_form)
 
+
 @app.route('/viewOnlineEvent')
 def view_online_event():
     online_events_dict = {}
@@ -111,6 +120,7 @@ def view_online_event():
 
     return render_template('viewevent.html', count=len(online_event_list), online_event_list=online_event_list)
 
+
 @app.route('/viewofflineEvent')
 def view_offline_event():
     offline_events_dict = {}
@@ -124,6 +134,7 @@ def view_offline_event():
         offline_event_list.append(event)
 
     return render_template('viewOfflineEvent.html', count=len(offline_event_list), offline_event_list=offline_event_list)
+
 
 @app.route('/viewuser')
 def view_user():
@@ -207,6 +218,7 @@ def update_offline_event(id):
         update_offline_event_form.date.data = event.get_date()
         return render_template('updateevent.html', form=update_offline_event_form)
 
+
 @app.route('/updateUser/<int:id>/', methods=['GET', 'POST'])
 def update_user(id):
     update_user_form = CreateUserForm(request.form)
@@ -223,7 +235,6 @@ def update_user(id):
         user.set_address2(update_user_form.address2.data)
         user.set_gender(update_user_form.gender.data)
         user.set_membership(update_user_form.membership.data)
-
 
         db['Users'] = users_dict
         db.close()
@@ -247,6 +258,7 @@ def update_user(id):
         update_user_form.gender.data = user.get_gender()
         update_user_form.membership.data = user.get_membership()
         return render_template('updateuser.html', form=update_user_form)
+
 
 @app.route('/deleteEvent/<int:id>', methods=['POST'])
 def delete_event(id):
@@ -351,9 +363,11 @@ def delete_product(id):
 
 
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('error404.html'), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)

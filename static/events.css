@@ -184,6 +184,15 @@ opacity: 0.7;
   border: none;
 }
 
+/* preview image css */
+.preview-img{
+  margin: 20px;
+  height: 175px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+
 @media (min-width: 768px) {
   #sidebar-wrapper {
     margin-left: 0;
