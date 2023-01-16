@@ -21,6 +21,7 @@
 <th>Description</th>
 <th>Quantity</th>
 <th>Category</th>
+<th>Date Created</th>
 <th></th>
 <th></th>
 </tr>
@@ -32,8 +33,9 @@
     <td>{{ product.get_product_name() }}</td>
     <td>{{ product.get_product_priceformat() }}</td>
     <td>{{ product.get_product_desc() }}</td>
-    <td>{{ product.get_product_qty() }}</td>
+    <td>{{ product.get_product_qty() }}</td>    
     <td>{{ product.get_product_group() }}</td>
+    <td>{{ product.get_product_date() }}</td>
     <td><a href="/updateProduct/{{product.get_product_id()}}" class="btn btn-warning">Update</a></td>
     <td>
     <form action="/deleteProduct/{{product.get_product_id()}}" method="POST">

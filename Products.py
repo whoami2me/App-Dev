@@ -1,4 +1,5 @@
 import uuid
+from datetime import date
 class Product:
     def __init__(self,name,price,desc,qty,grp):
     
@@ -8,6 +9,7 @@ class Product:
         self.__qty = qty
         self.__grp = grp
         self.__id = uuid.uuid4()
+        self.__date = date.today()
     def get_product_name(self):
         return self.__name
     def get_product_price(self):
@@ -21,9 +23,12 @@ class Product:
     def get_product_qty(self):
         return self.__qty
     def get_product_group(self):
+        self.__grp=(','.join(self.__grp))
         return self.__grp
     def get_product_id(self):
         return self.__id
+    def get_product_date(self):
+        return self.__date
 
     def set_product_name(self,name):
         self.__name = name

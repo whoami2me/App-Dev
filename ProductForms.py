@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, RadioField, SelectMultipleField, TextAreaField, DecimalField,IntegerField,validators
+from wtforms import Form, StringField, FileField, SelectMultipleField, TextAreaField, DecimalField,IntegerField,validators
  
 class CreateProduct(Form):
     name = StringField('Name: ', [validators.DataRequired()])
