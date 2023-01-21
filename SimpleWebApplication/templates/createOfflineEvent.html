@@ -23,7 +23,7 @@
   <div class="preview-img"><img id="preview" src="" width="400px" height="175px" alt="Image preview" /></div>
 
   <div class="form-group">
-    {{ render_field(form.image, id="fileinput" ,class="form-control", **{'onchange':'previewFile()'}) }}
+    {{ render_field(form.image, id="fileinput" , class="form-control", **{'onchange':'previewFile()'}) }}
   </div>
 
   <div id="map"><iframe class="map", src="/get_map" width="600" height="175"></iframe></div>

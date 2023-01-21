@@ -6,7 +6,6 @@ import shelve, OnlineEvents, OfflineEvents, folium
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
@@ -40,7 +39,7 @@ def create_online():
         except:
             print("Error in retrieving Users from online.db.")
 
-        create_event_form.image.data.save(app.config['UPLOADED_IMAGES_DEST']+create_event_form.image.data.filename)
+        create_event_form.image.data.save(app.config['UPLOADED_IMAGES_DEST'] + create_event_form.image.data.filename)
 
         today = date.today()
 
@@ -113,7 +112,7 @@ def retrieve_events():
         offline = offline_dict.get(key)
         offline_list.append(offline)
 
-    return render_template('retrieveEvents.html', count=len(online_list) and len(offline_list), online_list=online_list , offline_list = offline_list)
+    return render_template('retrieveEvents.html', count=len(online_list) , count1=len(offline_list), online_list=online_list, offline_list=offline_list)
 
 
 @app.route('/updateEvent/<int:id>/', methods=['GET', 'POST'])
