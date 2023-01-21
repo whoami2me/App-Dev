@@ -51,7 +51,7 @@ def create_online():
 
         db.close()
 
-        return redirect(url_for('retrieve_oe'))
+        return redirect(url_for('retrieve_events'))
     return render_template('createEvent.html', form=create_event_form)
 
 @app.route('/createOfflineEvent', methods=['GET', 'POST'])
@@ -88,11 +88,11 @@ def create_offline():
 
         db.close()
 
-        return redirect(url_for('retrieve_offline'))
+        return redirect(url_for('retrieve_events'))
     return render_template('createOfflineEvent.html', form=create_offline_form)
 
-@app.route('/retrieveOnlineEvents')
-def retrieve_oe():
+@app.route('/retrieveEvents')
+def retrieve_events():
     online_dict = {}
     db = shelve.open('online.db', 'r')
     online_dict = db['Online']
@@ -103,10 +103,6 @@ def retrieve_oe():
         online = online_dict.get(key)
         online_list.append(online)
 
-    return render_template('retrieveEvents.html', count=len(online_list), online_list=online_list)
-
-@app.route('/retrieveOfflineEvents')
-def retrieve_offline():
     offline_dict = {}
     db = shelve.open('offline.db', 'r')
     offline_dict = db['Offline']
@@ -117,7 +113,8 @@ def retrieve_offline():
         offline = offline_dict.get(key)
         offline_list.append(offline)
 
-    return render_template('retrieveOfflineEvents.html', count=len(offline_list), offline_list=offline_list)
+    return render_template('retrieveEvents.html', count=len(online_list) and len(offline_list), online_list=online_list , offline_list = offline_list)
+
 
 @app.route('/updateEvent/<int:id>/', methods=['GET', 'POST'])
 def update_user(id):
@@ -137,7 +134,7 @@ def update_user(id):
         db['Online'] = online_dict
         db.close()
 
-        return redirect(url_for('retrieve_oe'))
+        return redirect(url_for('retrieve_events'))
     else:
         online_dict = {}
         db = shelve.open('online.db', 'r')
@@ -171,7 +168,7 @@ def update_offline(id):
         db['Offline'] = offline_dict
         db.close()
 
-        return redirect(url_for('retrieve_offline'))
+        return redirect(url_for('retrieve_events'))
     else:
         offline_dict = {}
         db = shelve.open('offline.db', 'r')
