@@ -44,7 +44,7 @@ def create_online():
         today = date.today()
 
         online = OnlineEvents.OnlineEvents(create_event_form.name.data, create_event_form.image.data.filename, create_event_form.description.data,
-                                           create_event_form.date.data,'Active',today)
+                                           create_event_form.date.data, create_event_form.location.data ,'Active', 'Active', today)
         online_dict[online.get_event_id()] = online 
         db['Online'] = online_dict
 
@@ -80,8 +80,8 @@ def create_offline():
         today = date.today()
 
         offline = OfflineEvents.OfflineEvents(create_offline_form.name.data, create_offline_form.image.data.filename, create_offline_form.description.data,
-                                              create_offline_form.date.data, create_offline_form.pax.data, create_offline_form.location.data,
-                                              location.latitude, location.longitude, 'Active', today)
+                                              create_offline_form.date.data, create_offline_form.location.data, create_offline_form.pax.data,
+                                              location.latitude, location.longitude, 'Active', 'Active', today)
         offline_dict[offline.get_event_id()] = offline
         db['Offline'] = offline_dict
 

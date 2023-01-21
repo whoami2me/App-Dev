@@ -35,6 +35,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Location</th>
                         <th>Event Date</th>
                         <th>Event Status</th>
                         <th>Registration Status</th>
@@ -45,9 +46,10 @@
                 {% for online in online_list %}
                     <tr>
                         <td><img src="static/uploads/{{online.get_image() }}" width="70" height="50"><a class="name" href="">{{ online.get_name() }}</a></td>
+                        <td>{{ online.get_location() }}</td>
                         <td>{{ online.get_date() }}</td>
-                        <td><span class="status text-success">&bull;</span> Active </td>
-                        <td><span class="status text-success">&bull;</span> {{ online.get_status() }} </td>
+                        <td><span class="status text-success">&bull;</span> {{ online.get_event_status() }}</td>
+                        <td><span class="status text-success">&bull;</span> {{ online.get_reg_status() }} </td>
                         <td>
                             <a href="/updateEvent/{{online.get_event_id()}}" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
                             <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
@@ -99,8 +101,8 @@
                         <td>{{ offline.get_pax() }}</td>
                         <td>{{ offline.get_location() }}</td>
                         <td>{{ offline.get_date() }}</td>
-                        <td><span class="status text-success">&bull;</span> Active </td>
-                        <td><span class="status text-success">&bull;</span> {{ offline.get_status() }} </td>
+                        <td><span class="status text-success">&bull;</span> {{ offline.get_event_status() }} </td>
+                        <td><span class="status text-success">&bull;</span> {{ offline.get_reg_status() }} </td>
                         <td>
                             <a href="/updateEvent/{{offline.get_event_id()}}" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
                             <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>

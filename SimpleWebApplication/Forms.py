@@ -7,6 +7,7 @@ class CreateEventForm(Form):
     image = FileField('Image', validators=[validators.DataRequired()])
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
+    location = StringField('Location', [validators.Length(min=1, max=150), validators.DataRequired()])
 
 class CreateOfflineEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
