@@ -3,12 +3,13 @@ from EventForms import CreateOnlineEventForm, CreateOfflineEventForm, CreateUser
 import shelve, Events, User, OnlineEvents, OfflineEvents
 import Products
 from ProductForms import CreateProduct
+from werkzeug.datastructures import CombinedMultiDict
 
 app = Flask(__name__)
-app.secret_key = 'any_random_string'
-app.config['UPLOAD_DIRECTORY'] = 'uploads/'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
-app.config['ALLOWED_EXTENSIONS'] = ['.jpg', '.jpeg', '.png', '.gif']
+app.config['SECRET_KEY'] = 'thisisasecret'
+app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
+app.config['Product_Images_Dest'] = 'static/productimages/'
+
 
 
 @app.route('/')
@@ -289,7 +290,8 @@ def delete_user(id):
 
 @app.route('/createProduct', methods=['GET', 'POST'])
 def create_product():
-    create_product_form = CreateProduct(request.form)
+    create_product_form = CreateProduct(CombinedMultiDict((request.files,request.form)))
+
     if request.method == 'POST' and create_product_form.validate():
         products_dict = {}
         db = shelve.open('product.db', 'c')
@@ -297,7 +299,11 @@ def create_product():
             products_dict = db['Products']
         except:
             print("Error in retrieving Product from database")
-        p = Products.Product(create_product_form.name.data,create_product_form.price.data,create_product_form.desc.data,create_product_form.qty.data,create_product_form.grp.data)
+
+        create_product_form.image.data.save(app.config['Product_Images_Dest'] + create_product_form.image.data.filename)
+
+
+        p = Products.Product(create_product_form.name.data,create_product_form.price.data,create_product_form.desc.data,create_product_form.qty.data,create_product_form.grp.data,create_product_form.image.data.filename)
         products_dict[p.get_product_id()] = p
         db['Products'] = products_dict
         db.close()
@@ -317,22 +323,25 @@ def retrieve_products():
         products_list.append(p)
     return render_template('retrieveProduct.html', count = len(products_list), products_list = products_list, )
 
+#FIX UPDATEPRODUCTS(RETRIEVING AND UPLOADING IMAGES)########################
 @app.route('/updateProduct/<uuid:id>/', methods=['GET','POST'])
 def update_product(id):
     update_product_form = CreateProduct(request.form)
+    
     if request.method == 'POST' and update_product_form.validate():
 
         products_dict = {}
         db=shelve.open('product.db','w')
         products_dict = db['Products']
-        
+       
 
         product_id = products_dict.get(id)
         product_id.set_product_name(update_product_form.name.data) 
         product_id.set_product_price(update_product_form.price.data) 
         product_id.set_product_desc(update_product_form.desc.data) 
         product_id.set_product_qty(update_product_form.qty.data) 
-        product_id.set_product_group(update_product_form.grp.data) 
+        product_id.set_product_group(update_product_form.grp.data)
+        product_id.set_product_image(update_product_form.image.data.filename)
         db['Products'] = products_dict
         db.close()
 
@@ -349,8 +358,10 @@ def update_product(id):
         update_product_form.desc.data = product_id.get_product_desc()
         update_product_form.qty.data = product_id.get_product_qty()
         update_product_form.grp.data = product_id.get_product_group()
+        update_product_form.image.data = product_id.get_product_image() #Gives filename
+        
         return render_template('updateProduct.html', form = update_product_form)
-
+##################################################################
 @app.route("/deleteProduct/<uuid:id>/", methods = ["POST"])
 def delete_product(id):
     products_dict = {}

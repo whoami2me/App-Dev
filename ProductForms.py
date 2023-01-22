@@ -6,3 +6,4 @@ class CreateProduct(Form):
     price = DecimalField('Price: ', [validators.DataRequired()])
     qty = IntegerField('Quantity: ', [validators.DataRequired()])
     grp = SelectMultipleField("Category: ",[validators.DataRequired()], choices=[('Shoes','Shoes'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories')])
+    image = FileField('Image: ',[validators.DataRequired()])
