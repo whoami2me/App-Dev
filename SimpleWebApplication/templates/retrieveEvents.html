@@ -48,8 +48,25 @@
                         <td><img src="static/uploads/{{online.get_image() }}" width="70" height="50"><a class="name" href="">{{ online.get_name() }}</a></td>
                         <td>{{ online.get_location() }}</td>
                         <td>{{ online.get_date() }}</td>
-                        <td><span class="status text-success">&bull;</span> {{ online.get_event_status() }}</td>
-                        <td><span class="status text-success">&bull;</span> {{ online.get_reg_status() }} </td>
+
+                        {% if online.get_event_status() == "A" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif online.get_event_status() == "C" %}
+                        <td><span class="status text-danger">&bull;</span>Closed</td>
+                        {% elif online.get_event_status() == "O" %}
+                        <td><span class="status text-primary">&bull;</span>Open In Advance</td>
+                        {% elif online.get_event_status() == "Active" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% endif %}
+
+                        {% if online.get_reg_status() == "A" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif online.get_reg_status() == "C" %}
+                        <td><span class="status text-danger">&bull;</span>Closed</td>
+                        {% elif online.get_reg_status() == "Active" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% endif %}
+
                         <td>
                             <a href="/updateEvent/{{online.get_event_id()}}" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
                             <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
@@ -101,8 +118,25 @@
                         <td>{{ offline.get_pax() }}</td>
                         <td>{{ offline.get_location() }}</td>
                         <td>{{ offline.get_date() }}</td>
-                        <td><span class="status text-success">&bull;</span> {{ offline.get_event_status() }} </td>
-                        <td><span class="status text-success">&bull;</span> {{ offline.get_reg_status() }} </td>
+
+                        {% if offline.get_event_status() == "A" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif offline.get_event_status() == "C" %}
+                        <td><span class="status text-danger">&bull;</span>>Closed</td>
+                        {% elif offline.get_event_status() == "O" %}
+                        <td><span class="status text-primary">&bull;</span>Open In Advance</td>
+                        {% elif offline.get_event_status() == "Active" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% endif %}
+
+                        {% if offline.get_reg_status() == "A" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif offline.get_reg_status() == "C" %}
+                        <td><span class="status text-danger">&bull;</span>Closed</td>
+                        {% elif offline.get_reg_status() == "Active" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% endif %}
+
                         <td>
                             <a href="/updateOfflineEvent/{{offline.get_event_id()}}" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
                             <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
