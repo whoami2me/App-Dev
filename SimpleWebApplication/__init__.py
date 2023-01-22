@@ -63,7 +63,7 @@ def create_offline():
         try:
             offline_dict = db['Offline']
         except:
-            print("Error in retrieving offlines from offline.db.")
+            print("Error in retrieving offline from offline.db.")
 
         create_offline_form.image.data.save(app.config['UPLOADED_IMAGES_DEST']+create_offline_form.image.data.filename)
 
@@ -116,7 +116,7 @@ def retrieve_events():
 
 
 @app.route('/updateEvent/<int:id>/', methods=['GET', 'POST'])
-def update_user(id):
+def update_event(id):
     update_event_form = CreateEventForm(CombinedMultiDict((request.files, request.form)))
 
     if request.method == 'POST' and update_event_form.validate():
@@ -126,7 +126,6 @@ def update_user(id):
 
         online = online_dict.get(id)
         online.set_name(update_event_form.name.data)
-        online.set_image(update_event_form.image.data)
         online.set_description(update_event_form.description.data)
         online.set_date(update_event_form.date.data)
 
@@ -142,7 +141,7 @@ def update_user(id):
 
         online = online_dict.get(id)
         update_event_form.name.data = online.get_name()
-        update_event_form.image.data = online.get_image()
+        print(update_event_form.date.data)
         update_event_form.description.data = online.get_description()
         update_event_form.date.data = online.get_date()
 
@@ -158,7 +157,6 @@ def update_offline(id):
 
         offline = offline_dict.get(id)
         offline.set_name(update_offline_form.name.data)
-        offline.set_image(update_offline_form.image.data)
         offline.set_description(update_offline_form.description.data)
         offline.set_date(update_offline_form.date.data)
         offline.set_pax(update_offline_form.pax.data)
@@ -176,7 +174,6 @@ def update_offline(id):
 
         offline = offline_dict.get(id)
         update_offline_form.name.data = offline.get_name()
-        update_offline_form.image.data = offline.get_image()
         update_offline_form.description.data = offline.get_description()
         update_offline_form.date.data = offline.get_date()
         update_offline_form.pax.data = offline.get_pax()
