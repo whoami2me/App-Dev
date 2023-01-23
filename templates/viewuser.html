@@ -1,0 +1,95 @@
+{% extends "base2.html" %}
+{% block title%}Western Corp - View User{% endblock %}
+
+{% block head %}
+{{ super() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
+    <script defer src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script defer src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script defer src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.1/b-2.3.3/b-html5-2.3.3/b-print-2.3.3/datatables.min.js"></script>
+    <script defer src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script defer src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+    <script defer src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+    <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
+
+
+{% block content %}
+{% if 'user_created' in session %}
+<div class="alert alert-success alert-dismissible">
+<button type="button" class="btn-close" data-dismiss="alert"></button>
+{{ session.pop('user_created', None) }} was created.
+</div>
+{% elif 'user_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+<button type="button" class="btn-close" data-dismiss="alert"></button>
+{{ session.pop('user_updated', None) }} was updated.
+</div>
+{% elif 'user_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+<button type="button" class="btn-close" data-dismiss="alert"></button>
+{{ session.pop('user_deleted', None) }} was deleted.
+</div>
+{% endif %}
+<div class="text-center m-1">
+    <h1 class="display-4">User Lists</h1>
+    <div>
+        {% if count == 0 %}
+        <p class="lead">There are no users.</p>
+        {% elif count == 1 %}
+        <p class="lead">There is 1 user.</p>
+        {% else %}
+        <p class="lead">There are {{ count }} users.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="info-table">
+    <table id="example" class="table table-striped borderless" style="width:100%">
+    <thead class="table-dark">
+        <tr>
+            <th>User ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Email</th>
+            <th>Address1</th>
+            <th>Address2</th>
+            <th>Membership</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for user in user_list %}
+    <tr>
+    <td>{{ user.get_user_id() }}</td>
+        <td>{{ user.get_first_name() }}</td>
+    <td>{{ user.get_last_name() }}</td>
+        {% if user.get_gender() == "F" %}
+    <td>Female</td>
+    {% elif user.get_gender() == "M" %}
+    <td>Male</td>
+    {% endif %}
+    <td>{{ user.get_email() }}</td>
+    <td>{{ user.get_address1() }}</td>
+    <td>{{ user.get_address2() }}</td>
+    {% if user.get_membership() == "P" %}
+    <td>User</td>
+    {% elif user.get_membership() == "C" %}
+    <td>Customer</td>
+    {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>
+{% endblock %}

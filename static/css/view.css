@@ -1,0 +1,14 @@
+li{
+  list-style-type: none;
+  margin: 1em 0;
+}
+.warning {
+background-color: #ff9800;
+} /* Orange */
+.warning:hover {
+background: #e68a00;
+}
+a{
+color: white;
+text-decoration-line: none;
+}
