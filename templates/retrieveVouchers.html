@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Retrieve Vouchers{% endblock %}
+
+{% block content %}
+<header>
+      <div class="container">
+        <strong><nav>
+          <ul class="menu">
+            <li><a href="/createVoucher">Create voucher</a></li>
+            <li><a href="/retrieveVouchers">View vouchers</a></li>
+          </ul>
+        </nav></strong>
+      </div>
+    </header>
+<h1 class="display-4">View Voucher</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no vouchers.</p>
+  {% elif count == 1 %}
+  <p>There is 1 voucher.</p>
+  {% else %}
+  <p>There are {{ count }} vouchers.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Voucher ID</th>
+        <th>Name</th>
+        <th>Amount</th>
+          <th>Type</th>
+        <th>Category</th>
+          <th>Start date</th>
+        <th>Expiry date</th>
+        <th>Description</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for voucher in vouchers_list %}
+     <tr>
+        <td>{{ voucher.get_voucher_id() }}</td>
+        <td>{{ voucher.get_name() }}</td>
+        <td>{{ voucher.get_amount() }}</td>
+         <td>{{ voucher.get_type() }}</td>
+        <td>{{ voucher.get_category() }}</td>
+         <td>{{ voucher.get_start() }}</td>
+         <td>{{  voucher.get_expiry() }}</td>
+        <td>{{ voucher.get_description() }}</td>
+        <td><a href="/updateVoucher/{{voucher.get_voucher_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_voucher', id=voucher.get_voucher_id())}}" method="POST">
+<!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{voucher.get_name()}}?');">-->
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{voucher.get_voucher_id()}}">
+  Delete
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="myModal_{{voucher.get_voucher_id()}}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Confirmation</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to delete {{voucher.get_name()}}?
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <input type="submit" value="Delete" class="btn btn-danger">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+          </form>
+        </td>
+     </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
