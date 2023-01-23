@@ -1,5 +1,5 @@
 class Events:
-
+#create organizers and guests
     count_id = 0
 
     def __init__(self, name, image ,description, date, location):
@@ -10,6 +10,8 @@ class Events:
         self.__description = description
         self.__date = date
         self.__location = location
+        #self.__organizers = organizers
+        #self.__guest = guest
 
 
     def set_image(self, image):
