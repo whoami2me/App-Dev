@@ -2,14 +2,10 @@
 {% block title %}Library Loan System - View Supplier{% endblock %}
 
 {% block content %}
-
 <link rel="stylesheet" type="text/css" href="{{ url_for('static' , filename = 'css/view.css') }}">
-
-<h1 class="display-4">View Supplier</h1>
-
 <form method="GET" action="" id="view">
   {% for supplier in Supplier_list  %}
-      <li> Company Name: {{supplier.get_Company_name()}} </li>
+      <li> <h1 class="display-4">{{supplier.get_Company_name()}}</h1> </li>
       <li> Company telephone no.: {{supplier.get_telephone()}}</li>
       <li> Company website: {{supplier.get_website()}}</li>
       <li> Company email: {{supplier.get_email()}}</li>
