@@ -328,7 +328,7 @@ def retrieve_products():
 def update_product(id):
     update_product_form = CreateProduct(CombinedMultiDict((request.files,request.form)))
     
-    
+    #Save changes
     if request.method == 'POST' and update_product_form.validate():
         
         products_dict = {}
@@ -347,6 +347,7 @@ def update_product(id):
         db.close()
 
         return redirect(url_for('retrieve_products'))
+    #Return current product data
     else:
         products_dict = {}
         db=shelve.open('product.db','r')
