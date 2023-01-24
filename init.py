@@ -326,7 +326,7 @@ def retrieve_products():
 #FIX UPDATEPRODUCTS(RETRIEVING AND UPLOADING IMAGES)########################
 @app.route('/updateProduct/<uuid:id>/', methods=['GET','POST'])
 def update_product(id):
-    update_product_form = CreateProduct(request.form)
+    update_product_form = CreateProduct(CombinedMultiDict((request.files,request.form)))
     
     if request.method == 'POST' and update_product_form.validate():
 
@@ -334,7 +334,7 @@ def update_product(id):
         db=shelve.open('product.db','w')
         products_dict = db['Products']
        
-
+        update_product_form.image.data.save(app.config['Product_Images_Dest'] + update_product_form.image.data.filename)
         product_id = products_dict.get(id)
         product_id.set_product_name(update_product_form.name.data) 
         product_id.set_product_price(update_product_form.price.data) 
