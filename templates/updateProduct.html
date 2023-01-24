@@ -4,6 +4,7 @@
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 <h1>Update Product</h1>
+
     <form method='POST' action="" enctype="multipart/form-data">
     <div class="form-group">
         {{ render_field(form.name, class="form-control") }}
@@ -23,11 +24,13 @@
     <div class="form-group">
         {{ render_field(form.image, class="form-control", id="finput" , **{'onchange':'previewFile()'} )  }}
     </div>
+
     <div class="preview-img">
-        <img id="preview" src="" width="400px" height="175px" alt="Image preview" />
+        <img id="preview" src="static/productimages/{{product.get_product_image() }}" width="400px" height="175px" alt="Image preview" />
     </div>
+
     <input type="submit" value="Update" class="btn btn-primary"/>
-    <a href="/retrieveProduct"><input type="button" value="Cancel" class="btn btn-secondary"/></a>
+    <a href="/retrieveProduct"><input type="button" value="Cancel" class="btn btn-secondary" /></a>
     </form>
 
 {% endblock %}

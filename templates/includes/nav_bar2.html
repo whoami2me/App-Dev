@@ -1,41 +1,140 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+  <style>
+
+      /* Style the sidenav links and the dropdown button */
+      .sidenav-dropdown a, .dropdown-btn {
+        padding: 4px 8px 3px 10px;
+        text-decoration: none;
+        font-size: 16px;
+        color: white;
+        display: block;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        outline: none;
+      }
+
+      /* Add an active class to the active dropdown button */
+      .active {
+        background-color: #00008b;
+        color: white;
+      }
+
+      /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+      .dropdown-container {
+        display: none;
+        padding-left: 8px;
+      }
+
+      /* Optional: Style the caret down icon */
+      .fa-caret-down {
+        float: right;
+        padding-right: 6px;
+      }
+
+      /* Some media queries for responsiveness */
+      @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+      }
+  </style>
 </head>
 <body>
-        <!-- Sidebar -->
+      <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <div class="sidebar-heading text-left py-4 primary-text fs-4 fw-bold first-text text-white border-bottom"><i
                     class="fas fa-futbol me-2 text-light"></i>Western Corp</div>
             <div class="list-group list-group-flush my-3">
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-project-diagram me-2"></i>Projects</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-chart-line me-2"></i>Analytics</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-paperclip me-2"></i>Reports</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-shopping-cart me-2"></i>Store Mng</a>
-                <a href="/adminproducts" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-gift me-2"></i>Products</a>
-                <a href="/adminevents" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-calendar me-2"></i>Events</a>
-                <a href="/createevent" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-calendar-plus me-2"></i>Create Event</a>
-                <a href="/viewevent" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-calendar-week me-2"></i>View Events</a>
-                <a href="/viewuser" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-users me-2"></i>View Users</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-comment-dots me-2"></i>Chat</a>
-                <a href="/" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-power-off me-2"></i>Logout</a>
+                <div class="sidenav-dropdown">
+                  <button class="dropdown-btn" ><i class="fas fa-tachometer-alt me-2"></i>Dashboard<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="#">User Status</a>
+                    <a href="#">Monthly Analytics</a>
+                    <a href="#">Weekly Analytics</a>
+                  </div>
+                </div>
+                <hr>
+                <div class="sidenav-dropdown">
+                <button class="dropdown-btn" ><i class="fas fa-project-diagram me-2"></i>Projects<i class="fa fa-caret-down"></i>
+                </button>
+                  <div class="dropdown-container">
+                    <a href="#">Create Project</a>
+                    <a href="#">View Projects</a>
+                  </div>
+                </div>
+                <hr>
+                <div class="sidenav-dropdown">
+                  <button class="dropdown-btn" ><i class="fas fa-users me-2"></i>Account Management<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="#">Profile</a>
+                    <a href="/retrieveStaffs">Staff Account</a>
+                    <a href="/retrieveCustomers">Customer Account</a>
+                  </div>
+                </div>
+              <hr>
+              <div class="sidenav-dropdown">
+                  <button class="dropdown-btn"><i class="fas fa-gift me-2"></i>Rewards<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="#">Create Rewards</a>
+                    <a href="#">View Rewards</a>
+                  </div>
+                </div>
+              <hr>
+              <div class="sidenav-dropdown">
+                  <button class="dropdown-btn"><i class="fas fa-gift me-2"></i>Product Management<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="/createProduct">Create Products</a>
+                    <a href="/retrieveProduct">View Products</a>
+                  </div>
+                </div>
+              <hr>
+              <div class="sidenav-dropdown">
+                  <button class="dropdown-btn"><i class="fas fa-gift me-2"></i>Inventory Management<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="#">Inventory</a>
+                  </div>
+                </div>
+              <hr>
+                <div class="sidenav-dropdown">
+                  <button class="dropdown-btn"><i class="fas fa-calendar-week me-2"></i>Event Management<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="/createOfflineEvent">Create Offline Events</a>
+                      <a href="/createOnlineEvent">Create Online Events</a>
+                    <a href="/retrieveEvents">View Events</a>
+                  </div>
+                  </div>
+              <hr>
             </div>
         </div>
+  <script>
+  /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+  var dropdown = document.getElementsByClassName("dropdown-btn");
+  var i;
 
+  for (i = 0; i < dropdown.length; i++) {
+    dropdown[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var dropdownContent = this.nextElementSibling;
+      if (dropdownContent.style.display === "block") {
+        dropdownContent.style.display = "none";
+      } else {
+        dropdownContent.style.display = "block";
+      }
+    });
+  }
+  </script>
 </body>
 </html>

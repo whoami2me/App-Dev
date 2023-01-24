@@ -328,8 +328,9 @@ def retrieve_products():
 def update_product(id):
     update_product_form = CreateProduct(CombinedMultiDict((request.files,request.form)))
     
+    
     if request.method == 'POST' and update_product_form.validate():
-
+        
         products_dict = {}
         db=shelve.open('product.db','w')
         products_dict = db['Products']
@@ -351,6 +352,10 @@ def update_product(id):
         db=shelve.open('product.db','r')
         products_dict = db['Products']
         db.close()
+        products_list = []
+        for key in products_dict:
+            p = products_dict.get(key)
+            products_list.append(p)
 
         product_id = products_dict[id]
         update_product_form.name.data = product_id.get_product_name()
@@ -360,7 +365,7 @@ def update_product(id):
         update_product_form.grp.data = product_id.get_product_group()
         update_product_form.image.data = product_id.get_product_image() #Gives filename
         
-        return render_template('updateProduct.html', form = update_product_form)
+        return render_template('updateProduct.html', form = update_product_form, products_list = products_list,)
 ##################################################################
 @app.route("/deleteProduct/<uuid:id>/", methods = ["POST"])
 def delete_product(id):
