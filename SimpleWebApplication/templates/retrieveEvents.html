@@ -69,8 +69,36 @@
 
                         <td>
                             <a href="/updateEvent/{{online.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
-                            <a href="#" class="delete" title="View" data-toggle="tooltip"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="#" class="delete" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal1"><i class="material-icons">remove_red_eye</i></a>
                         </td>
+
+                        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header bg-primary">
+                                <h5 class="modal-title text-white" id="exampleModalLabel1">Event Details</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+
+                                  <div class="col-md-12"><img src="static/uploads/{{online.get_image() }}" alt="teste" class="img-thumbnail" height="100"></div>
+
+                                  <div class="col-md-12">
+                                      <div class="username"><p>Name: <span>{{ online.get_name() }}</span></p></div>
+                                      <div class="position"><p>Event ID: <span>{{online.get_event_id()}}</span></p></div>
+                                      <div class="office"><p>Description: <span>{{online.get_description()}}</span></p></div>
+                                      <div class="age"><p>Event Date: <span>{{online.get_date()}}</span></p></div>
+                                      <div class="salary"><p>Location: <span>{{online.get_location()}}</span></p></div>
+                                  </div>
+
+                              </div>
+                              <div class="modal-footer d-flex justify-content-center">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -139,22 +167,32 @@
 
                         <td>
                             <a href="/updateOfflineEvent/{{offline.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
-                            <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="material-icons">remove_red_eye</i></a>
                         </td>
 
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              <div class="modal-header bg-primary">
+                                <h5 class="modal-title text-white" id="exampleModalLabel">Event Details</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body">
-                                ...
+
+                                  <div class="col-md-12"><img src="static/uploads/{{offline.get_image() }}" alt="teste" class="img-thumbnail" height="100"></div>
+
+                                  <div class="col-md-12">
+                                      <div class="username"><p>Name: <span>{{ offline.get_name() }}</span></p></div>
+                                      <div class="position"><p>Event ID: <span>{{offline.get_event_id()}}</span></p></div>
+                                      <div class="office"><p>Description: <span>{{offline.get_description()}}</span></p></div>
+                                      <div class="age"><p>Event Date: <span>{{offline.get_date()}}</span></p></div>
+                                      <div class="date"><p>Pax: <span>{{offline.get_pax()}}</span></p></div>
+                                      <div class="salary"><p>Location: <span>{{offline.get_location()}}</span></p></div>
+                                  </div>
+
                               </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                              <div class="modal-footer d-flex justify-content-center">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                               </div>
                             </div>
                           </div>
