@@ -13,6 +13,7 @@ class CreateEventForm(Form):
 
 class CreateOEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    image = FileField('Image', validators=[validators.DataRequired()])
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
     event_status = SelectField('Event Status', validators=[validators.DataRequired()], choices=[('A', 'Active'), ('C', 'Closed'), ('O', 'Open-In-Advance')], default='O')
@@ -30,6 +31,7 @@ class CreateOfflineEventForm(Form):
 
 class CreateOffEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    image = FileField('Image', validators=[validators.DataRequired()])
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
     pax = IntegerField('Pax', [validators.NumberRange(min=0, max=200), validators.DataRequired()])

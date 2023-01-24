@@ -121,7 +121,7 @@ def retrieve_events():
 
 @app.route('/updateEvent/<int:id>/', methods=['GET', 'POST'])
 def update_event(id):
-    update_event_form = CreateOEventForm(request.form)
+    update_event_form = CreateOEventForm(CombinedMultiDict((request.files, request.form)))
 
     if request.method == 'POST' and update_event_form.validate():
         online_dict = {}
@@ -134,6 +134,9 @@ def update_event(id):
         online.set_date(update_event_form.date.data)
         online.set_event_status(update_event_form.event_status.data)
         online.set_reg_status(update_event_form.reg_status.data)
+        online.set_image(update_event_form.image.data.filename)
+
+        update_event_form.image.data.save(app.config['UPLOADED_IMAGES_DEST'] + update_event_form.image.data.filename)
 
         db['Online'] = online_dict
         db.close()
@@ -151,13 +154,14 @@ def update_event(id):
         update_event_form.date.data = online.get_date()
         update_event_form.event_status.data = online.get_event_status()
         update_event_form.reg_status.data = online.get_reg_status()
+        update_event_form.image.data = online.get_image()
 
         return render_template('updateEvent.html', form=update_event_form)
 
 
 @app.route('/updateOfflineEvent/<int:id>/', methods=['GET', 'POST'])
 def update_offline(id):
-    update_offline_form = CreateOffEventForm(request.form)
+    update_offline_form = CreateOffEventForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and update_offline_form.validate():
         offline_dict = {}
         db = shelve.open('offline.db', 'w')
@@ -171,6 +175,7 @@ def update_offline(id):
         offline.set_location(update_offline_form.location.data)
         offline.set_event_status(update_offline_form.event_status.data)
         offline.set_reg_status(update_offline_form.reg_status.data)
+        offline.set_image(update_offline_form.image.data.filename)
 
         db['Offline'] = offline_dict
         db.close()
@@ -190,6 +195,7 @@ def update_offline(id):
         update_offline_form.location.data = offline.get_location()
         update_offline_form.event_status.data = offline.get_event_status()
         update_offline_form.reg_status.data = offline.get_reg_status()
+        update_offline_form.image.data = offline.get_image()
 
         return render_template('updateOfflineEvent.html', form=update_offline_form)
 
