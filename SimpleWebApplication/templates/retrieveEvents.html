@@ -68,8 +68,8 @@
                         {% endif %}
 
                         <td>
-                            <a href="/updateEvent/{{online.get_event_id()}}" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
+                            <a href="/updateEvent/{{online.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
+                            <a href="#" class="delete" title="View" data-toggle="tooltip"><i class="material-icons">remove_red_eye</i></a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -138,8 +138,8 @@
                         {% endif %}
 
                         <td>
-                            <a href="/updateOfflineEvent/{{offline.get_event_id()}}" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
+                            <a href="/updateOfflineEvent/{{offline.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
+                            <a href="#" class="delete" title="view" data-toggle="tooltip"><i class="material-icons">remove_red_eye</i></a>
                         </td>
                     </tr>
                 {% endfor %}
