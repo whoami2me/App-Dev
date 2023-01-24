@@ -3,45 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static' , filename = 'css/nav_bar2.css') }}">
+    <script src="{{ url_for('static', filename='js/nav_bar2.js') }}"></script>
 </head>
 <body>
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
+      <!-- Sidebar -->
+         <div id="sidebar-wrapper">
             <div class="sidebar-heading text-left py-4 primary-text fs-4 fw-bold first-text text-white border-bottom"><i
                     class="fas fa-futbol me-2 text-light"></i>Western Corp</div>
             <div class="list-group list-group-flush my-3">
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                    class="fas fa-shelves me-2"></i>Inventory</a>
-                <a class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light" href="#" role="button" data-bs-toggle="dropdown"><i class="fas fa-warehouse me-2"></i>Manage Suppliers</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/createSuppliers">Create Suppliers</a></li>
-                        <li><a class="dropdown-item" href="/retrieveSupplier">Retrive Suppliers</a></li>
-                    </ul>
-
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-project-diagram me-2"></i>Projects</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-chart-line me-2"></i>Analytics</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-paperclip me-2"></i>Reports</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-shopping-cart me-2"></i>Store Mng</a>
-                <a href="/adminproducts" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-gift me-2"></i>Products</a>
-                <a href="/adminevents" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-calendar me-2"></i>Events</a>
-                <a href="/createevent" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-calendar-plus me-2"></i>Create Event</a>
-                <a href="/viewevent" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-calendar-week me-2"></i>View Events</a>
-                <a href="/viewuser" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-users me-2"></i>View Users</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-comment-dots me-2"></i>Chat</a>
-                <a href="/" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-power-off me-2"></i>Logout</a>
+                <div class="sidenav-dropdown">
+                  <button class="dropdown-btn" ><i class="fas fa-tachometer-alt me-2"></i>Dashboard<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="/AdminDashboard">Home</a>
+                    <a href="#">Monthly Analytics</a>
+                    <a href="#">Weekly Analytics</a>
+                  </div>
+                </div>
+                <hr>
+                <div class="sidenav-dropdown">
+                <button class="dropdown-btn" ><i class="fas fa-project-diagram me-2"></i>Projects<i class="fa fa-caret-down"></i>
+                </button>
+                  <div class="dropdown-container">
+                    <a href="#">Create Project</a>
+                    <a href="#">View Projects</a>
+                  </div>
+                </div>
+                <hr>
+                <div class="sidenav-dropdown">
+                  <button class="dropdown-btn" ><i class="fas fa-users me-2"></i>Account Management<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="#">Profile</a>
+                    <a href="/retrieveStaffs">Staff Account</a>
+                    <a href="/retrieveCustomers">Customer Account</a>
+                  </div>
+                </div>
+              <hr>
+              <div class="sidenav-dropdown">
+                  <button class="dropdown-btn"><i class="fas fa-gift me-2"></i>Rewards<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="#">Create Rewards</a>
+                    <a href="#">View Rewards</a>
+                  </div>
+                </div>
+              <hr>
+              <div class="sidenav-dropdown">
+                  <button class="dropdown-btn"><i class="fas fa-gift me-2"></i>Product Management<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="#">Products</a>
+                    <a href="#">Inventory</a>
+                  </div>
+                </div>
+              <hr>
+                <div class="sidenav-dropdown">
+                <button class="dropdown-btn" ><i class="fas fa-warehouse me-2"></i>Manage Suppliers<i class="fa fa-caret-down"></i>
+                </button>
+                  <div class="dropdown-container">
+                    <a href="/createSuppliers">Create Suppliers</a>
+                    <a href="/retrieveSupplier">Retrieve Suppliers</a>
+                  </div>
+                </div>
+                <hr>
+                <div class="sidenav-dropdown">
+                  <button class="dropdown-btn"><i class="fas fa-calendar-week me-2"></i>Event Management<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="/createOfflineEvent">Create Offline Events</a>
+                      <a href="/createOnlineEvent">Create Online Events</a>
+                    <a href="/retrieveEvents">View Events</a>
+                  </div>
+                  </div>
+              <hr>
             </div>
         </div>
 
