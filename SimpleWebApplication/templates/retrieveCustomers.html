@@ -1,8 +1,8 @@
 {% extends "baseStaff.html" %}
 {% block title %}Customer Accounts{% endblock %}
+{% block silly %}Account Management{% endblock %}
 
 {% block content %}
-<h1 class="display-4">Account Management</h1>
 <h5 class="display-6">Customer Accounts</h5>
 <a href="/createCustomer" class="btn btn-warning" style="float: right;">Add Staff</a>
 <div>
@@ -20,10 +20,9 @@
     <thead>
       <tr>
         <th>Customer ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Gender</th>
+        <th>Name</th>
         <th>Email</th>
+        <th>Gender</th>
         <th>Date Joined</th>
         <th>Status</th>
         <th>View/Update</th>
@@ -34,10 +33,9 @@
       {% for customer in customers_list %}
         <tr>
           <td>{{ customer.get_customer_id() }}</td>
-          <td>{{ customer.get_first_name() }}</td>
-          <td>{{ customer.get_last_name() }}</td>
-          <td>{{ customer.get_gender() }}</td>
+          <td>{{ customer.get_first_name() }} {{ customer.get_last_name() }}</td>
           <td>{{ customer.get_email() }}</td>
+          <td>{{ customer.get_gender() }}</td>
           <td>{{ customer.get_date_created() }}</td>
           <td>{{ customer.get_status() }}</td>
           <td><a href="/updateCustomer/{{customer.get_customer_id()}}" class="btn btn-warning">View/Update</a></td>

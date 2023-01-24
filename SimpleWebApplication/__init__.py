@@ -40,7 +40,7 @@ def create_staff():
                             create_staff_form.email.data, create_staff_form.address1.data,
                             create_staff_form.address2.data, create_staff_form.gender.data,
                             create_staff_form.membership.data,  create_staff_form.password.data,
-                            create_staff_form.passwordcfm.data, 'Active', today)
+                            create_staff_form.passwordcfm.data, 'Active', today, create_staff_form.phone_number.data)
         staffs_dict[staff.get_staff_id()] = staff
         db['Staffs'] = staffs_dict
 
@@ -67,7 +67,7 @@ def create_customer():
                                      create_customer_form.gender.data, create_customer_form.email.data,
                                      create_customer_form.address1.data, create_customer_form.address2.data,
                                      create_customer_form.password.data, create_customer_form.passwordcfm.data,
-                                     'Active', today)
+                                     'Active', today, create_customer_form.phone_number.data)
         ##        customers_dict[customer.get_customer_id()] = customer
         customers_dict[customer.get_customer_id()] = customer
         db['Customers'] = customers_dict
@@ -124,6 +124,9 @@ def update_staff(id):
         staff.set_address2(update_staff_form.address2.data)
         staff.set_gender(update_staff_form.gender.data)
         staff.set_membership(update_staff_form.membership.data)
+        staff.set_password(update_staff_form.password.data)
+        staff.set_passwordcfm(update_staff_form.passwordcfm.data)
+        staff.set_phone_number(update_staff_form.phone_number.data)
 
         db['Staffs'] = staffs_dict
         db.close()
@@ -143,6 +146,9 @@ def update_staff(id):
         update_staff_form.address2.data = staff.get_address2()
         update_staff_form.gender.data = staff.get_gender()
         update_staff_form.membership.data = staff.get_membership()
+        update_staff_form.password.data = staff.get_password()
+        update_staff_form.passwordcfm.data = staff.get_passwordcfm()
+        update_staff_form.phone_number.data = staff.get_phone_number()
 
         return render_template('updateStaff.html', form=update_staff_form)
 
@@ -209,6 +215,8 @@ def delete_customer(id):
     db.close()
 
     return redirect(url_for('retrieve_customers'))
+
+##@app.route('/staff/changePasswordStaff')
 
 
 @app.route('/customerLogin', methods=['GET', 'POST'])

@@ -3,7 +3,7 @@ class Staff:
     count_id = 0
 
     # initializer method
-    def __init__(self, first_name, last_name, email, address1, address2, gender, membership, password, passwordcfm, status, date_created):
+    def __init__(self, first_name, last_name, email, address1, address2, gender, membership, password, passwordcfm, status, date_created, phone_number):
         Staff.count_id += 1
         self.__staff_id = Staff.count_id
         self.__first_name = first_name
@@ -17,6 +17,7 @@ class Staff:
         self.__passwordcfm = passwordcfm
         self.__status = status
         self.__date_created = date_created
+        self.__phone_number = phone_number
 
     # accessor methods
     def get_staff_id(self):
@@ -55,6 +56,9 @@ class Staff:
     def get_date_created(self):
         return self.__date_created
 
+    def get_phone_number(self):
+        return self.__phone_number
+
     # mutator methods
     def set_staff_id(self, staff_id):
         self.__staff_id = staff_id
@@ -91,3 +95,6 @@ class Staff:
 
     def set_date_created(self, date_created):
         self.__date_created = date_created
+
+    def set_phone_number(self, phone_number):
+        self.__phone_number = phone_number

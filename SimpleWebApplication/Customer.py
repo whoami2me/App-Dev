@@ -2,7 +2,7 @@
 class Customer:
     count_id = 0
 
-    def __init__(self, first_name, last_name, gender, email, address1, address2, password, passwordcfm, status, date_created):
+    def __init__(self, first_name, last_name, gender, email, address1, address2, password, passwordcfm, status, date_created, phone_number):
         Customer.count_id += 1
         self.__customer_id = Customer.count_id
         self.__first_name = first_name
@@ -15,6 +15,7 @@ class Customer:
         self.__passwordcfm = passwordcfm
         self.__status = status
         self.__date_created = date_created
+        self.__phone_number = phone_number
 
     # accessor methods
     def get_customer_id(self):
@@ -50,6 +51,9 @@ class Customer:
     def get_date_created(self):
         return self.__date_created
 
+    def get_phone_number(self):
+        return self.__phone_number
+
     # mutator methods
     def set_customer_id(self, customer_id):
         self.__customer_id = customer_id
@@ -83,3 +87,6 @@ class Customer:
 
     def set_date_created(self, date_created):
         self.__date_created = date_created
+
+    def set_phone_number(self, phone_number):
+        self.__phone_number = phone_number
