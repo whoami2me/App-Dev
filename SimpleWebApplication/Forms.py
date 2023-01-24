@@ -1,11 +1,11 @@
-from wtforms import Form, StringField, TextAreaField, validators, IntegerField, RadioField, SelectField
-from flask_wtf.file import FileField
+from wtforms import Form, StringField, TextAreaField, validators, IntegerField, SelectField
+from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields import DateField
 
 
 class CreateEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    image = FileField('Image', validators=[validators.DataRequired()])
+    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png' , 'jpeg' ,'gif'])])
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
     location = StringField('Location', [validators.Length(min=1, max=150), validators.DataRequired()])
@@ -13,7 +13,7 @@ class CreateEventForm(Form):
 
 class CreateOEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    image = FileField('Image', validators=[validators.DataRequired()])
+    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg' ,'gif'])])
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
     event_status = SelectField('Event Status', validators=[validators.DataRequired()], choices=[('A', 'Active'), ('C', 'Closed'), ('O', 'Open-In-Advance')], default='O')
@@ -22,7 +22,7 @@ class CreateOEventForm(Form):
 
 class CreateOfflineEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    image = FileField('Image', validators=[validators.DataRequired()])
+    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg' ,'gif'])])
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
     pax = IntegerField('Pax', [validators.NumberRange(min=0, max=200), validators.DataRequired()])
@@ -31,7 +31,7 @@ class CreateOfflineEventForm(Form):
 
 class CreateOffEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    image = FileField('Image', validators=[validators.DataRequired()])
+    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg' ,'gif'])])
     description = TextAreaField('Description', [validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
     pax = IntegerField('Pax', [validators.NumberRange(min=0, max=200), validators.DataRequired()])

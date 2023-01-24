@@ -81,15 +81,19 @@
                               </div>
                               <div class="modal-body">
 
-                                  <div class="col-md-12"><img src="static/uploads/{{online.get_image() }}" alt="teste" class="img-thumbnail" height="100"></div>
+                                  <div class="row">
 
-                                  <div class="col-md-12">
-                                      <div class="username"><p>Name: <span>{{ online.get_name() }}</span></p></div>
-                                      <div class="position"><p>Event ID: <span>{{online.get_event_id()}}</span></p></div>
-                                      <div class="office"><p>Description: <span>{{online.get_description()}}</span></p></div>
-                                      <div class="age"><p>Event Date: <span>{{online.get_date()}}</span></p></div>
-                                      <div class="salary"><p>Location: <span>{{online.get_location()}}</span></p></div>
-                                  </div>
+                                      <div class="col-md-5"><img src="static/uploads/{{online.get_image() }}" alt="teste" class="img-thumbnail" height="100"></div>
+
+                                      <div class="col-md-7">
+                                          <div class="name"><p>Name: <span>{{ online.get_name() }}</span></p></div>
+                                          <div class="eventid"><p>Event ID: <span>{{online.get_event_id()}}</span></p></div>
+                                          <div class="desc"><p>Description: <span>{{online.get_description()}}</span></p></div>
+                                          <div class="eventdate"><p>Event Date: <span>{{online.get_date()}}</span></p></div>
+                                          <div class="location"><p>Location: <span>{{online.get_location()}}</span></p></div>
+                                      </div>
+
+                                   </div>
 
                               </div>
                               <div class="modal-footer d-flex justify-content-center">
@@ -179,15 +183,17 @@
                               </div>
                               <div class="modal-body">
 
-                                  <div class="col-md-12"><img src="static/uploads/{{offline.get_image() }}" alt="teste" class="img-thumbnail" height="100"></div>
+                                  <div class="row">
+                                      <div class="col-md-5"><img src="static/uploads/{{offline.get_image() }}" alt="teste" class="img-thumbnail" height="100"></div>
 
-                                  <div class="col-md-12">
-                                      <div class="username"><p>Name: <span>{{ offline.get_name() }}</span></p></div>
-                                      <div class="position"><p>Event ID: <span>{{offline.get_event_id()}}</span></p></div>
-                                      <div class="office"><p>Description: <span>{{offline.get_description()}}</span></p></div>
-                                      <div class="age"><p>Event Date: <span>{{offline.get_date()}}</span></p></div>
-                                      <div class="date"><p>Pax: <span>{{offline.get_pax()}}</span></p></div>
-                                      <div class="salary"><p>Location: <span>{{offline.get_location()}}</span></p></div>
+                                      <div class="col-md-7">
+                                          <div class="name"><p>Name: <span>{{ offline.get_name() }}</span></p></div>
+                                          <div class="eventid"><p>Event ID: <span>{{offline.get_event_id()}}</span></p></div>
+                                          <div class="desc"><p>Description: <span>{{offline.get_description()}}</span></p></div>
+                                          <div class="eventdate"><p>Event Date: <span>{{offline.get_date()}}</span></p></div>
+                                          <div class="pax"><p>Pax: <span>{{offline.get_pax()}}</span></p></div>
+                                          <div class="location"><p>Location: <span>{{offline.get_location()}}</span></p></div>
+                                      </div>
                                   </div>
 
                               </div>
