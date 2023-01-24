@@ -156,7 +156,7 @@ def update_event(id):
         update_event_form.reg_status.data = online.get_reg_status()
         update_event_form.image.data = online.get_image()
 
-        return render_template('updateEvent.html', form=update_event_form)
+        return render_template('updateEvent.html', form=update_event_form, online=online)
 
 
 @app.route('/updateOfflineEvent/<int:id>/', methods=['GET', 'POST'])
@@ -179,7 +179,6 @@ def update_offline(id):
 
         update_offline_form.image.data.save(app.config['UPLOADED_IMAGES_DEST'] + update_offline_form.image.data.filename)
 
-
         db['Offline'] = offline_dict
         db.close()
 
@@ -200,6 +199,7 @@ def update_offline(id):
         update_offline_form.reg_status.data = offline.get_reg_status()
         update_offline_form.image.data = offline.get_image()
 
+
         return render_template('updateOfflineEvent.html', form=update_offline_form)
 
 
@@ -212,6 +212,9 @@ def get_map():
 def page_not_found(e):
     return render_template('error404.html'), 404
 
+@app.route('/img/<fname>')
+def legacy_images(fname):
+    return app.redirect(app.url_for('static', filename='uploads/' + fname), code=301)
 
 if __name__ == '__main__':
     app.run()
