@@ -8,7 +8,7 @@
 
       /* Style the sidenav links and the dropdown button */
       .sidenav-dropdown a, .dropdown-btn {
-        padding: 6px 8px 6px 16px;
+        padding: 4px 8px 3px 10px;
         text-decoration: none;
         font-size: 16px;
         color: white;
@@ -52,10 +52,26 @@
             <div class="sidebar-heading text-left py-4 primary-text fs-4 fw-bold first-text text-white border-bottom"><i
                     class="fas fa-futbol me-2 text-light"></i>Western Corp</div>
             <div class="list-group list-group-flush my-3">
-                <a href="/dashboard" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text text-white fw-light"><i
-                        class="fas fa-project-diagram me-2"></i>Projects</a>
+                <div class="sidenav-dropdown">
+                  <button class="dropdown-btn" ><i class="fas fa-tachometer-alt me-2"></i>Dashboard<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
+                    <a href="#">Profile</a>
+                    <a href="/retrieveStaffs">Staff Account</a>
+                    <a href="/retrieveCustomers">Customer Account</a>
+                  </div>
+                </div>
+                <hr>
+                <div class="sidenav-dropdown">
+                <button class="dropdown-btn" ><i class="fas fa-project-diagram me-2"></i>Projects<i class="fa fa-caret-down"></i>
+                </button>
+                  <div class="dropdown-container">
+                    <a href="#">Profile</a>
+                    <a href="/retrieveStaffs">Staff Account</a>
+                    <a href="/retrieveCustomers">Customer Account</a>
+                  </div>
+                </div>
+                <hr>
                 <div class="sidenav-dropdown">
                   <button class="dropdown-btn" ><i class="fas fa-users me-2"></i>Account Management<i class="fa fa-caret-down"></i>
                   </button>
@@ -88,9 +104,9 @@
                   <button class="dropdown-btn"><i class="fas fa-calendar-week me-2"></i>Event Management<i class="fa fa-caret-down"></i>
                   </button>
                   <div class="dropdown-container">
-                    <a href="#">Create Events</a>
-                    <a href="#">View Events</a>
-                    <a href="#">View Event's User</a>
+                    <a href="/createOfflineEvent">Create Offline Events</a>
+                      <a href="/createOnlineEvent">Create Online Events</a>
+                    <a href="/retrieveEvents">View Events</a>
                   </div>
                   </div>
               <hr>
