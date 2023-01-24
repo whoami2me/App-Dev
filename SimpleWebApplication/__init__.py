@@ -177,6 +177,9 @@ def update_offline(id):
         offline.set_reg_status(update_offline_form.reg_status.data)
         offline.set_image(update_offline_form.image.data.filename)
 
+        update_offline_form.image.data.save(app.config['UPLOADED_IMAGES_DEST'] + update_offline_form.image.data.filename)
+
+
         db['Offline'] = offline_dict
         db.close()
 
