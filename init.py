@@ -323,7 +323,6 @@ def retrieve_products():
         products_list.append(p)
     return render_template('retrieveProduct.html', count = len(products_list), products_list = products_list, )
 
-#FIX UPDATEPRODUCTS(RETRIEVING AND UPLOADING IMAGES)########################
 @app.route('/updateProduct/<uuid:id>/', methods=['GET','POST'])
 def update_product(id):
     update_product_form = CreateProduct(CombinedMultiDict((request.files,request.form)))
@@ -367,7 +366,7 @@ def update_product(id):
         update_product_form.image.data = product_id.get_product_image() #Gives filename
         
         return render_template('updateProduct.html', form = update_product_form, product = product_id)
-##################################################################
+
 @app.route("/deleteProduct/<uuid:id>/", methods = ["POST"])
 def delete_product(id):
     products_dict = {}
