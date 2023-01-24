@@ -1,11 +1,12 @@
 class Suppliers:
     count_id = 0
-    def __init__(self,Company_name,telephone,website,Address1,Address2,Payment,Categories_select,Product_name,remarks):
+    def __init__(self,Company_name,telephone,website,email,Address1,Address2,Payment,Categories_select,Product_name,remarks):
         Suppliers.count_id +=1
         self.__Suppliers_id = Suppliers.count_id
         self.__Company_name = Company_name
         self.__telephone = telephone
         self.__website = website
+        self.__email = email
         self.__Address1 = Address1
         self.__Address2 = Address2
         self.__Payment = Payment
@@ -21,6 +22,8 @@ class Suppliers:
         return self.__telephone
     def get_website(self):
         return self.__website
+    def get_email(self):
+        return self.__email
     def get_Address1(self):
         return self.__Address1
     def get_Address2(self):
@@ -42,6 +45,8 @@ class Suppliers:
         self.__telephone = telephone
     def set_website(self,website):
         self.__website = website
+    def set_email(self,email):
+        self.__email = email
     def set_Address1(self,Address1):
         self.__Address1 = Address1
     def set_Address2(self,Address2):
