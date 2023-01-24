@@ -378,13 +378,6 @@ def delete_product(id):
     db.close()
     return redirect(url_for('retrieve_products'))
 
-@app.route('/productimages/<fname>')
-def legacy_images(fname):
-    return app.redirect(app.url_for('static', filename='productimages/' + fname), code=301)
-
-if __name__ == '__main__':
-    app.run()
-
 
 
 @app.errorhandler(404)
