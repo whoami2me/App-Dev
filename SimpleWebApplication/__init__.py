@@ -199,8 +199,7 @@ def update_offline(id):
         update_offline_form.reg_status.data = offline.get_reg_status()
         update_offline_form.image.data = offline.get_image()
 
-
-        return render_template('updateOfflineEvent.html', form=update_offline_form)
+        return render_template('updateOfflineEvent.html', form=update_offline_form, offline=offline)
 
 
 @app.route('/get_map')
