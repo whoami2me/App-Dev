@@ -326,15 +326,16 @@ def retrieve_products():
 #FIX UPDATEPRODUCTS(RETRIEVING AND UPLOADING IMAGES)########################
 @app.route('/updateProduct/<uuid:id>/', methods=['GET','POST'])
 def update_product(id):
-    update_product_form = CreateProduct(request.form)
+    update_product_form = CreateProduct(CombinedMultiDict((request.files,request.form)))
     
+    #Save changes
     if request.method == 'POST' and update_product_form.validate():
-
+        
         products_dict = {}
         db=shelve.open('product.db','w')
         products_dict = db['Products']
        
-
+        update_product_form.image.data.save(app.config['Product_Images_Dest'] + update_product_form.image.data.filename)
         product_id = products_dict.get(id)
         product_id.set_product_name(update_product_form.name.data) 
         product_id.set_product_price(update_product_form.price.data) 
@@ -346,11 +347,16 @@ def update_product(id):
         db.close()
 
         return redirect(url_for('retrieve_products'))
+    #Return current product data
     else:
         products_dict = {}
         db=shelve.open('product.db','r')
         products_dict = db['Products']
         db.close()
+        products_list = []
+        for key in products_dict:
+            p = products_dict.get(key)
+            products_list.append(p)
 
         product_id = products_dict[id]
         update_product_form.name.data = product_id.get_product_name()
@@ -360,7 +366,7 @@ def update_product(id):
         update_product_form.grp.data = product_id.get_product_group()
         update_product_form.image.data = product_id.get_product_image() #Gives filename
         
-        return render_template('updateProduct.html', form = update_product_form)
+        return render_template('updateProduct.html', form = update_product_form, product = product_id)
 ##################################################################
 @app.route("/deleteProduct/<uuid:id>/", methods = ["POST"])
 def delete_product(id):
@@ -371,7 +377,6 @@ def delete_product(id):
     db['Products'] = products_dict
     db.close()
     return redirect(url_for('retrieve_products'))
-
 
 
 

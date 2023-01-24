@@ -3,6 +3,7 @@
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<link rel="stylesheet" href="{{ url_for('static', filename='product.css') }}">
 <h1>Create Product</h1>
     <form method='POST' action="" enctype="multipart/form-data">
     <div class="form-group">
@@ -27,6 +28,7 @@
         <img id="preview" src="" width="400px" height="175px" alt="Image preview" />
     </div>
     <input type="submit" value="Submit" class="btn btn-primary"/>
+    <a href="/adminproducts"><input type="button" value="Cancel" class="btn btn-secondary"/></a>
     </form>
 
 {% endblock %}
