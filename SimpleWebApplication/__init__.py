@@ -135,6 +135,8 @@ def update_event(id):
         online.set_event_status(update_event_form.event_status.data)
         online.set_reg_status(update_event_form.reg_status.data)
         online.set_image(update_event_form.image.data.filename)
+        online.set_location(update_event_form.location.data)
+
 
         update_event_form.image.data.save(app.config['UPLOADED_IMAGES_DEST'] + update_event_form.image.data.filename)
 
@@ -155,6 +157,7 @@ def update_event(id):
         update_event_form.event_status.data = online.get_event_status()
         update_event_form.reg_status.data = online.get_reg_status()
         update_event_form.image.data = online.get_image()
+        update_event_form.location.data = online.get_location()
 
         return render_template('updateEvent.html', form=update_event_form, online=online)
 

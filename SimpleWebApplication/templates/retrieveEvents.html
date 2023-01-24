@@ -49,7 +49,14 @@
                 {% for online in online_list %}
                     <tr>
                         <td><img src="static/uploads/{{online.get_image() }}" width="70" height="50"><a class="name" href="">{{ online.get_name() }}</a></td>
-                        <td>{{ online.get_location() }}</td>
+                        {% if online.get_location() == "Z" %}
+                        <td>Zoom</td>
+                        {% elif online.get_location() == "G" %}
+                        <td>Google Meets</td>
+                        {% elif online.get_location() == "C" %}
+                        <td>Cisco Webex</td>
+                        {% endif %}
+
                         <td>{{ online.get_date() }}</td>
 
                         {% if online.get_event_status() == "A" %}
@@ -93,7 +100,14 @@
                                           <div class="eventid"><p>Event ID: <span>{{online.get_event_id()}}</span></p></div>
                                           <div class="desc"><p>Description: <span>{{online.get_description()}}</span></p></div>
                                           <div class="eventdate"><p>Event Date: <span>{{online.get_date()}}</span></p></div>
-                                          <div class="location"><p>Location: <span>{{online.get_location()}}</span></p></div>
+                                            {% if online.get_location() == "Z" %}
+                                            <div class="location"><p>Location: <span>Zoom</span></p></div>
+                                            {% elif online.get_location() == "G" %}
+                                            <div class="location"><p>Location: <span>Google Meets</span></p></div>
+                                            {% elif online.get_location() == "C" %}
+                                            <div class="location"><p>Location: <span>Cisco Webex</span></p></div>
+                                            {% endif %}
+
                                       </div>
 
                                    </div>

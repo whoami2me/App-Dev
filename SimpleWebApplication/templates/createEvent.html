@@ -32,12 +32,9 @@
                     <div class="form-group">
                     {{ render_field(form.location, class="form-control") }}
                     </div>
-
-                      <div class="form-group">
-                        {{ render_field(form.image, id="fileinput" , class="form-control", **{'onchange':'previewFile()'}) }}
-                      </div>
-
+                    <div class="form-group">{{ render_field(form.image, id="fileinput" , class="form-control", **{'onchange':'previewFile()'}) }}</div>
                     <div class="preview-img"><img id="preview" src="" width="400px" height="175px" alt="Image preview" /></div>
+
                     <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" id="exampleCheck1">
                     <label class="form-check-label" for="exampleCheck1">Check me out</label>
