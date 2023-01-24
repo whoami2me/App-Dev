@@ -3,6 +3,7 @@
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<link rel="stylesheet" href="{{ url_for('static', filename='product.css') }}">
 <h1>Update Product</h1>
 
     <form method='POST' action="" enctype="multipart/form-data">
@@ -26,7 +27,7 @@
     </div>
 
     <div class="preview-img">
-        <img id="preview" src="static/productimages/{{product.get_product_image() }}" width="400px" height="175px" alt="Image preview" />
+        <img id="preview" src="/productimages/{{product.get_product_image() }}" width="400px" height="175px" alt="Image preview" />
     </div>
 
     <input type="submit" value="Update" class="btn btn-primary"/>

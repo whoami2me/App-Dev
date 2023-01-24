@@ -3,6 +3,7 @@
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<link rel="stylesheet" href="{{ url_for('static', filename='product.css') }}">
 <h1>Create Product</h1>
     <form method='POST' action="" enctype="multipart/form-data">
     <div class="form-group">

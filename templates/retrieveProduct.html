@@ -30,7 +30,7 @@
 <tbody>
 {% for product in products_list %}
     <tr>
-    <td><a href="static/productimages/{{product.get_product_image() }}" target="_blank"><img src="static/productimages/{{product.get_product_image() }}" width="70" height="50"></a></td>
+    <td><a href="/productimages/{{product.get_product_image() }}" target="_blank"><img src="/productimages/{{product.get_product_image() }}" width="70" height="50"></a></td>
     <td>{{ product.get_product_id() }}</td>
     <td>{{ product.get_product_name() }}</td>
     <td>{{ product.get_product_priceformat() }}</td>

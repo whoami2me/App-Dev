@@ -366,7 +366,7 @@ def update_product(id):
         update_product_form.grp.data = product_id.get_product_group()
         update_product_form.image.data = product_id.get_product_image() #Gives filename
         
-        return render_template('updateProduct.html', form = update_product_form, products_list = products_list,)
+        return render_template('updateProduct.html', form = update_product_form, product = product_id)
 ##################################################################
 @app.route("/deleteProduct/<uuid:id>/", methods = ["POST"])
 def delete_product(id):
@@ -378,6 +378,12 @@ def delete_product(id):
     db.close()
     return redirect(url_for('retrieve_products'))
 
+@app.route('/productimages/<fname>')
+def legacy_images(fname):
+    return app.redirect(app.url_for('static', filename='productimages/' + fname), code=301)
+
+if __name__ == '__main__':
+    app.run()
 
 
 
