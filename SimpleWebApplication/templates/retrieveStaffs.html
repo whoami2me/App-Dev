@@ -1,0 +1,84 @@
+{% extends "baseStaff.html" %}
+{% block title %}Staff Accounts{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Account Management</h1>
+<h5 class="display-6">Staff Accounts</h5>
+<a href="/createStaff" class="btn btn-warning" style="float: right;">Add Staff</a>
+<div>
+  {% if count == 0 %}
+  <p>There are no staffs.</p>
+  {% elif count == 1 %}
+  <p>There is 1 staff.</p>
+  {% else %}
+  <p>There are {{ count }} staffs.</p>
+  {% endif %}
+</div>
+<hr>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Staff ID</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Membership</th>
+        <th>Date Joined</th>
+        <th>Status</th>
+        <th>View/Update</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for staff in staffs_list %}
+     <tr>
+        <td>{{ staff.get_staff_id() }}</td>
+        <td>{{ staff.get_first_name() }} {{ staff.get_last_name() }}</td>
+        <td>{{ staff.get_gender() }}</td>
+         {% if staff.get_membership() == "E" %}
+        <td>Employee</td>
+        {% elif staff.get_membership() == "A" %}
+        <td>Admin</td>
+        {% endif %}
+        <td>{{ staff.get_date_created() }}</td>
+        <td>{{ staff.get_status() }}</td>
+         <td><a href="/updateStaff/{{staff.get_staff_id()}}" class="btn btn-warning">View/Update</a></td>
+         <td>
+          <form action="{{url_for('delete_staff', id=staff.get_staff_id())}}" method="POST">
+<!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{staff.get_first_name()}} {{staff.get_last_name()}}?');">-->
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{staff.get_staff_id()}}">Delete</button>
+
+<!-- The Modal -->
+<div class="modal" id="myModal_{{staff.get_staff_id()}}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Confirmation</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to delete {{staff.get_first_name()}} {{staff.get_last_name()}}?
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <input type="submit" value="Delete" class="btn btn-danger">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+          </form>
+        </td>
+     </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

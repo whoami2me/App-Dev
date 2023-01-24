@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Login Page{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<div class="container" style="float: right;">
+    <h1>Please login</h1>
+    <br>
+    <form method="POST" action="">
+        <input type="text" placeholder="Email" name="email" value="{{ request.form.email }}">
+        <br>
+        <input type="password" placeholder="Password" name="password" value="{{ request.form.password }}">
+        <br>
+        <input class="btn btn-default" type="submit" value="Login">
+    </form>
+</div>
+{% endblock %}
+
