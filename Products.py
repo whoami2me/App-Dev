@@ -17,7 +17,7 @@ class Product:
         self.__price = float("{:.2f}".format(self.__price))
         return self.__price
     def get_product_priceformat(self):
-        self.__price = ("${:.2f}".format(self.__price))
+        self.__price = ("${:.2f}".format(float(self.__price)))
         return self.__price
     def get_product_desc(self):
         return self.__desc

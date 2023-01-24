@@ -93,8 +93,10 @@ main{
 
 /* preview image css */
 .preview-img{
+  text-align: center;
   margin: 0px;
   margin-top: 20px;
+  margin-left: 25%;
   width:400px ;
   height:175px;
   border-style: solid;
