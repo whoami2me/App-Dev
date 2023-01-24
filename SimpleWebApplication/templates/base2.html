@@ -20,7 +20,10 @@
         {% include 'includes/nav_bar2.html' %}
     {% endblock %}
     <div id="page-content-wrapper">
-        {% include 'includes/nav_bar2.5.html' %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+            <div class="d-flex align-items-center"><i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i><h2 class="fs-2 m-0">{% block silly %}{% endblock %}</h2></div>
+            {% include 'includes/nav_bar2.5.html' %}
+        </nav>
         <div class="container-fluid px-4">
             {% block content %} {% endblock %}
         </div>
