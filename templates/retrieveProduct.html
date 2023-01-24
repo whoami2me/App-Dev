@@ -2,22 +2,31 @@
 {% block title %}Western Corp - Retrieve Products{% endblock %}
 
 
-{% block silly %}Retrieve Products{% endblock %}
+{% block silly %}Product Management{% endblock %}
 
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='product.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--Data Tables-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="../retrieveProduct.js"></script>
+
 <div class="container">
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-5">
-                        <h2><b>Product Management</b></h2>
+                        <h2><b>Retrive Products</b></h2>
                         <div>
                           {% if count == 0 %}
                           <p>There are no products.</p>
@@ -30,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover" id="example" style="width:100%">
                 <thead>
                     <tr>
                         <th>Product Image</th>
