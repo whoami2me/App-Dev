@@ -4,7 +4,7 @@ from SuppliersForms import CreateSuppliersForm
 import shelve, Events, User, OnlineEvents, OfflineEvents,Suppliers
 import Products
 from ProductForms import CreateProduct
-
+from datetime import date
 app = Flask(__name__)
 app.secret_key = 'any_random_string'
 app.config['UPLOAD_DIRECTORY'] = 'uploads/'
@@ -42,8 +42,8 @@ def create_Suppliers():
             Suppliers_dict = db['Supplier']
         except:
             print("Error in retrieving Users from supplier.db.")
-
-        supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,create_Supplier_form.Address1.data, create_Supplier_form.Address2.data,create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.remarks.data)
+        today = date.today()
+        supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,create_Supplier_form.Address1.data, create_Supplier_form.Address2.data,create_Supplier_form.postal.data,create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.remarks.data, today)
         Suppliers_dict[supplier.get_Suppliers_id()] = supplier
         db['Supplier'] = Suppliers_dict
 
@@ -130,19 +130,6 @@ def delete_Supplier(id):
 
     return redirect(url_for('retrieve_Supplier'))
 
-@app.route('/viewSupplier/<int:id>')
-def show_form(id):
-    Suppliers_dict = {}
-    db = shelve.open('supplier.db', 'r')
-    Suppliers_dict = db['Supplier']
-    db.close()
-
-    Supplier_list = []
-    for key in Suppliers_dict:
-        suppl = Suppliers_dict.get(key)
-        Supplier_list.append(suppl)
-
-    return render_template('viewSupplier.html', count=len(Supplier_list), Supplier_list=Supplier_list)
 
 
 @app.errorhandler(404)

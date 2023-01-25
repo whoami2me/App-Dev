@@ -12,3 +12,8 @@ a{
 color: white;
 text-decoration-line: none;
 }
+
+#date{
+    float: right;
+    padding-top:3px;
+    }

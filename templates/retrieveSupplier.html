@@ -1,20 +1,40 @@
 {% extends "base2.html" %}
-{% block title %}Library Loan System - Retrieve Supplier{% endblock %}
+{% block title %}Western Corp - Retrieve Suppliers{% endblock %}
+
+
+{% block silly %}Retrieve Suppliers{% endblock %}
+
+
+{% block head %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<h1 class="display-4">Retrieve Supplier</h1>
-<div>
-  {% if count == 0 %}
-  <p>There are no supplier.</p>
-  {% elif count == 1 %}
-  <p>There is 1 supplier.</p>
-  {% else %}
-  <p>There are {{ count }} supplier.</p>
-  {% endif %}
-</div>
-<div>
-  <table class="table table-striped">
+<div class="container">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h2><b>Suppliers</b></h2>
+                        <div>
+                          {% if count == 0 %}
+                          <p>There are no Supplier.</p>
+                          {% elif count == 1 %}
+                          <p>There is 1 Suppliers.</p>
+                          {% else %}
+                          <p>There are {{ count }} Supplier.</p>
+                          {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
     <thead>
       <tr>
         <th>Supplier ID</th>
@@ -39,15 +59,56 @@
           <td>{{ suppliers.get_Product_name() }}</td>
           <td>{{ suppliers.get_remarks() }}</td>
 
-         <td><a href="/viewSupplier/{{suppliers.get_Suppliers_id()}}" class="btn btn-warning">View</a></td>
+         <td><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal1_{{suppliers.get_Suppliers_id()}}">
+                View
+                </button>
+         <div class="modal fade" id="exampleModal1_{{suppliers.get_Suppliers_id()}}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header bg-primary">
+                                <h5 class="modal-title text-white" id="exampleModalLabel1">{{ suppliers.get_Company_name() }}</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+
+                                  <div class="row">
+                                      <div class="col-md-7">
+                                          <div class="telephone"><p>telephone no.: <span>{{suppliers.get_telephone()}}</span></p></div>
+                                          <div class="desc"><p>Company website: <span>{{suppliers.get_website()}}</span></p></div>
+                                          <div class="desc"><p>Company email: <span>{{suppliers.get_email()}}</span></p></div>
+                                          <div class="Address"><p>Address line 1: <span>{{suppliers.get_Address1()}}</span></p></div>
+                                          <div class="desc"><p>Address line 2: <span>{{suppliers.get_Address2()}}</span></p></div>
+                                          <div class="desc"><p>Postal code: <span>{{suppliers.get_postal()}}</span></p></div>
+                                          <div class="desc"><p>Payment details: <span>{{suppliers.get_Payment()}}</span></p></div>
+                                            {% if suppliers.get_Categories_select() == "B" %}
+                                            <div class="Type"><p>Type: <span>Ball</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "F" %}
+                                            <div class="Type"><p>Type: <span>Footwear</span></p></div>
+                                            {% endif %}
+                                          <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
+                                          <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
+                                          <div class="desc"><p>Date created: <span>{{ suppliers.get_date() }}</span></p></div>
+                                      </div>
+
+                                   </div>
+
+                              </div>
+                              <div class="modal-footer d-flex justify-content-center">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+         </td>
+
          <td><a href="/updateSupplier/{{suppliers.get_Suppliers_id()}}" class="btn btn-warning">Update</a></td>
           <td>
             <form action="{{url_for('delete_Supplier', id=suppliers.get_Suppliers_id())}}" method="POST">
 <!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{suppliers.get_Company_name()}}?');"-->
-<!-- Button to Open the Modal -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{suppliers.get_Suppliers_id()}}">
-  Delete
-</button>
+        <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{suppliers.get_Suppliers_id()}}">
+                Delete
+                </button>
 
 <!-- The Modal -->
 <div class="modal" id="myModal_{{suppliers.get_Suppliers_id()}}">
@@ -77,8 +138,11 @@
           </form>
         </td>
      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}
