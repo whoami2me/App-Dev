@@ -1,10 +1,534 @@
+<!--Foundation for product home page on customer side-->
 {% extends "base.html" %}
 {% block title%}Western Corp - Products{% endblock %}
 
 {% block content %}
+<!-- Bootstrap core CSS -->
+<link href="../static/css/vendorproduct/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- Additional CSS Files -->
+<link rel="stylesheet" href="../static/css/assetsproduct/css/fontawesome.css">
+<link rel="stylesheet" href="../static/css/assetsproduct/css/tooplate-main.css">
+<link rel="stylesheet" href="../static/css/assetsproduct/css/owl.css">
 
-<h1 class="display-4">Products</h1>
+
+<!-- Bootstrap core JavaScript -->
+<script src="../static/css/vendorproduct/jquery/jquery.min.js"></script>
+<script src="../static/css/vendorproduct/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Additional Scripts -->
+<script src="../static/css/assetsproduct/js/custom.js"></script>
+<script src="../static/css/assetsproduct/js/owl.js"></script>
+<script src="../static/css/assetsproduct/js/isotope.js"></script>
+<script language = "text/Javascript"> 
+  cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+  function clearField(t){                   //declaring the array outside of the
+  if(! cleared[t.id]){                      // function makes it static and global
+      cleared[t.id] = 1;  // you could use true and false, but that's more typing
+      t.value='';         // with more chance of typos
+      t.style.color='#fff';
+      }
+  }
+</script>
+
+
+<div class="featured-page">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-sm-12">
+            <div class="section-heading">
+              <div class="line-dec"></div>
+              <h1>Products</h1>
+            </div>
+          </div>
+          <div class="col-md-8 col-sm-12">
+            <div id="filters" class="button-group">
+              <button class="btn btn-primary" data-filter="*">All Products</button>
+              <button class="btn btn-primary" data-filter=".new">Newest</button>
+              <button class="btn btn-primary" data-filter=".low">Low Price</button>
+              <button class="btn btn-primary" data-filter=".high">Hight Price</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="featured container no-gutter">
+        {% if count >= 9 %}
+        <div class="row posts">
+            <div id="1" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[0].get_product_image() }}" alt="">
+                    <h4>{{ products[0].get_product_name() }}</h4>
+                    <h6>{{ products[0].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        <div id="2" class="item high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[1].get_product_image() }}" alt="">
+                    <h4>{{ products[1].get_product_name() }}</h4>
+                    <h6>{{ products[1].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="3" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[2].get_product_image() }}" alt="">
+                    <h4>{{ products[2].get_product_name() }}</h4>
+                    <h6>{{ products[2].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="4" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[3].get_product_image() }}" alt="">
+                    <h4>{{ products[3].get_product_name() }}</h4>
+                    <h6>{{ products[3].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="5" class="item new high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[4].get_product_image() }}" alt="">
+                    <h4>{{ products[4].get_product_name() }}</h4>
+                    <h6>{{ products[4].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="6" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[5].get_product_image() }}" alt="">
+                    <h4>{{ products[5].get_product_name() }}</h4>
+                    <h6>{{ products[5].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="7" class="item new high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[6].get_product_image() }}" alt="">
+                    <h4>{{ products[6].get_product_name() }}</h4>
+                    <h6>{{ products[6].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="8" class="item low new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[7].get_product_image() }}" alt="">
+                    <h4>{{ products[7].get_product_name() }}</h4>
+                    <h6>{{ products[7].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="9" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[8].get_product_image() }}" alt="">
+                    <h4>{{ products[8].get_product_name() }}</h4>
+                    <h6>{{ products[8].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        </div>
+
+
+        {% elif count == 8 %}
+        <div class="row posts">
+            <div id="1" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[0].get_product_image() }}" alt="">
+                    <h4>{{ products[0].get_product_name() }}</h4>
+                    <h6>{{ products[0].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            
+        <div id="2" class="item high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[1].get_product_image() }}" alt="">
+                    <h4>{{ products[1].get_product_name() }}</h4>
+                    <h6>{{ products[1].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="3" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[2].get_product_image() }}" alt="">
+                    <h4>{{ products[2].get_product_name() }}</h4>
+                    <h6>{{ products[2].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="4" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[3].get_product_image() }}" alt="">
+                    <h4>{{ products[3].get_product_name() }}</h4>
+                    <h6>{{ products[3].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="5" class="item new high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[4].get_product_image() }}" alt="">
+                    <h4>{{ products[4].get_product_name() }}</h4>
+                    <h6>{{ products[4].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="6" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[5].get_product_image() }}" alt="">
+                    <h4>{{ products[5].get_product_name() }}</h4>
+                    <h6>{{ products[5].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="7" class="item new high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[6].get_product_image() }}" alt="">
+                    <h4>{{ products[6].get_product_name() }}</h4>
+                    <h6>{{ products[6].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="8" class="item low new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[7].get_product_image() }}" alt="">
+                    <h4>{{ products[7].get_product_name() }}</h4>
+                    <h6>{{ products[7].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        </div>
+
+
+        {% elif count == 7 %}
+        <div class="row posts">
+            <div id="1" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[0].get_product_image() }}" alt="">
+                    <h4>{{ products[0].get_product_name() }}</h4>
+                    <h6>{{ products[0].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            
+        <div id="2" class="item high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[1].get_product_image() }}" alt="">
+                    <h4>{{ products[1].get_product_name() }}</h4>
+                    <h6>{{ products[1].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="3" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[2].get_product_image() }}" alt="">
+                    <h4>{{ products[2].get_product_name() }}</h4>
+                    <h6>{{ products[2].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="4" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[3].get_product_image() }}" alt="">
+                    <h4>{{ products[3].get_product_name() }}</h4>
+                    <h6>{{ products[3].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="5" class="item new high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[4].get_product_image() }}" alt="">
+                    <h4>{{ products[4].get_product_name() }}</h4>
+                    <h6>{{ products[4].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="6" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[5].get_product_image() }}" alt="">
+                    <h4>{{ products[5].get_product_name() }}</h4>
+                    <h6>{{ products[5].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="7" class="item new high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[6].get_product_image() }}" alt="">
+                    <h4>{{ products[6].get_product_name() }}</h4>
+                    <h6>{{ products[6].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        </div>
+
+
+        {% elif count == 6 %}
+        <div class="row posts">
+            <div id="1" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[0].get_product_image() }}" alt="">
+                    <h4>{{ products[0].get_product_name() }}</h4>
+                    <h6>{{ products[0].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            
+        <div id="2" class="item high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[1].get_product_image() }}" alt="">
+                    <h4>{{ products[1].get_product_name() }}</h4>
+                    <h6>{{ products[1].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="3" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[2].get_product_image() }}" alt="">
+                    <h4>{{ products[2].get_product_name() }}</h4>
+                    <h6>{{ products[2].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="4" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[3].get_product_image() }}" alt="">
+                    <h4>{{ products[3].get_product_name() }}</h4>
+                    <h6>{{ products[3].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="5" class="item new high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[4].get_product_image() }}" alt="">
+                    <h4>{{ products[4].get_product_name() }}</h4>
+                    <h6>{{ products[4].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="6" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[5].get_product_image() }}" alt="">
+                    <h4>{{ products[5].get_product_name() }}</h4>
+                    <h6>{{ products[5].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        </div>
+
+
+        {% elif count == 5 %}
+        <div class="row posts">
+            <div id="1" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[0].get_product_image() }}" alt="">
+                    <h4>{{ products[0].get_product_name() }}</h4>
+                    <h6>{{ products[0].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            
+        <div id="2" class="item high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[1].get_product_image() }}" alt="">
+                    <h4>{{ products[1].get_product_name() }}</h4>
+                    <h6>{{ products[1].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="3" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[2].get_product_image() }}" alt="">
+                    <h4>{{ products[2].get_product_name() }}</h4>
+                    <h6>{{ products[2].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="4" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[3].get_product_image() }}" alt="">
+                    <h4>{{ products[3].get_product_name() }}</h4>
+                    <h6>{{ products[3].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="5" class="item new high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[4].get_product_image() }}" alt="">
+                    <h4>{{ products[4].get_product_name() }}</h4>
+                    <h6>{{ products[4].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        </div>
+
+
+        {% elif count == 4 %}
+        <div class="row posts">
+            <div id="1" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[0].get_product_image() }}" alt="">
+                    <h4>{{ products[0].get_product_name() }}</h4>
+                    <h6>{{ products[0].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            
+        <div id="2" class="item high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[1].get_product_image() }}" alt="">
+                    <h4>{{ products[1].get_product_name() }}</h4>
+                    <h6>{{ products[1].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="3" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[2].get_product_image() }}" alt="">
+                    <h4>{{ products[2].get_product_name() }}</h4>
+                    <h6>{{ products[2].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="4" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[3].get_product_image() }}" alt="">
+                    <h4>{{ products[3].get_product_name() }}</h4>
+                    <h6>{{ products[3].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        </div>
+
+
+        {% elif count == 3 %}
+        <div class="row posts">
+            <div id="1" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[0].get_product_image() }}" alt="">
+                    <h4>{{ products[0].get_product_name() }}</h4>
+                    <h6>{{ products[0].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            
+        <div id="2" class="item high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[1].get_product_image() }}" alt="">
+                    <h4>{{ products[1].get_product_name() }}</h4>
+                    <h6>{{ products[1].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            <div id="3" class="item low col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[2].get_product_image() }}" alt="">
+                    <h4>{{ products[2].get_product_name() }}</h4>
+                    <h6>{{ products[2].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        </div>
+
+
+        {% elif count == 2 %}
+        <div class="row posts">
+            <div id="1" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[0].get_product_image() }}" alt="">
+                    <h4>{{ products[0].get_product_name() }}</h4>
+                    <h6>{{ products[0].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+            
+        <div id="2" class="item high col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[1].get_product_image() }}" alt="">
+                    <h4>{{ products[1].get_product_name() }}</h4>
+                    <h6>{{ products[1].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        </div>
+
+
+        {% elif count == 1 %}
+        <div class="row posts">
+            <div id="1" class="item new col-md-4">
+              <a href="single-product.html">
+                <div class="featured-item">
+                    <img src="static/productimages/{{products[0].get_product_image() }}" alt="">
+                    <h4>{{ products[0].get_product_name() }}</h4>
+                    <h6>{{ products[0].get_product_priceformat() }}</h6>
+                </div>
+              </a>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+            
+
+    <div class="page-navigation">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul>
+              <li class="current-page"><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Featred Page Ends Here -->
+
+    
 
 
 {% endblock %}
-<!--Foundation for product home page on customer side-->
