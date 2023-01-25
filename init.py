@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from EventForms import CreateOnlineEventForm, CreateOfflineEventForm, CreateUserForm
 import shelve, Events, User, OnlineEvents, OfflineEvents
 import Products
-from ProductForms import CreateProduct
+from ProductForms import CreateProduct, UpdateProduct
 from werkzeug.datastructures import CombinedMultiDict
 
 app = Flask(__name__)
@@ -325,7 +325,7 @@ def retrieve_products():
 
 @app.route('/updateProduct/<uuid:id>/', methods=['GET','POST'])
 def update_product(id):
-    update_product_form = CreateProduct(CombinedMultiDict((request.files,request.form)))
+    update_product_form = UpdateProduct(CombinedMultiDict((request.files,request.form)))
     
     #Save changes
     if request.method == 'POST' and update_product_form.validate():
@@ -342,6 +342,7 @@ def update_product(id):
         product_id.set_product_qty(update_product_form.qty.data) 
         product_id.set_product_group(update_product_form.grp.data)
         product_id.set_product_image(update_product_form.image.data.filename)
+        product_id.set_product_status(update_product_form.status.data)
         db['Products'] = products_dict
         db.close()
 
@@ -364,6 +365,7 @@ def update_product(id):
         update_product_form.qty.data = product_id.get_product_qty()
         update_product_form.grp.data = product_id.get_product_group()
         update_product_form.image.data = product_id.get_product_image() #Gives filename
+        update_product_form.status.data = product_id.get_product_status()
         
         return render_template('updateProduct.html', form = update_product_form, product = product_id)
 

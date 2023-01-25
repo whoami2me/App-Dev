@@ -50,6 +50,7 @@
                         <th>Quantity</th>
                         <th>Category</th>
                         <th>Date Created</th>
+                        <th>Status</th>
                         <th>Action(s)</th>
                     </tr>
                 </thead>
@@ -73,6 +74,11 @@
                         <td>{{ product.get_product_qty() }}</td>    
                         <td>{{ product.get_product_group() }}</td>
                         <td>{{ product.get_product_date() }}</td>
+                        {% if product.get_product_status() == "Active" %}
+                            <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif product.get_product_status() == "Inactive" %}
+                            <td><span class="status text-danger">&bull;</span>Inactive</td>
+                        {% endif %}
                         <td>
                             <a href="/updateProduct/{{product.get_product_id()}}" class="btn btn-warning">Update</a>
                         </td>
