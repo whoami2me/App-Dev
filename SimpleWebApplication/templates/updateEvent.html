@@ -8,7 +8,13 @@
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 
-<h1 class="display-4">Update Online Event</h1>
+<section id="update-event">
+    <div class="container-lg">
+        <div class="text-center">
+            <h1 class="display-5">Update Online Event</h1>
+            <p class="lead">Update to the latest Event</p>
+        </div>
+
 
 <form method="POST" action="" enctype="multipart/form-data">
   <div class="form-group">
@@ -35,4 +41,9 @@
 
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
+
+
+    </div>
+</section>
+
 {% endblock %}

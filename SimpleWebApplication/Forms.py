@@ -18,7 +18,7 @@ class CreateEventForm(Form):
 
 
 class CreateOEventForm(Form):
-    name = StringField('Name', [validators.Length(min=1, max=150, message="It should be in a range from 1 to 150!"), validators.DataRequired()], validators.Regexp('[a-zA-Z0-9_-]+$', message="It should only contain letters, numbers , underscores and dashes"))
+    name = StringField('Name', [validators.Length(min=1, max=150, message="It should be in a range from 1 to 150!"), validators.DataRequired(), validators.Regexp('[a-zA-Z0-9_-]+$', message="It should only contain letters, numbers , underscores and dashes")])
     image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg' ,'gif']), FileSize(max_size=16, min_size=2, message="Invalid file size")])
     description = TextAreaField('Description', [validators.Length(min=1, max=150, message="It should be in a range from 1 to 150!"), validators.DataRequired()])
     date = DateField('Date', validators=[validators.DataRequired()], format='%Y-%m-%d')
