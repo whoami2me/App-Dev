@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from EventForms import CreateOnlineEventForm, CreateOfflineEventForm, CreateUserForm
 from SuppliersForms import CreateSuppliersForm
-import shelve, Events, User, OnlineEvents, OfflineEvents,Suppliers
+from InventoryForms import CreateInventoryForm
+import shelve, Events, User, OnlineEvents, OfflineEvents,Suppliers,Inventory
 import Products
 from ProductForms import CreateProduct
 from datetime import date
@@ -41,7 +42,7 @@ def create_Suppliers():
         try:
             Suppliers_dict = db['Supplier']
         except:
-            print("Error in retrieving Users from supplier.db.")
+            print("Error in retrieving info from supplier.db.")
         today = date.today()
         supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,create_Supplier_form.Address1.data, create_Supplier_form.Address2.data,create_Supplier_form.postal.data,create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.remarks.data, today)
         Suppliers_dict[supplier.get_Suppliers_id()] = supplier
@@ -130,7 +131,40 @@ def delete_Supplier(id):
 
     return redirect(url_for('retrieve_Supplier'))
 
+@app.route('/createInventory', methods=['GET', 'POST'])
+def create_Inventory():
+    create_Inventory_form = CreateInventoryForm(request.form)
+    if request.method == 'POST' and create_Inventory_form.validate():
+        Inventory_dict = {}
+        db = shelve.open('Inventory.db', 'c')
 
+        try:
+            Inventory_dict = db['Inventory']
+        except:
+            print("Error in retrieving supply from Inventory.db.")
+        today = date.today()
+        supply = Inventory.Inventory(create_Inventory_form.Categories_select.data,create_Inventory_form.Product_name.data,create_Inventory_form.Qty.data,create_Inventory_form.remarks.data ,today)
+        Inventory_dict[Inventory.get_Inventory_id()] = supply
+        db['Inventory'] = Inventory_dict
+
+        db.close()
+
+        return redirect(url_for('retrieve_Inventory'))
+    return render_template('createInventory.html', form=create_Inventory_form)
+
+@app.route('/retrieveInventory')
+def retrieve_Inventory():
+    Inventory_dict = {}
+    db = shelve.open('Inventory.db', 'r')
+    Inventory_dict = db['Inventory']
+    db.close()
+
+    Inventory_list = []
+    for key in Inventory_dict:
+        supp = Inventory_dict.get(key)
+        Inventory_list.append(supp)
+
+    return render_template('retrieveInventory.html', count=len(Inventory_list), Inventory_list=Inventory_list)
 
 @app.errorhandler(404)
 def page_not_found(e):
