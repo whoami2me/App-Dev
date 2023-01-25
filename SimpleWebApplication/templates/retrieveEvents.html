@@ -93,7 +93,10 @@
 
                                   <div class="row">
 
-                                      <div class="col-md-5"><img src="static/uploads/{{online.get_image() }}" alt="teste" class="img-thumbnail" height="100"></div>
+                                      <div class="col-md-5">
+                                          <img src="static/uploads/{{online.get_image() }}" alt="teste" class="img-thumbnail" height="100">
+
+                                      </div>
 
                                       <div class="col-md-7">
                                           <div class="name"><p>Name: <span>{{ online.get_name() }}</span></p></div>
@@ -200,8 +203,11 @@
                               </div>
                               <div class="modal-body">
 
-                                  <div class="row">
-                                      <div class="col-md-5"><img src="static/uploads/{{offline.get_image() }}" alt="teste" class="img-thumbnail" height="100"></div>
+                                  <div class="row d-flex">
+                                      <div class="col-md-5">
+                                          <img src="static/uploads/{{offline.get_image() }}" alt="teste" class="img-thumbnail" height="100">
+                                          <iframe class="map", src="/get_map" width="180" height="180"></iframe>
+                                        </div>
 
                                       <div class="col-md-7">
                                           <div class="name"><p>Name: <span>{{ offline.get_name() }}</span></p></div>

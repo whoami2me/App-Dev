@@ -137,7 +137,6 @@ def update_event(id):
         online.set_image(update_event_form.image.data.filename)
         online.set_location(update_event_form.location.data)
 
-
         update_event_form.image.data.save(app.config['UPLOADED_IMAGES_DEST'] + update_event_form.image.data.filename)
 
         db['Online'] = online_dict
