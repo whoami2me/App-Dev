@@ -79,50 +79,8 @@
 
                         <td>
                             <a href="/updateEvent/{{online.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
-                            <a href="#" class="delete" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal1"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="#" class="delete" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myOutput{{ online.get_event_id() }}"><i class="material-icons">remove_red_eye</i></a>
                         </td>
-
-                        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header bg-primary">
-                                <h5 class="modal-title text-white" id="exampleModalLabel1">Event Details</h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-
-                                  <div class="row">
-
-                                      <div class="col-md-5">
-                                          <img src="static/uploads/{{online.get_image() }}" alt="teste" class="img-thumbnail" height="100">
-
-                                      </div>
-
-                                      <div class="col-md-7">
-                                          <div class="name"><p>Name: <span>{{ online.get_name() }}</span></p></div>
-                                          <div class="eventid"><p>Event ID: <span>{{online.get_event_id()}}</span></p></div>
-                                          <div class="desc"><p>Description: <span>{{online.get_description()}}</span></p></div>
-                                          <div class="eventdate"><p>Event Date: <span>{{online.get_date()}}</span></p></div>
-                                            {% if online.get_location() == "Z" %}
-                                            <div class="location"><p>Location: <span>Zoom</span></p></div>
-                                            {% elif online.get_location() == "G" %}
-                                            <div class="location"><p>Location: <span>Google Meets</span></p></div>
-                                            {% elif online.get_location() == "C" %}
-                                            <div class="location"><p>Location: <span>Cisco Webex</span></p></div>
-                                            {% endif %}
-
-                                      </div>
-
-                                   </div>
-
-                              </div>
-                              <div class="modal-footer d-flex justify-content-center">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -130,6 +88,48 @@
         </div>
     </div>
 </div>
+
+{% for online in online_list %}
+<div class="modal fade" id="myOutput{{ online.get_event_id() }}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="exampleModalLabel1">Event Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="row">
+
+                    <div class="col-md-5">
+                        <img src="static/uploads/{{online.get_image() }}" alt="teste" class="img-thumbnail" height="100">
+
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="name"><p>Name: <span>{{ online.get_name() }}</span></p></div>
+                        <div class="eventid"><p>Event ID: <span>{{online.get_event_id()}}</span></p></div>
+                        <div class="desc"><p>Description: <span>{{online.get_description()}}</span></p></div>
+                        <div class="eventdate"><p>Event Date: <span>{{online.get_date()}}</span></p></div>
+                        {% if online.get_location() == "Z" %}
+                        <div class="location"><p>Location: <span>Zoom</span></p></div>
+                        {% elif online.get_location() == "G" %}
+                        <div class="location"><p>Location: <span>Google Meets</span></p></div>
+                        {% elif online.get_location() == "C" %}
+                        <div class="location"><p>Location: <span>Cisco Webex</span></p></div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
 
 
 <div class="container">
@@ -191,46 +191,49 @@
 
                         <td>
                             <a href="/updateOfflineEvent/{{offline.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
-                            <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myOutput{{ offline.get_event_id() }}"><i class="material-icons">remove_red_eye</i></a>
                         </td>
 
-                        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header bg-primary">
-                                <h5 class="modal-title text-white" id="exampleModalLabel">Event Details</h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-
-                                  <div class="row d-flex">
-                                      <div class="col-md-5">
-                                          <img src="static/uploads/{{offline.get_image() }}" alt="teste" class="img-thumbnail" height="100">
-                                          <iframe class="map", src="/get_map" width="180" height="180"></iframe>
-                                        </div>
-
-                                      <div class="col-md-7">
-                                          <div class="name"><p>Name: <span>{{ offline.get_name() }}</span></p></div>
-                                          <div class="eventid"><p>Event ID: <span>{{offline.get_event_id()}}</span></p></div>
-                                          <div class="desc"><p>Description: <span>{{offline.get_description()}}</span></p></div>
-                                          <div class="eventdate"><p>Event Date: <span>{{offline.get_date()}}</span></p></div>
-                                          <div class="pax"><p>Pax: <span>{{offline.get_pax()}}</span></p></div>
-                                          <div class="location"><p>Location: <span>{{offline.get_location()}}</span></p></div>
-                                      </div>
-                                  </div>
-
-                              </div>
-                              <div class="modal-footer d-flex justify-content-center">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        {% endfor %}
                     </tr>
-                {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+{% for offline in offline_list %}
+<div class="modal fade" id="myOutput{{ offline.get_event_id() }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="exampleModalLabel">Event Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row d-flex">
+                    <div class="col-md-5">
+                        <img src="static/uploads/{{offline.get_image() }}" alt="teste" class="img-thumbnail" height="100">
+                        <iframe class="map", src="/get_map" width="180" height="180"></iframe>
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="name"><p>Name: <span>{{ offline.get_name() }}</span></p></div>
+                        <div class="eventid"><p>Event ID: <span>{{offline.get_event_id()}}</span></p></div>
+                        <div class="desc"><p>Description: <span>{{offline.get_description()}}</span></p></div>
+                        <div class="eventdate"><p>Event Date: <span>{{offline.get_date()}}</span></p></div>
+                        <div class="pax"><p>Pax: <span>{{offline.get_pax()}}</span></p></div>
+                        <div class="location"><p>Location: <span>{{offline.get_location()}}</span></p></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
 {% endblock %}
