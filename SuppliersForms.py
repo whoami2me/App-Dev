@@ -23,7 +23,7 @@ class CreateSuppliersForm(Form):
     website = StringField('Supplier website', [validators.Length(min=1, max=150), validators.DataRequired(), validators.regexp("^https://[0-9A-z.]+.[0-9A-z.]+.[a-z]+$",message= "Please enter a valid website")])
     email = StringField('Company e-mail:', [validators.Email(message="Please enter a valid email")])
     Address1 = StringField('Address line 1', [validators.Length(min=1, max=150), validators.DataRequired()])
-    Address2 = StringField('Unit no.', [validators.Length(min=1, max=10), validators.Optional()])
+    Address2 = StringField('Unit no. #', [validators.Length(min=1, max=10), validators.Optional()])
     postal = IntegerField('Postal code', [validators.InputRequired(), check_postal_code])
     Payment = IntegerField("Payment Details", [validators.InputRequired(), check_payment])
     Categories_select = SelectField('Categories', [validators.DataRequired()], choices=[('', 'Select'), ('B', 'Ball'), ('F', 'Footwear')],default='')

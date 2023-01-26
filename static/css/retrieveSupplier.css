@@ -1,0 +1,21 @@
+#searchbar {
+float: right;
+}
+input[type=text] {
+padding: 6px;
+margin-top: 8px;
+font-size: 10px;
+border: none;
+}
+#searchbar button {
+
+padding: 6px;
+margin-top: 8px;
+background: orange;
+font-size: 10px;
+border: none;
+cursor: pointer;
+}
+#searchbar button:hover {
+background: #F64A17;
+}
