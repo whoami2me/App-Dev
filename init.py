@@ -136,14 +136,15 @@ def home_product():
 
     products_list = []
     products_list2 = [] #Excludes inactive products
+
     for key in products_dict:
         p = products_dict.get(key)
         products_list.append(p)
     for i in products_list:
         if i.get_product_status() == 'Active':
             products_list2.append(i)
-
-    return render_template('homeProduct.html',products = products_list2,count = len(products_list2))
+        
+    return render_template('homeProduct.html',products = products_list2)
 
 
 @app.errorhandler(404)
