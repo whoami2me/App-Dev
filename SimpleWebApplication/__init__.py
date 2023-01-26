@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from Forms import CreateStaffForm, CreateCustomerForm
+from Forms import CreateStaffForm, CreateCustomerForm, UpdateStaffForm
 import shelve, Staff, Customer
 from datetime import date
 
@@ -40,7 +40,9 @@ def create_staff():
                             create_staff_form.email.data, create_staff_form.address1.data,
                             create_staff_form.address2.data, create_staff_form.gender.data,
                             create_staff_form.membership.data,  create_staff_form.password.data,
-                            create_staff_form.passwordcfm.data, 'Active', today, create_staff_form.phone_number.data)
+                            create_staff_form.passwordcfm.data, today, create_staff_form.phone_number.data,
+                            create_staff_form.postal_code.data, create_staff_form.unit_number.data,
+                            create_staff_form.floor_number.data)
         staffs_dict[staff.get_staff_id()] = staff
         db['Staffs'] = staffs_dict
 
@@ -110,7 +112,7 @@ def retrieve_customers():
 
 @app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
 def update_staff(id):
-    update_staff_form = CreateStaffForm(request.form)
+    update_staff_form = UpdateStaffForm(request.form)
     if request.method == 'POST' and update_staff_form.validate():
         staffs_dict = {}
         db = shelve.open('staff.db', 'w')
@@ -124,9 +126,11 @@ def update_staff(id):
         staff.set_address2(update_staff_form.address2.data)
         staff.set_gender(update_staff_form.gender.data)
         staff.set_membership(update_staff_form.membership.data)
-        staff.set_password(update_staff_form.password.data)
-        staff.set_passwordcfm(update_staff_form.passwordcfm.data)
         staff.set_phone_number(update_staff_form.phone_number.data)
+        staff.set_postal_code(update_staff_form.postal_code.data)
+        staff.set_floor_number(update_staff_form.floor_number.data)
+        staff.set_unit_number(update_staff_form.unit_number.data)
+        staff.set_status(update_staff_form.status.data)
 
         db['Staffs'] = staffs_dict
         db.close()
@@ -146,9 +150,11 @@ def update_staff(id):
         update_staff_form.address2.data = staff.get_address2()
         update_staff_form.gender.data = staff.get_gender()
         update_staff_form.membership.data = staff.get_membership()
-        update_staff_form.password.data = staff.get_password()
-        update_staff_form.passwordcfm.data = staff.get_passwordcfm()
         update_staff_form.phone_number.data = staff.get_phone_number()
+        update_staff_form.postal_code.data = staff.get_postal_code()
+        update_staff_form.floor_number.data = staff.get_floor_number()
+        update_staff_form.unit_number.data = staff.get_unit_number()
+        update_staff_form.status.data = staff.get_status()
 
         return render_template('updateStaff.html', form=update_staff_form)
 
@@ -168,6 +174,9 @@ def update_customer(id):
         customer.set_email(update_customer_form.email.data)
         customer.set_address1(update_customer_form.address1.data)
         customer.set_address2(update_customer_form.address2.data)
+        customer.set_password(update_customer_form.password.data)
+        customer.set_passwordcfm(update_customer_form.passwordcfm.data)
+        customer.set_phone_number(update_customer_form.phone_number.data)
 
         db['Customers'] = customers_dict
         db.close()
@@ -186,6 +195,9 @@ def update_customer(id):
         update_customer_form.email.data = customer.get_email()
         update_customer_form.address1.data = customer.get_address1()
         update_customer_form.address2.data = customer.get_address2()
+        update_customer_form.password.data = customer.get_password()
+        update_customer_form.passwordcfm.data = customer.get_passwordcfm()
+        update_customer_form.phone_number.data = customer.get_phone_number()
 
         return render_template('updateCustomer.html', form=update_customer_form)
 

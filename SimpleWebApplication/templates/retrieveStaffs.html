@@ -59,7 +59,11 @@
                         <td>Admin</td>
                         {% endif %}
                         <td>{{ staff.get_date_created() }}</td>
-                        <td>{{ staff.get_status() }}</td>
+                        {% if staff.get_status() == "A" %}
+                        <td>Active</td>
+                        {% elif staff.get_status() == "I" %}
+                        <td>Inactive</td>
+                        {% endif %}
                         <td>
                             <a href="/updateStaff/{{staff.get_staff_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
                             <a href="#" class="view" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myViewModal_{{staff.get_staff_id()}}" style="color: turquoise"><i class="material-icons">remove_red_eye</i></a>

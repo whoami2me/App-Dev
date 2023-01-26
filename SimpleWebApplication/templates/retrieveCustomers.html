@@ -2,82 +2,128 @@
 {% block title %}Customer Accounts{% endblock %}
 {% block silly %}Account Management{% endblock %}
 
-{% block content %}
-<h5 class="display-6">Customer Accounts</h5>
-<a href="/createCustomer" class="btn btn-warning" style="float: right;">Add Staff</a>
-<div>
-  {% if count == 0 %}
-  <p>There are no customers.</p>
-  {% elif count == 1 %}
-  <p>There is 1 customer.</p>
-  {% else %}
-  <p>There are {{ count }} customers.</p>
-  {% endif %}
-</div>
-<hr>
-<div>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Customer ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Gender</th>
-        <th>Date Joined</th>
-        <th>Status</th>
-        <th>View/Update</th>
-        <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for customer in customers_list %}
-        <tr>
-          <td>{{ customer.get_customer_id() }}</td>
-          <td>{{ customer.get_first_name() }} {{ customer.get_last_name() }}</td>
-          <td>{{ customer.get_email() }}</td>
-          <td>{{ customer.get_gender() }}</td>
-          <td>{{ customer.get_date_created() }}</td>
-          <td>{{ customer.get_status() }}</td>
-          <td><a href="/updateCustomer/{{customer.get_customer_id()}}" class="btn btn-warning">View/Update</a></td>
-          <td>
-            <form action="{{url_for('delete_customer', id=customer.get_customer_id())}}" method="POST">
-<!--              <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{customer.get_first_name()}} {{customer.get_last_name()}}?');">-->
-<!-- Button to Open the Modal -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{customer.get_customer_id()}}">
-  Delete
-</button>
-
-<!-- The Modal -->
-<div class="modal" id="myModal_{{customer.get_customer_id()}}">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Delete Confirmation</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body">
-        Are you sure you want to delete {{customer.get_first_name()}} {{customer.get_last_name()}}?
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <input type="submit" value="Delete" class="btn btn-danger">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-            </form>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+{% block head %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
+{% block content %}
+<a href="/createCustomer" class="btn btn-warning" style="float: right;">Add Customer</a>
+<div class="container">
+    <div class="table-responsive-xxl">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h2><b>Customer Accounts</b></h2>
+                        <div>
+                          {% if count == 0 %}
+                          <p>There are no customers.</p>
+                          {% elif count == 1 %}
+                          <p>There is 1 customer.</p>
+                          {% else %}
+                          <p>There are {{ count }} customers.</p>
+                          {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                      <th>Customer ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Gender</th>
+                      <th>Date Joined</th>
+                      <th>Status</th>
+                      <th>View/Update</th>
+                      <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for customer in customers_list %}
+                    <tr>
+                      <td>{{ customer.get_customer_id() }}</td>
+                      <td>{{ customer.get_first_name() }} {{ customer.get_last_name() }}</td>
+                      <td>{{ customer.get_email() }}</td>
+                      <td>{{ customer.get_gender() }}</td>
+                      <td>{{ customer.get_date_created() }}</td>
+                      <td>{{ customer.get_status() }}</td>
+                      <td>
+                            <a href="/updateCustomer/{{customer.get_customer_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
+                            <a href="#" class="view" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myViewModal_{{customer.get_customer_id()}}" style="color: turquoise"><i class="material-icons">remove_red_eye</i></a>
+                      </td>
+
+            <!-- Button to Open the Modal -->
+                <td><a href="#" class="delete" title="delete" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myDeleteModal_{{customer.get_customer_id()}}" style="color: Red"><i class="material-icons">remove_circle</i></a></td>
+
+            <!-- The Delete Modal -->
+            <div class="modal" id="myDeleteModal_{{customer.get_customer_id()}}">
+              <div class="modal-dialog">
+                <div class="modal-content">
+
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    Are you sure you want to delete {{customer.get_first_name()}} {{customer.get_last_name()}}?
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+             <div class="modal" id="myViewModal_{{customer.get_customer_id()}}">
+              <div class="modal-dialog">
+                <div class="modal-content">
+
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Customer's Detail</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    Name: {{ customer.get_first_name() }} {{ customer.get_last_name() }}<br>
+                    Email: {{ customer.get_email() }}<br>
+                    Gender: {{ customer.get_gender() }}<br>
+                    Address: {{ customer.get_address1() }} {{ customer.get_address2() }}<br>
+                    Date Joined: {{ customer.get_date_created() }}<br>
+                    Status: {{ customer.get_status() }}
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="float: center">Okay</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+                      </form>
+                    </td>
+                 </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
