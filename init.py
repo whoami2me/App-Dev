@@ -13,7 +13,7 @@ app.config['Product_Images_Dest'] = 'static/productimages/'
 
 @app.route('/')
 def home():
-    return render_template('loginevents.html')
+   return redirect(url_for('home_product'))
 
 
 @app.route('/staff')
