@@ -57,7 +57,7 @@
                 <tbody>
                 {% for product in products_list %}
                     <tr>
-                        <td><img class="myImages" id="myImg" src="static/productimages/{{product.get_product_image() }}" alt= {{product.get_product_name()}}&nbspImage width="100" height="50">
+                        <td><img class="myImages" id="myImg" src="static/productimages/{{product.get_product_image() }}" alt= "{{ product.get_product_name() }}&nbspImage" width="100" height="50">
                         <!-- The Modal -->
                         <div id="myModal" class="modal">
                                 
@@ -84,7 +84,31 @@
                         </td>
                         <td>
                           <form action="/deleteProduct/{{product.get_product_id()}}" method="POST">
-                          <input type="submit" value="Delete" class="btn btn-danger">
+                          <!-- Button to Open the Modal -->
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{ product.get_product_id() }}">
+                                Delete
+                                </button>
+                                <!-- The Modal -->
+                                <div class="modal" id="myModal_{{ product.get_product_id() }}">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                <h4 class="modal-title">Confirm Deletion?</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                Are you sure you want to delete {{ product.get_product_name() }}? Product ID: {{ product.get_product_id() }}
+                                </div>
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                <input type="submit" value="Delete" class="btn btn-danger">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
                           </form>
                           </td>
 

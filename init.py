@@ -45,8 +45,13 @@ def create_product():
 
         create_product_form.image.data.save(app.config['Product_Images_Dest'] + create_product_form.image.data.filename)
 
-
-        p = Products.Product(create_product_form.name.data,create_product_form.price.data,create_product_form.desc.data,create_product_form.qty.data,create_product_form.grp.data,create_product_form.image.data.filename)
+        p = Products.Product(create_product_form.name.data,
+                             create_product_form.price.data,
+                             create_product_form.desc.data,
+                             create_product_form.qty.data,
+                             create_product_form.grp.data,
+                             create_product_form.image.data.filename)
+                             
         products_dict[p.get_product_id()] = p
         db['Products'] = products_dict
         db.close()
