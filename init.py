@@ -44,7 +44,10 @@ def create_Suppliers():
         except:
             print("Error in retrieving info from supplier.db.")
         today = date.today()
-        supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,create_Supplier_form.Address1.data, create_Supplier_form.Address2.data,create_Supplier_form.postal.data,create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.remarks.data, today)
+        supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,
+                                       create_Supplier_form.Address1.data, create_Supplier_form.floor_number.data,create_Supplier_form.unit_number.data,create_Supplier_form.postal.data,
+                                       create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.remarks.data,
+                                       today)
         Suppliers_dict[supplier.get_Suppliers_id()] = supplier
         db['Supplier'] = Suppliers_dict
 
@@ -84,7 +87,8 @@ def update_Supplier(id):
         Supplier.set_website(update_Supplier_form.website.data)
         Supplier.set_email(update_Supplier_form.email.data)
         Supplier.set_Address1(update_Supplier_form.Address1.data)
-        Supplier.set_Address2(update_Supplier_form.Address2.data)
+        Supplier.set_floor_number(update_Supplier_form.floor_number.data)
+        Supplier.set_unit_number(update_Supplier_form.unit_number.data)
         Supplier.set_Payment(update_Supplier_form.Payment.data)
         Supplier.set_Categories_select(update_Supplier_form.Categories_select.data)
         Supplier.set_Product_name(update_Supplier_form.Product_name.data)
@@ -110,7 +114,8 @@ def update_Supplier(id):
         update_Supplier_form.website.data = Supplier.get_website()
         update_Supplier_form.email.data = Supplier.get_email()
         update_Supplier_form.Address1.data = Supplier.get_Address1()
-        update_Supplier_form.Address2.data = Supplier.get_Address2()
+        update_Supplier_form.floor_number.data = Supplier.get_floor_number()
+        update_Supplier_form.unit_number.data = Supplier.get_unit_number()
         update_Supplier_form.Payment.data = Supplier.get_Payment()
         update_Supplier_form.Categories_select.data = Supplier.get_Categories_select()
         update_Supplier_form.Product_name.data = Supplier.get_Product_name()

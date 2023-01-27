@@ -1,6 +1,6 @@
 class Suppliers:
     count_id = 0
-    def __init__(self,Company_name,telephone,website,email,Address1,Address2,postal,Payment,Categories_select,Product_name,remarks,date):
+    def __init__(self,Company_name,telephone,website,email,Address1,floor_number, unit_number,postal,Payment,Categories_select,Product_name,remarks,date):
         Suppliers.count_id +=1
         self.__Suppliers_id = Suppliers.count_id
         self.__Company_name = Company_name
@@ -8,7 +8,8 @@ class Suppliers:
         self.__website = website
         self.__email = email
         self.__Address1 = Address1
-        self.__Address2 = Address2
+        self.__floor_number = floor_number
+        self.__unit_number = unit_number
         self.__postal = postal
         self.__Payment = Payment
         self.__Categories_select = Categories_select
@@ -27,8 +28,10 @@ class Suppliers:
         return self.__email
     def get_Address1(self):
         return self.__Address1
-    def get_Address2(self):
-        return self.__Address2
+    def get_floor_number(self):
+        return self.__floor_number
+    def get_unit_number(self):
+        return self.__unit_number
     def get_postal(self):
         return self.__postal
     def get_Payment(self):
@@ -54,8 +57,10 @@ class Suppliers:
         self.__email = email
     def set_Address1(self,Address1):
         self.__Address1 = Address1
-    def set_Address2(self,Address2):
-        self.__Address2 = Address2
+    def set_floor_number(self, floor_number):
+        self.__floor_number = floor_number
+    def set_unit_number(self, unit_number):
+        self.__unit_number = unit_number
     def set_postal(self,postal):
         self.__postal = postal
     def set_Payment(self,Payment):

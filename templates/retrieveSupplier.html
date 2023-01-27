@@ -77,12 +77,12 @@
                               <div class="modal-body">
 
                                   <div class="row">
-                                      <div class="col-md-7">
+                                      <div class="col-md-12">
                                           <div class="telephone"><p>telephone no.: <span>{{suppliers.get_telephone()}}</span></p></div>
                                           <div class="desc"><p>Company website: <span>{{suppliers.get_website()}}</span></p></div>
                                           <div class="desc"><p>Company email: <span>{{suppliers.get_email()}}</span></p></div>
-                                          <div class="Address"><p>Address line 1: <span>{{suppliers.get_Address1()}}</span></p></div>
-                                          <div class="desc"><p>Address line 2: <span>{{suppliers.get_Address2()}}</span></p></div>
+                                          <div class="Address"><p>Address line: <span>{{suppliers.get_Address1()}}</span></p></div>
+                                          <div class="Address"><p>Address line 2: # <span>{{suppliers.get_floor_number()}}-{{suppliers.get_unit_number()}}</span></p></div>
                                           <div class="desc"><p>Postal code: <span>{{suppliers.get_postal()}}</span></p></div>
                                           <div class="desc"><p>Payment details: <span>{{suppliers.get_Payment()}}</span></p></div>
                                             {% if suppliers.get_Categories_select() == "B" %}
