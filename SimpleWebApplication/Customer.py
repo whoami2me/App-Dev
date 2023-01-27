@@ -2,7 +2,7 @@
 class Customer:
     count_id = 0
 
-    def __init__(self, first_name, last_name, gender, email, address1, address2, password, passwordcfm, status, date_created, phone_number):
+    def __init__(self, first_name, last_name, gender, email, address1, address2, password, passwordcfm, date_created, phone_number, postal_code, floor_number, unit_number, status='Active'):
         Customer.count_id += 1
         self.__customer_id = Customer.count_id
         self.__first_name = first_name
@@ -16,6 +16,9 @@ class Customer:
         self.__status = status
         self.__date_created = date_created
         self.__phone_number = phone_number
+        self.__postal_code = postal_code
+        self.__floor_number = floor_number
+        self.__unit_number = unit_number
 
     # accessor methods
     def get_customer_id(self):
@@ -54,6 +57,15 @@ class Customer:
     def get_phone_number(self):
         return self.__phone_number
 
+    def get_postal_code(self):
+        return self.__postal_code
+
+    def get_floor_number(self):
+        return self.__floor_number
+
+    def get_unit_number(self):
+        return self.__unit_number
+
     # mutator methods
     def set_customer_id(self, customer_id):
         self.__customer_id = customer_id
@@ -90,3 +102,12 @@ class Customer:
 
     def set_phone_number(self, phone_number):
         self.__phone_number = phone_number
+
+    def set_postal_code(self, postal_code):
+        self.__postal_code = postal_code
+
+    def set_floor_number(self, floor_number):
+        self.__floor_number = floor_number
+
+    def set_unit_number(self, unit_number):
+        self.__unit_number = unit_number

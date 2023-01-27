@@ -12,7 +12,6 @@
 {% endblock %}
 
 {% block content %}
-<a href="/createCustomer" class="btn btn-warning" style="float: right;">Add Customer</a>
 <div class="container">
     <div class="table-responsive-xxl">
         <div class="table-wrapper">
@@ -53,7 +52,11 @@
                       <td>{{ customer.get_email() }}</td>
                       <td>{{ customer.get_gender() }}</td>
                       <td>{{ customer.get_date_created() }}</td>
-                      <td>{{ customer.get_status() }}</td>
+                      {% if customer.get_status() == "Active" %}
+                      <td>Active</td>
+                      {% elif customer.get_status() == "Inactive" %}
+                      <td>Inactive</td>
+                      {% endif %}
                       <td>
                             <a href="/updateCustomer/{{customer.get_customer_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
                             <a href="#" class="view" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myViewModal_{{customer.get_customer_id()}}" style="color: turquoise"><i class="material-icons">remove_red_eye</i></a>
@@ -102,8 +105,11 @@
                   <div class="modal-body">
                     Name: {{ customer.get_first_name() }} {{ customer.get_last_name() }}<br>
                     Email: {{ customer.get_email() }}<br>
+                    Phone Number: {{ customer.get_phone_number() }}<br>
                     Gender: {{ customer.get_gender() }}<br>
                     Address: {{ customer.get_address1() }} {{ customer.get_address2() }}<br>
+                    Unit Number: #{{ customer.get_floor_number() }} - {{ customer.get_unit_number() }}<br>
+                    Postal Code: {{ customer.get_postal_code() }}<br>
                     Date Joined: {{ customer.get_date_created() }}<br>
                     Status: {{ customer.get_status() }}
                   </div>

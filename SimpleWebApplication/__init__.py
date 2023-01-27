@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from Forms import CreateStaffForm, CreateCustomerForm, UpdateStaffForm
+from Forms import CreateStaffForm, CreateCustomerForm, UpdateStaffForm, UpdateCustomerForm
 import shelve, Staff, Customer
 from datetime import date
 
@@ -38,11 +38,10 @@ def create_staff():
         today = date.today()
         staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data,
                             create_staff_form.email.data, create_staff_form.address1.data,
-                            create_staff_form.address2.data, create_staff_form.gender.data,
-                            create_staff_form.membership.data,  create_staff_form.password.data,
+                            create_staff_form.address2.data, create_staff_form.gender.data,   create_staff_form.password.data,
                             create_staff_form.passwordcfm.data, today, create_staff_form.phone_number.data,
-                            create_staff_form.postal_code.data, create_staff_form.unit_number.data,
-                            create_staff_form.floor_number.data)
+                            create_staff_form.postal_code.data, create_staff_form.floor_number.data,
+                            create_staff_form.unit_number.data)
         staffs_dict[staff.get_staff_id()] = staff
         db['Staffs'] = staffs_dict
 
@@ -69,7 +68,8 @@ def create_customer():
                                      create_customer_form.gender.data, create_customer_form.email.data,
                                      create_customer_form.address1.data, create_customer_form.address2.data,
                                      create_customer_form.password.data, create_customer_form.passwordcfm.data,
-                                     'Active', today, create_customer_form.phone_number.data)
+                                     today, create_customer_form.phone_number.data, create_customer_form.postal_code.data,
+                                     create_customer_form.floor_number.data, create_customer_form.unit_number.data)
         ##        customers_dict[customer.get_customer_id()] = customer
         customers_dict[customer.get_customer_id()] = customer
         db['Customers'] = customers_dict
@@ -161,7 +161,7 @@ def update_staff(id):
 
 @app.route('/updateCustomer/<int:id>/', methods=['GET', 'POST'])
 def update_customer(id):
-    update_customer_form = CreateCustomerForm(request.form)
+    update_customer_form = UpdateCustomerForm(request.form)
     if request.method == 'POST' and update_customer_form.validate():
         customers_dict = {}
         db = shelve.open('customer.db', 'w')
@@ -174,9 +174,11 @@ def update_customer(id):
         customer.set_email(update_customer_form.email.data)
         customer.set_address1(update_customer_form.address1.data)
         customer.set_address2(update_customer_form.address2.data)
-        customer.set_password(update_customer_form.password.data)
-        customer.set_passwordcfm(update_customer_form.passwordcfm.data)
         customer.set_phone_number(update_customer_form.phone_number.data)
+        customer.set_floor_number(update_customer_form.floor_number.data)
+        customer.set_unit_number(update_customer_form.unit_number.data)
+        customer.set_postal_code(update_customer_form.postal_code.data)
+        customer.set_status(update_customer_form.status.data)
 
         db['Customers'] = customers_dict
         db.close()
@@ -195,9 +197,11 @@ def update_customer(id):
         update_customer_form.email.data = customer.get_email()
         update_customer_form.address1.data = customer.get_address1()
         update_customer_form.address2.data = customer.get_address2()
-        update_customer_form.password.data = customer.get_password()
-        update_customer_form.passwordcfm.data = customer.get_passwordcfm()
         update_customer_form.phone_number.data = customer.get_phone_number()
+        update_customer_form.floor_number.data = customer.get_floor_number()
+        update_customer_form.unit_number.data = customer.get_unit_number()
+        update_customer_form.postal_code.data = customer.get_postal_code()
+        update_customer_form.status.data = customer.get_status()
 
         return render_template('updateCustomer.html', form=update_customer_form)
 

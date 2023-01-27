@@ -3,7 +3,7 @@ class Staff:
     count_id = 0
 
     # initializer method
-    def __init__(self, first_name, last_name, email, address1, address2, gender, membership, password, passwordcfm, status, date_created, phone_number, postal_code, floor_number, unit_number):
+    def __init__(self, first_name, last_name, email, address1, address2, gender, password, passwordcfm, date_created, phone_number, postal_code, floor_number, unit_number, membership='Employee', status='Active'):
         Staff.count_id += 1
         self.__staff_id = Staff.count_id
         self.__first_name = first_name

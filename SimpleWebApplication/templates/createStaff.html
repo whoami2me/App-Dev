@@ -34,7 +34,7 @@
     </div>
   </div>
   <div class="form-group">
-    Unit Number {{ render_field(form.postal_code, class="form-control") }}
+    {{ render_field(form.postal_code, class="form-control") }}
   </div>
   <div class="form-group">
     {{ render_field(form.gender, class="form-control") }}
@@ -44,9 +44,6 @@
   </div>
   <div class="form-group">
     {{ render_field(form.passwordcfm, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.membership, class="form-check", style="list-style-type:none") }}
   </div>
   <br>
   <input type="submit" value="Submit" class="btn btn-primary"/>

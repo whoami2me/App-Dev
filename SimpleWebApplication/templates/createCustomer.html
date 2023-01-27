@@ -1,11 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Library Loan System - Create Customer{% endblock %}
+{% block title %}Adding New Staff{% endblock %}
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
-
-<h1 class="display-4">Create Customer</h1>
-
+<h5 class="display-5">Create Account</h5>
+<hr>
 <form method="POST" action="">
   <div class="form-group">
     {{ render_field(form.first_name, class="form-control") }}
@@ -24,6 +23,17 @@
   </div>
   <div class="form-group">
     {{ render_field(form.address2, class="form-control") }}
+  </div>
+  <div class="form-group row">
+  <div class="col">
+    Unit Number {{ render_field(form.floor_number, class="form-control") }}
+  </div>
+    <div class="col">
+        {{ render_field(form.unit_number, class="form-control")}}
+    </div>
+  </div>
+  <div class="form-group">
+    {{ render_field(form.postal_code, class="form-control") }}
   </div>
   <div class="form-group">
     {{ render_field(form.gender, class="form-control") }}

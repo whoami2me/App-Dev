@@ -53,15 +53,15 @@
                         <td>{{ staff.get_first_name() }} {{ staff.get_last_name() }}</td>
                         <td>{{ staff.get_email() }}</td>
                         <td>{{ staff.get_gender() }}</td>
-                        {% if staff.get_membership() == "E" %}
+                        {% if staff.get_membership() == "Employee" %}
                         <td>Employee</td>
-                        {% elif staff.get_membership() == "A" %}
+                        {% elif staff.get_membership() == "Admin" %}
                         <td>Admin</td>
                         {% endif %}
                         <td>{{ staff.get_date_created() }}</td>
-                        {% if staff.get_status() == "A" %}
+                        {% if staff.get_status() == "Active" %}
                         <td>Active</td>
-                        {% elif staff.get_status() == "I" %}
+                        {% elif staff.get_status() == "Inactive" %}
                         <td>Inactive</td>
                         {% endif %}
                         <td>
@@ -114,8 +114,10 @@
                     Email: {{ staff.get_email() }}<br>
                     Phone Number: {{ staff.get_phone_number() }}<br>
                     Gender: {{ staff.get_gender() }}<br>
+                    Membership: {{ staff.get_membership() }}<br>
                     Address: {{ staff.get_address1() }} {{ staff.get_address2() }}<br>
-                    Role: {{ staff.get_membership() }}<br>
+                    Unit Number: #{{ staff.get_floor_number() }} - {{ staff.get_unit_number() }}<br>
+                    Postal Code: {{ staff.get_postal_code() }}<br>
                     Date Joined: {{ staff.get_date_created() }}<br>
                     Status: {{ staff.get_status() }}
                   </div>
