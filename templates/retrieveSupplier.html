@@ -56,10 +56,16 @@
      <tr>
          <td>{{ suppliers.get_Suppliers_id() }}</td>
          <td>{{ suppliers.get_Company_name() }}</td>
-          {% if suppliers.get_Categories_select() == "B" %}
+          {% if suppliers.get_Categories_select() == "Ball" %}
             <td>Ball</td>
-          {% elif suppliers.get_Categories_select() == "F" %}
+          {% elif suppliers.get_Categories_select() == "Footwear" %}
             <td>Footwear</td>
+          {% elif suppliers.get_Categories_select() == "Shirts" %}
+            <td>Shirts</td>
+          {% elif suppliers.get_Categories_select() == "Pants" %}
+            <td>Pants</td>
+          {% elif suppliers.get_Categories_select() == "Accessories" %}
+            <td>Accessories</td>
           {% endif %}
           <td>{{ suppliers.get_Product_name() }}</td>
           <td>{{ suppliers.get_remarks() }}</td>
@@ -85,15 +91,15 @@
                                           <div class="Address"><p>Address line 2: # <span>{{suppliers.get_floor_number()}}-{{suppliers.get_unit_number()}}</span></p></div>
                                           <div class="desc"><p>Postal code: <span>{{suppliers.get_postal()}}</span></p></div>
                                           <div class="desc"><p>Payment details: <span>{{suppliers.get_Payment()}}</span></p></div>
-                                            {% if suppliers.get_Categories_select() == "B" %}
+                                            {% if suppliers.get_Categories_select() == "Ball" %}
                                             <div class="Type"><p>Type: <span>Ball</span></p></div>
-                                            {% elif suppliers.get_Categories_select() == "F" %}
+                                            {% elif suppliers.get_Categories_select() == "Footwear" %}
                                             <div class="Type"><p>Type: <span>Footwear</span></p></div>
-                                            {% elif suppliers.get_Categories_select() == "S" %}
+                                            {% elif suppliers.get_Categories_select() == "Shirts" %}
                                             <div class="Type"><p>Type: <span>Shirts</span></p></div>
-                                            {% elif suppliers.get_Categories_select() == "P" %}
+                                            {% elif suppliers.get_Categories_select() == "Pants" %}
                                             <div class="Type"><p>Type: <span>Pants</span></p></div>
-                                            {% elif suppliers.get_Categories_select() == "A" %}
+                                            {% elif suppliers.get_Categories_select() == "Accessories" %}
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
