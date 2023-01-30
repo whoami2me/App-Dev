@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from EventForms import CreateOnlineEventForm, CreateOfflineEventForm, CreateUserForm
 from SuppliersForms import CreateSuppliersForm
 from InventoryForms import CreateInventoryForm
-import shelve, Events, User, OnlineEvents, OfflineEvents,Suppliers,Inventory
-import Products
-from ProductForms import CreateProduct
+import shelve,Suppliers,Inventory
 from datetime import date
 app = Flask(__name__)
 app.secret_key = 'any_random_string'
@@ -16,21 +13,6 @@ app.config['ALLOWED_EXTENSIONS'] = ['.jpg', '.jpeg', '.png', '.gif']
 @app.route('/')
 def home():
     return render_template('loginevents.html')
-
-
-@app.route('/staff')
-def staff():
-    return render_template('staff.html')
-
-
-@app.route('/adminevents')
-def admin():
-    return render_template('adminevents.html')
-
-
-@app.route('/adminproducts')
-def product():
-    return render_template('adminproducts.html')
 
 @app.route('/createSuppliers', methods=['GET', 'POST'])
 def create_Suppliers():
