@@ -2,7 +2,7 @@ from datetime import date
 from idlelib import tooltip
 from flask import Flask, render_template, request, redirect, url_for
 from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, UpdateStaffForm, CreateCustomerForm, CreateStaffForm, CreateSuppliersForm, CreateInventoryForm
-import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer
+import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
 
