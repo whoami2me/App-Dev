@@ -10,9 +10,6 @@ class Events:
         self.__description = description
         self.__date = date
         self.__location = location
-        #self.__organizers = organizers
-        #self.__guest = guest
-
 
     def set_image(self, image):
         self.__image = image
