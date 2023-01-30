@@ -1,7 +1,7 @@
 import uuid
 from datetime import date
 class Product:
-    def __init__(self,name,price,desc,qty,grp,image,status='Active',priceclass='item high col-md-4'):
+    def __init__(self,name,price,desc,qty,grp,image,status='Active',priceclass='item high col-md-4',saledate='Nil'):
     
         self.__name = name
         self.__price = price
@@ -13,6 +13,7 @@ class Product:
         self.__image = image
         self.__status = status
         self.__priceclass = priceclass
+        self.__saledate = saledate
     def get_product_name(self):
         return self.__name
     def get_product_price(self):
