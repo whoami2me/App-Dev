@@ -134,3 +134,32 @@ class UpdateCustomerForm(Form):
     floor_number = IntegerField('#', [validators.input_required(), check_floor_number])
     unit_number = IntegerField('-', [validators.input_required(), check_unit_number])
     status = RadioField('Status', choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
+
+
+#izwan
+
+def check_payment(form, field):
+    if not re.match(r'[0-9]{16}$', str(field.data)):
+        raise validators.ValidationError('Invalid card details. It must be 16 digit long')
+
+
+class CreateSuppliersForm(Form):
+    Company_name = StringField('Company Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    telephone = IntegerField('Phone Number', [validators.InputRequired(), check_phone_number])
+    website = StringField('Supplier website', [validators.Length(min=1, max=150), validators.DataRequired(), validators.regexp("^https://[0-9A-z.]+.[0-9A-z.]+.[a-z]+$",message= "Please enter a valid website")])
+    email = StringField('Company e-mail:', [validators.Email(message="Please enter a valid email")])
+    Address1 = StringField('Address line', [validators.Length(min=1, max=150), validators.DataRequired()])
+    floor_number = IntegerField('#', [validators.optional(), check_floor_number])
+    unit_number = IntegerField('-', [validators.optional(), check_unit_number])
+    postal = IntegerField('Postal code', [validators.InputRequired(), check_postal_code])
+    Payment = IntegerField("Payment Details", [validators.InputRequired(), check_payment])
+    Categories_select = SelectField('Categories', [validators.DataRequired()], choices=[('', 'Select'), ('Ball', 'Ball'), ('Footwear', 'Footwear'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories')],default='')
+    Product_name = StringField('Name of product', [validators.Length(min=1, max=150), validators.DataRequired()])
+    remarks = TextAreaField('Remarks', [validators.Optional()])
+
+
+class CreateInventoryForm(Form):
+    Categories_select = SelectField('Categories', [validators.DataRequired()], choices=[('', 'Select'), ('B', 'Ball'), ('F', 'Footwear')],default='')
+    Product_name = StringField('Name of product', [validators.Length(min=1, max=150), validators.DataRequired()])
+    Qty = IntegerField('Quantity: ',[validators.NumberRange(min=1,max=100),validators.DataRequired])
+    remarks = TextAreaField('Remarks', [validators.Optional()])
