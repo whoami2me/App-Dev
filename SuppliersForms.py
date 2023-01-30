@@ -34,7 +34,7 @@ class CreateSuppliersForm(Form):
     unit_number = IntegerField('-', [validators.optional(), check_unit_number])
     postal = IntegerField('Postal code', [validators.InputRequired(), check_postal_code])
     Payment = IntegerField("Payment Details", [validators.InputRequired(), check_payment])
-    Categories_select = SelectField('Categories', [validators.DataRequired()], choices=[('', 'Select'), ('B', 'Ball'), ('F', 'Footwear')],default='')
+    Categories_select = SelectField('Categories', [validators.DataRequired()], choices=[('', 'Select'), ('B', 'Ball'), ('F', 'Footwear'),('S','Shirts',),('P','Pants'),('A','Accessories')],default='')
     Product_name = StringField('Name of product', [validators.Length(min=1, max=150), validators.DataRequired()])
     remarks = TextAreaField('Remarks', [validators.Optional()])
 

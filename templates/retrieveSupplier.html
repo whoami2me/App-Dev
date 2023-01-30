@@ -89,6 +89,12 @@
                                             <div class="Type"><p>Type: <span>Ball</span></p></div>
                                             {% elif suppliers.get_Categories_select() == "F" %}
                                             <div class="Type"><p>Type: <span>Footwear</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "S" %}
+                                            <div class="Type"><p>Type: <span>Shirts</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "P" %}
+                                            <div class="Type"><p>Type: <span>Pants</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "A" %}
+                                            <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
