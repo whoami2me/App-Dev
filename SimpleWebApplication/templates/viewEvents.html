@@ -22,11 +22,17 @@
                 <h2>{{ online.get_name() }}</h2>
               </div>
                 <div class="card-text">
-                <p>{{ online.get_location() }}</p>
+                    {% if online.get_location() == "Z" %}
+                    <p><i class="bi bi-geo-alt"></i>Zoom</p>
+                    {% elif online.get_location() == "G" %}
+                    <p><i class="bi bi-geo-alt"></i>Google Meets</p>
+                    {% elif online.get_location() == "C" %}
+                    <p><i class="bi bi-geo-alt"></i>Cisco Webex</p>
+				    {% endif %}
+                    <p><i class="bi bi-calendar-fill"></i>{{ online.get_date() }}</p>
+
               </div>
-                <div class="card-text">
-                <p>{{ online.get_date() }}</p>
-              </div>
+
               <div class="card-text">
                 <p>{{ online.get_description() }}</p>
               </div>
@@ -46,11 +52,9 @@
                 <h2>{{ offline.get_name() }}</h2>
               </div>
                 <div class="card-text">
-                <p>{{ offline.get_location() }}</p>
+                <p><i class="bi bi-geo-alt"></i>{{ offline.get_location() }}</p><p><i class="bi bi-calendar-fill"></i>{{ offline.get_date() }}</p>
               </div>
-                <div class="card-text">
-                <p>{{ offline.get_date() }}</p>
-              </div>
+
               <div class="card-text">
                 <p>{{ offline.get_description() }}</p>
               </div>
@@ -59,7 +63,6 @@
           </div>
         </div>
       {% endfor %}
-
       </div>
 </div>
 
