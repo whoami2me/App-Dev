@@ -26,6 +26,10 @@ def admin_home():
 def contact_us():
     return render_template('contactUs.html')
 
+@app.route('/Events')
+#def events():
+#    return render_template()
+
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
 def create_online():
