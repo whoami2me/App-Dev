@@ -6,13 +6,6 @@
 
 <div class="container">
       <div class="text-center my-5">
-          <div class="hero-image">
-              <div class="hero-text">
-                <h1 style="font-size:50px">I am John Doe</h1>
-                <p>And I'm a Photographer</p>
-                <button>Hire me</button>
-              </div>
-          </div>
         <h1>Events</h1>
         <hr/>
       </div>
@@ -27,6 +20,12 @@
             <div class="card-body">
               <div class="card-title">
                 <h2>{{ online.get_name() }}</h2>
+              </div>
+                <div class="card-text">
+                <p>{{ online.get_location() }}</p>
+              </div>
+                <div class="card-text">
+                <p>{{ online.get_date() }}</p>
               </div>
               <div class="card-text">
                 <p>{{ online.get_description() }}</p>
@@ -45,6 +44,12 @@
             <div class="card-body">
               <div class="card-title">
                 <h2>{{ offline.get_name() }}</h2>
+              </div>
+                <div class="card-text">
+                <p>{{ offline.get_location() }}</p>
+              </div>
+                <div class="card-text">
+                <p>{{ offline.get_date() }}</p>
               </div>
               <div class="card-text">
                 <p>{{ offline.get_description() }}</p>
