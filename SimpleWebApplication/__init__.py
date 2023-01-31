@@ -27,8 +27,29 @@ def contact_us():
     return render_template('contactUs.html')
 
 @app.route('/Events')
-#def events():
-#    return render_template()
+def events():
+
+    online_dict = {}
+    db = shelve.open('online.db', 'r')
+    online_dict = db['Online']
+    db.close()
+
+    online_list = []
+    for key in online_dict:
+        online = online_dict.get(key)
+        online_list.append(online)
+
+    offline_dict = {}
+    db = shelve.open('offline.db', 'r')
+    offline_dict = db['Offline']
+    db.close()
+
+    offline_list = []
+    for key in offline_dict:
+        offline = offline_dict.get(key)
+        offline_list.append(offline)
+
+    return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list)
 
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
