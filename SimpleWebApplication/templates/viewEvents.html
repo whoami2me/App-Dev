@@ -6,31 +6,55 @@
 
 <div class="container">
       <div class="text-center my-5">
+          <div class="hero-image">
+              <div class="hero-text">
+                <h1 style="font-size:50px">I am John Doe</h1>
+                <p>And I'm a Photographer</p>
+                <button>Hire me</button>
+              </div>
+          </div>
         <h1>Events</h1>
         <hr/>
       </div>
 
       <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-12">
+
+        {% for online in online_list %}
+          <div class="col-lg-4 col-md-6 col-sm-12">
           <div class="card mb-5 shadow-sm">
-            <img src="imgs/a.jpg" class="img-fluid" />
+            <img src="static/uploads/{{online.get_image() }}" class="img-fluid" />
 
             <div class="card-body">
               <div class="card-title">
-                <h2>This is the blog title</h2>
+                <h2>{{ online.get_name() }}</h2>
               </div>
               <div class="card-text">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Deleniti corporis quis ab. Exercitationem et quibusdam
-                  impedit? Sint vitae labore nulla sit, dignissimos non tempore,
-                  maxime facere, quod harum aliquid in...
-                </p>
+                <p>{{ online.get_description() }}</p>
               </div>
               <a href="#" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
             </div>
           </div>
         </div>
+      {% endfor %}
+
+          {% for offline in offline_list %}
+          <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="card mb-5 shadow-sm">
+            <img src="static/uploads/{{offline.get_image() }}" class="img-fluid" />
+
+            <div class="card-body">
+              <div class="card-title">
+                <h2>{{ offline.get_name() }}</h2>
+              </div>
+              <div class="card-text">
+                <p>{{ offline.get_description() }}</p>
+              </div>
+              <a href="#" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
       </div>
 </div>
 
