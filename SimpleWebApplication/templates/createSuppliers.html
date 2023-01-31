@@ -1,0 +1,62 @@
+{% extends "base2.html" %}
+{% block title %}Western Corp - Create Supplier{% endblock %}
+{% block silly %}Create Supplier{% endblock %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+
+
+<section id="create-event">
+    <div class="container-lg">
+        <div class="text-center">
+            <h1 class="display-5">Create Supplier</h1>
+        </div>
+
+        <div class="row justify-content-center my-5">
+            <div class="col-lg-8">
+                <form method="POST" action="" enctype="multipart/form-data">
+ <div class="form-group">
+ {{ render_field(form.Company_name, class="form-control") }}
+     {{ render_field(form.telephone, class="form-control") }}
+     {{ render_field(form.website, class="form-control") }}
+     {{ render_field(form.email, class="form-control") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.Address1, class="form-control") }}
+  <div class="form-group row">
+  <div class="col">
+    Unit Number {{ render_field(form.floor_number, class="form-control") }}
+  </div>
+    <div class="col">
+        {{ render_field(form.unit_number, class="form-control")}}
+    </div>
+  </div>
+     {{ render_field(form.postal, class="form-control") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.Payment, class="form-control") }}
+ </div>
+
+   <div class="form-group">
+      {{ render_field(form.Categories_select, class="form-check", style="list-style-type:none") }}
+   </div>
+   <div class="form-group">
+       {{ render_field(form.Product_name, class="form-control") }}
+   </div>
+
+ <br>
+
+ <div class="form-group">
+ {{ render_field(form.remarks, class="form-control") }}
+ </div>
+ <div class="mb-4 text-center">
+                        <input type="submit" value="Submit" class="btn btn-primary center"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
