@@ -587,6 +587,9 @@ def retrieve_Inventory():
 
     return render_template('retrieveInventory.html', count=len(Inventory_list), Inventory_list=Inventory_list)
 
+
+# end of izwan portion
+
 @app.route('/get_map')
 def get_map():
     return render_template('map.html')
