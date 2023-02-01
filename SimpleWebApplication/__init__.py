@@ -112,11 +112,15 @@ def create_offline():
                                               location.latitude, location.longitude, 'Active', 'Active', today)
         offline_dict[offline.get_event_id()] = offline
         db['Offline'] = offline_dict
-
         db.close()
 
         return redirect(url_for('retrieve_events'))
     return render_template('createOfflineEvent.html', form=create_offline_form)
+
+
+@app.route('registerEvents')
+def register_event():
+    return render_template('registerEvent.html')
 
 
 @app.route('/retrieveEvents')
