@@ -1,8 +1,9 @@
 from datetime import date
 from idlelib import tooltip
 from flask import Flask, render_template, request, redirect, url_for
-from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, UpdateStaffForm, CreateCustomerForm, CreateStaffForm, CreateSuppliersForm, CreateInventoryForm
-import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers
+from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, \
+    UpdateStaffForm, CreateCustomerForm, CreateStaffForm, CreateSuppliersForm, CreateInventoryForm, RegisterEventForm
+import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers, registerEvent
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
 
@@ -118,10 +119,27 @@ def create_offline():
     return render_template('createOfflineEvent.html', form=create_offline_form)
 
 
-@app.route('registerEvents')
+@app.route('/registerEvents', methods=['GET', 'POST'])
 def register_event():
-    return render_template('registerEvent.html')
+    create_regeve_form = RegisterEventForm(request.form)
 
+    if request.method == 'POST' and create_regeve_form.validate():
+        regeve_dict = {}
+        db = shelve.open('regeve.db', 'c')
+
+        try:
+            regeve_dict = db['Register_Events']
+        except:
+            print("Error in retrieving Registered Events from regeve.db.")
+
+        today = date.today()
+        reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data)
+        regeve_dict[reg_eve.get_reg_user_id()] = reg_eve
+        db['Register_Events'] = regeve_dict
+        db.close()
+
+        return redirect(url_for('events'))
+    return render_template('registerEvent.html')
 
 @app.route('/retrieveEvents')
 def retrieve_events():

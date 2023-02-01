@@ -136,8 +136,16 @@ class UpdateCustomerForm(Form):
     status = RadioField('Status', choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
 
 
-#izwan
+#de register events
 
+class RegisterEventForm(Form):
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
+    phone_number = IntegerField('Phone Number', [validators.InputRequired(), check_phone_number])
+
+
+#izwan
 def check_payment(form, field):
     if not re.match(r'[0-9]{16}$', str(field.data)):
         raise validators.ValidationError('Invalid card details. It must be 16 digit long')
