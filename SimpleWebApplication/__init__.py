@@ -171,8 +171,8 @@ def register_event(evename):
             if key.get_name() == evename:
                 reg_eve.set_eve(key)
 
+        session['user_registered'] = reg_eve.get_first_name()
         session['event_registered'] = reg_eve.get_event_name()
-        print(session['event_registered'])
 
         return redirect(url_for('events'))
     return render_template('registerEvent.html', form=create_regeve_form)
