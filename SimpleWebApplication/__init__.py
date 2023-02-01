@@ -156,7 +156,6 @@ def register_event(evename):
         for key in online_list:
             if key.get_name() == evename:
                 reg_eve.set_eve(key)
-                print(key)
 
         offline_dict = {}
         db = shelve.open('offline.db', 'r')
@@ -171,7 +170,6 @@ def register_event(evename):
         for key in offline_list:
             if key.get_name() == evename:
                 reg_eve.set_eve(key)
-                print(key)
 
         session['event_registered'] = reg_eve.get_event_name()
         print(session['event_registered'])
