@@ -47,13 +47,15 @@
         <th>Categories</th>
         <th>Products</th>
         <th>Remarks</th>
+        <th>Status</th>
         <th></th>
         <th></th>
       </tr>
     </thead>
+
     <tbody>
     {% for suppliers in Suppliers_list %}
-     <tr>
+     <tr id="check">
          <td>{{ suppliers.get_Suppliers_id() }}</td>
          <td>{{ suppliers.get_Company_name() }}</td>
           {% if suppliers.get_Categories_select() == "Ball" %}
@@ -69,7 +71,11 @@
           {% endif %}
           <td>{{ suppliers.get_Product_name() }}</td>
           <td>{{ suppliers.get_remarks() }}</td>
-
+          {% if suppliers.get_status() == "A" %}
+            <td><span class="status text-success">&bull;</span>Available</td>
+          {% elif suppliers.get_status() == "NA" %}
+            <td><span class="status text-danger">&bull;</span>Not Available</td>
+            {% endif %}
          <td><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal1_{{suppliers.get_Suppliers_id()}}">
                 View
                 </button>
@@ -104,9 +110,14 @@
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
+                                          {% if suppliers.get_status() == "A" %}
+                                            <div class="Type"><p>Status: <span>Available</span></p></div>
+                                            {% elif suppliers.get_status() == "NA" %}
+                                            <div class="Type"><p>Status: <span>Not Available</span></p></div>
+                                            {% endif %}
                                           <div class="desc"><p>Date created: <span>{{ suppliers.get_date() }}</span></p></div>
                                       </div>
-
+f
                                    </div>
 
                               </div>
@@ -158,6 +169,7 @@
 
                     {% endfor %}
                 </tbody>
+
             </table>
         </div>
     </div>

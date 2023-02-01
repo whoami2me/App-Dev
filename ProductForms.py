@@ -5,4 +5,4 @@ class CreateProduct(Form):
     desc = TextAreaField('Description: ', [validators.Optional()])
     price = DecimalField('Price: ', [validators.DataRequired()])
     qty = IntegerField('Quantity: ', [validators.DataRequired()])
-    grp = SelectMultipleField("Category: ",[validators.DataRequired()], choices=[('Shoes','Shoes'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories')])
+    grp = SelectMultipleField("Category: ",[validators.DataRequired()], choices=[('Footwear','Footwear'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories'),('Ball','Ball')])

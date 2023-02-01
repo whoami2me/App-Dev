@@ -29,7 +29,7 @@ def create_Suppliers():
         supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,
                                        create_Supplier_form.Address1.data, create_Supplier_form.floor_number.data,create_Supplier_form.unit_number.data,create_Supplier_form.postal.data,
                                        create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.remarks.data,
-                                       today)
+                                       'Available',today)
         Suppliers_dict[supplier.get_Suppliers_id()] = supplier
         db['Supplier'] = Suppliers_dict
 

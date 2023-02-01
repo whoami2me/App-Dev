@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, validators, IntegerField
+from wtforms import Form, StringField, SelectField, TextAreaField, validators, IntegerField, RadioField
 import re
 
 #remove add product
@@ -37,6 +37,7 @@ class CreateSuppliersForm(Form):
     Categories_select = SelectField('Categories', [validators.DataRequired()], choices=[('', 'Select'), ('Ball', 'Ball'), ('Footwear', 'Footwear'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories')],default='')
     Product_name = StringField('Name of product', [validators.Length(min=1, max=150), validators.DataRequired()])
     remarks = TextAreaField('Remarks', [validators.Optional()])
+    status = RadioField('Status',[validators.DataRequired()], choices=[('A', 'Available'), ('NA', 'Not available')], default='A')
 
 
 
