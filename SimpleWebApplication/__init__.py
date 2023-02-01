@@ -1,6 +1,6 @@
 from datetime import date
 from idlelib import tooltip
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, \
     UpdateStaffForm, CreateCustomerForm, CreateStaffForm, CreateSuppliersForm, CreateInventoryForm, RegisterEventForm
 import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers, registerEvent
@@ -119,8 +119,9 @@ def create_offline():
     return render_template('createOfflineEvent.html', form=create_offline_form)
 
 
-@app.route('/registerEvents', methods=['GET', 'POST'])
-def register_event():
+@app.route('/registerEvents/<evename>', methods=['GET', 'POST'])
+def register_event(evename):
+
     create_regeve_form = RegisterEventForm(request.form)
 
     if request.method == 'POST' and create_regeve_form.validate():
@@ -133,13 +134,17 @@ def register_event():
             print("Error in retrieving Registered Events from regeve.db.")
 
         today = date.today()
-        reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data)
+
+        reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data, evename)
         regeve_dict[reg_eve.get_reg_user_id()] = reg_eve
+
         db['Register_Events'] = regeve_dict
         db.close()
 
+        session['event_registered'] = reg_eve.get_first_name() + ' ' + reg_eve.get_last_name()
+
         return redirect(url_for('events'))
-    return render_template('registerEvent.html')
+    return render_template('registerEvent.html', form=create_regeve_form)
 
 @app.route('/retrieveEvents')
 def retrieve_events():

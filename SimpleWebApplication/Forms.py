@@ -135,14 +135,16 @@ class UpdateCustomerForm(Form):
     unit_number = IntegerField('-', [validators.input_required(), check_unit_number])
     status = RadioField('Status', choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
 
-
-#de register events
-
 class RegisterEventForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     phone_number = IntegerField('Phone Number', [validators.InputRequired(), check_phone_number])
+
+    def check_phone_number(form, field):
+        if not re.match(r'^[89][0-9]{7}$', str(field.data)):
+            raise validators.ValidationError(
+                'Invalid phone number,it must start with either 8 or 9 and be 8 digit long')
 
 
 #izwan
