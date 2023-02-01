@@ -2,7 +2,7 @@
 class registerEvent:
     count_id = 0
 
-    def __init__(self, first_name, last_name, email, date_created, phone_number, status='Active'):
+    def __init__(self, first_name, last_name, email, date_created, phone_number, event_name,status='Active'):
         registerEvent.count_id += 1
         self.__reg_user_id = registerEvent.count_id
         self.__first_name = first_name
@@ -11,6 +11,8 @@ class registerEvent:
         self.__status = status
         self.__date_created = date_created
         self.__phone_number = phone_number
+        self.__event_name = event_name
+        self.__event = None
 
     # accessor methods
     def get_reg_user_id(self):
@@ -34,6 +36,9 @@ class registerEvent:
     def get_phone_number(self):
         return self.__phone_number
 
+    def get_event_name(self):
+        return self.__event_name
+
     def set_first_name(self, first_name):
         self.__first_name = first_name
 
@@ -51,5 +56,8 @@ class registerEvent:
 
     def set_phone_number(self, phone_number):
         self.__phone_number = phone_number
+
+    def set_eve(self, event):
+        self.__event = event
 
 
