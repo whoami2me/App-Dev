@@ -139,9 +139,6 @@ def register_event(evename):
         reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data, evename)
         regeve_dict[reg_eve.get_reg_user_id()] = reg_eve
 
-        db['Register_Events'] = regeve_dict
-        db.close()
-
 
         online_dict = {}
         db = shelve.open('online.db', 'r')
@@ -170,6 +167,9 @@ def register_event(evename):
         for key in offline_list:
             if key.get_name() == evename:
                 reg_eve.set_eve(key)
+
+        db['Register_Events'] = regeve_dict
+        db.close()
 
         session['user_registered'] = reg_eve.get_first_name()
         session['event_registered'] = reg_eve.get_event_name()

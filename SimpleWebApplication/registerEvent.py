@@ -60,4 +60,7 @@ class registerEvent:
     def set_eve(self, event):
         self.__event = event
 
+    def get_eve(self):
+        return self.__event
+
 
