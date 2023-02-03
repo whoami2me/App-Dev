@@ -52,6 +52,11 @@ def events():
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list)
 
+@app.route('/viewRegisteredEvents')
+def view_regeve():
+
+    return render_template('userRegisteredEvents.html')
+
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
 def create_online():
