@@ -306,7 +306,6 @@ def update_offline(id):
         return render_template('updateOfflineEvent.html', form=update_offline_form, offline=offline)
 
 
-
 #trisven portion
 
 @app.route('/customerProfile')
