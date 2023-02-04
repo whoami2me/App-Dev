@@ -2,7 +2,7 @@
 class registerEvent:
     count_id = 0
 
-    def __init__(self, first_name, last_name, email, date_created, phone_number, event_name,status='Active'):
+    def __init__(self, first_name, last_name, email, date_created, phone_number, event_name, status='Active'):
         registerEvent.count_id += 1
         self.__reg_user_id = registerEvent.count_id
         self.__first_name = first_name

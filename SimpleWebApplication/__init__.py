@@ -55,7 +55,6 @@ def events():
 @app.route('/viewRegisteredEvents')
 def view_regeve():
 
-
     regeve_dict = {}
     db = shelve.open('regeve.db', 'c')
     regeve_dict = db['Register_Events']
@@ -143,19 +142,6 @@ def register_event(evename):
     create_regeve_form = RegisterEventForm(request.form)
 
     if request.method == 'POST' and create_regeve_form.validate():
-        regeve_dict = {}
-        db = shelve.open('regeve.db', 'c')
-
-        try:
-            regeve_dict = db['Register_Events']
-        except:
-            print("Error in retrieving Registered Events from regeve.db.")
-
-        today = date.today()
-
-        reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data, evename)
-        regeve_dict[reg_eve.get_reg_user_id()] = reg_eve
-        db['Register_Events'] = regeve_dict
 
         online_dict = {}
         db = shelve.open('online.db', 'r')
@@ -167,10 +153,6 @@ def register_event(evename):
             online = online_dict.get(key)
             online_list.append(online)
 
-        for key in online_list:
-            if key.get_name() == evename:
-                reg_eve.set_eve(key)
-
         offline_dict = {}
         db = shelve.open('offline.db', 'r')
         offline_dict = db['Offline']
@@ -181,10 +163,30 @@ def register_event(evename):
             offline = offline_dict.get(key)
             offline_list.append(offline)
 
+        regeve_dict = {}
+        db = shelve.open('regeve.db', 'c')
+
+        try:
+            regeve_dict = db['Register_Events']
+        except:
+            print("Error in retrieving Registered Events from regeve.db.")
+
+        today = date.today()
+
+        reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data, evename)
+
         for key in offline_list:
             if key.get_name() == evename:
                 reg_eve.set_eve(key)
 
+        for key in online_list:
+            if key.get_name() == evename:
+                reg_eve.set_eve(key)
+
+        print(reg_eve.get_eve())
+
+        regeve_dict[reg_eve.get_reg_user_id()] = reg_eve
+        db['Register_Events'] = regeve_dict
         db.close()
 
         session['user_registered'] = reg_eve.get_first_name()
