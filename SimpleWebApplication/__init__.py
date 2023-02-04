@@ -55,7 +55,20 @@ def events():
 @app.route('/viewRegisteredEvents')
 def view_regeve():
 
-    return render_template('userRegisteredEvents.html')
+
+    regeve_dict = {}
+    db = shelve.open('regeve.db', 'c')
+    regeve_dict = db['Register_Events']
+    db.close()
+
+    regeve_list = []
+    for key in regeve_dict:
+        regeve = regeve_dict.get(key)
+        if regeve.get_first_name() == session['user_registered']:
+            print("yes the user is",regeve.get_first_name())
+            regeve_list.append(regeve)
+
+    return render_template('userRegisteredEvents.html', regeve_list=regeve_list)
 
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
@@ -143,6 +156,8 @@ def register_event(evename):
 
         reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data, evename)
         regeve_dict[reg_eve.get_reg_user_id()] = reg_eve
+        db['Register_Events'] = regeve_dict
+
 
 
         online_dict = {}
@@ -173,7 +188,6 @@ def register_event(evename):
             if key.get_name() == evename:
                 reg_eve.set_eve(key)
 
-        db['Register_Events'] = regeve_dict
         db.close()
 
         session['user_registered'] = reg_eve.get_first_name()
