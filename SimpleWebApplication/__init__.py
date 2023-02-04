@@ -138,7 +138,6 @@ def create_offline():
 
 
 @app.route('/registerEvents/<evename>', methods=['GET', 'POST'])
-
 def register_event(evename):
 
     create_regeve_form = RegisterEventForm(request.form)
@@ -157,8 +156,6 @@ def register_event(evename):
         reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data, evename)
         regeve_dict[reg_eve.get_reg_user_id()] = reg_eve
         db['Register_Events'] = regeve_dict
-
-
 
         online_dict = {}
         db = shelve.open('online.db', 'r')
@@ -195,6 +192,7 @@ def register_event(evename):
 
         return redirect(url_for('events'))
     return render_template('registerEvent.html', form=create_regeve_form)
+
 
 @app.route('/retrieveEvents')
 def retrieve_events():

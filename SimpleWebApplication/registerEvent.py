@@ -14,7 +14,6 @@ class registerEvent:
         self.__event_name = event_name
         self.__event = None
 
-    # accessor methods
     def get_reg_user_id(self):
         return self.__reg_user_id
 
