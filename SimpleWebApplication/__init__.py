@@ -56,7 +56,7 @@ def events():
 def view_regeve():
 
     regeve_dict = {}
-    db = shelve.open('regeve.db', 'c')
+    db = shelve.open('regeve.db', 'r')
     regeve_dict = db['Register_Events']
     db.close()
 
@@ -305,6 +305,21 @@ def update_offline(id):
 
         return render_template('updateOfflineEvent.html', form=update_offline_form, offline=offline)
 
+@app.route('/cancelRegisteredEvents/<int:id>', methods=['POST'])
+def cancelEvent(id):
+
+    regeve_dict = {}
+    db = shelve.open('regeve.db', 'w')
+    regeve_dict = db['Register_Events']
+
+    user = regeve_dict.pop(id)
+
+    db['Register_Events'] = regeve_dict
+    db.close()
+
+    session['event_cancelled'] = user.get_first_name(), 'cancelled', user.get_event_name()
+
+    return render_template('view_regeve')
 
 #trisven portion
 

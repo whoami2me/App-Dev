@@ -7,20 +7,49 @@
 <div class="container">
 
     <div class="title text-center">
-        <h1 class="text-uppercase my-5">Welcome {{ session['user_registered'] }} to Registered Events</h1>
+        <h2 class="my-5">Welcome {{ session['user_registered'] }} to Registered Events</h2>
     </div>
 
     {% for regeve in regeve_list %}
-    <div class="card mb-4">
+    <div class="mb-4">
         <div class="row g-0">
-            <div class="col-md-4">
+            <div class="col-lg-5">
                 <img class="img-fluid rounded-start" src="/img/{{ regeve.get_eve().get_image() }}">
             </div>
 
-            <div class="col-md-8">
-                <h2 class="card-title">{{ regeve.get_event_name() }}</h2>
-                <p>blah blah</p>
+            <div class="col-lg-7 p-3 border">
+                <h3 class="card-title">{{ regeve.get_event_name() }}</h3>
+                <p>Date: {{ regeve.get_eve().get_date() }}</p>
                 <button class="btn btn-primary">Zoom link</button>
+
+                <form action="{{url_for('cancelEvent', id=regeve.get_reg_user_id()) }}" method="POST">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{regeve.get_reg_user_id()}}">Cancel Event</button>
+
+                 <div class="modal" id="myModal_{{regeve.get_reg_user_id()}}">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Cancel Confirmation</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        Are you sure you want to delete {{regeve.get_event_name()}}?
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                </form>
             </div>
         </div>
     </div>
