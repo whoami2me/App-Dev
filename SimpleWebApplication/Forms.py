@@ -39,7 +39,6 @@ class CreateOfflineEventForm(Form):
     pax = IntegerField('Pax', [validators.NumberRange(min=0, max=1000, message="numbers should only range from 1 to 1000!"), validators.DataRequired()])
     location = StringField('Location', [validators.Length(min=1, max=150, message="It should be in a range from 1 to 150!"), validators.DataRequired()])
 
-
     def validate_date(Form, field):
         if field.data < date.today():
             raise ValidationError("The date cannot be in the past!")
