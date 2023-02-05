@@ -6,8 +6,16 @@
 
 <div class="container">
 
-    <div class="title text-center">
-        <h2 class="my-5">Welcome {{ session['user_registered'] }} to Registered Events</h2>
+
+    <div class="title text-center my-5">
+        <h2 class="">Welcome {{ session['user_registered'] }} to Registered Events</h2>
+        {% if count == 0 %}
+        <lead>There are no online events.</lead>
+        {% elif count == 1 %}
+        <lead>There is 1 online event.</lead>
+        {% else %}
+        <lead>There are {{ count }} online events.</lead>
+        {% endif %}
     </div>
 
     {% for regeve in regeve_list %}

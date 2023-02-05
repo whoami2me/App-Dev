@@ -67,7 +67,7 @@ def view_regeve():
             print("yes the user is",regeve.get_first_name())
             regeve_list.append(regeve)
 
-    return render_template('userRegisteredEvents.html', regeve_list=regeve_list)
+    return render_template('userRegisteredEvents.html', regeve_list=regeve_list, count=len(regeve_list) )
 
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
@@ -319,7 +319,8 @@ def cancelEvent(id):
 
     session['event_cancelled'] = user.get_first_name(), 'cancelled', user.get_event_name()
 
-    return render_template('view_regeve')
+    return redirect(url_for('view_regeve'))
+
 
 #trisven portion
 
