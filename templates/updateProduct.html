@@ -1,5 +1,5 @@
 {% extends "base2.html" %}
-{% block title %}Western Corp - Create Products{% endblock %}
+{% block title %}Western Corp - Update Products{% endblock %}
 {% block silly %}Product Management{% endblock %}
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
@@ -30,6 +30,9 @@
                     </div>
                     <div class="form-group">
                         {{ render_field(form.status, class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ render_field(form.sale, class="form-control") }}
                     </div>
                     <div class="form-group">
                         {{ render_field(form.image, class="form-control", id="finput" , **{'onchange':'previewFile()'} )  }}

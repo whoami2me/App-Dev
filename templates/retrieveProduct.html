@@ -79,8 +79,16 @@
                         {% elif product.get_product_status() == "Inactive" %}
                             <td><span class="status text-danger">&bull;</span>Inactive</td>
                         {% endif %}
-                        <td>
-                            <a href="/updateProduct/{{product.get_product_id()}}" class="btn btn-warning">Update</a>
+                        <td> <div class="dropdown">
+                            <button onclick="myFunction()" class="dropbtn btn btn-warning">Update</button>
+                            <div id="myDropdown" class="dropdown-content">
+                              <a href="/updateProduct/{{product.get_product_id()}}">Update general details</a>
+                              {% if product.get_product_saleoption() == "Yes" %}
+                              <a href="/updateProductSale/{{product.get_product_id()}}">Update sale details</a>
+                              {% endif %}
+                              <a href="#">Update image</a>
+                            </div>
+                          </div> 
                         </td>
                         <td>
                           <form action="/deleteProduct/{{product.get_product_id()}}" method="POST">
@@ -146,7 +154,25 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
 
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+} 
 </script>
 
 

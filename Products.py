@@ -1,7 +1,7 @@
 import uuid
-from datetime import date
+from datetime import date, datetime
 class Product:
-    def __init__(self,name,price,desc,qty,grp,image,status='Active',priceclass='item high col-md-4',saledate='Nil'):
+    def __init__(self,name,price,desc,qty,grp,image,saleoption=None,status='Active',priceclass='item high col-md-4',salestartdate=date.today(),saleenddate=date.today()):
     
         self.__name = name
         self.__price = price
@@ -13,7 +13,9 @@ class Product:
         self.__image = image
         self.__status = status
         self.__priceclass = priceclass
-        self.__saledate = saledate
+        self.__salepoption = saleoption
+        self.__salestartdate = salestartdate
+        self.__saleenddate = saleenddate
     def get_product_name(self):
         return self.__name
     def get_product_price(self):
@@ -41,7 +43,13 @@ class Product:
         if self.__price <=100:
             self.__priceclass = 'item low col-md-4'
         return self.__priceclass
-
+    def get_product_saleoption(self):
+        return self.__salepoption
+    def get_product_salestartdate(self):
+        return self.__salestartdate
+    def get_product_saleenddate(self):
+        return self.__saleenddate 
+        
     def set_product_name(self,name):
         self.__name = name
     def set_product_price(self,price):
@@ -56,3 +64,9 @@ class Product:
         self.__image = image
     def set_product_status(self,status):
         self.__status = status
+    def set_product_saleoption(self,saleoption):
+        self.__salepoption = saleoption
+    def set_product_salestartdate(self,salestartdate):
+        self.__salestartdate = salestartdate
+    def set_product_saleenddate(self,saleenddate):
+        self.__saleenddate = saleenddate

@@ -1,0 +1,21 @@
+TABLE IN RETRIEVE: 
+Add a sale status 
+Add a sale price
+
+PRODUCT CLASS:
+Add attribute for sale percentage 
+Add attribute for sale final price
+Add accessor and mutator functions
+
+UPDATEPRODUCTSALES FORMS:
+Add sale percentage field
+
+UPDATESALES HTML:
+Add sale percentage render field
+
+INIT:
+Make changes accordingly (Add accessor and mutator)
+
+
+Plans for Future:
+Add a modal for product ID, description, date created

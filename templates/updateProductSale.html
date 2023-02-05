@@ -1,0 +1,29 @@
+{% extends "base2.html" %}
+{% block title %}Western Corp - Update Products{% endblock %}
+{% block silly %}Product Management{% endblock %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
+<section id="update-product">
+    <div class="container-lg">
+        <div class="text-center">
+            <h1 class="display-5">Update Product</h1>
+        </div>
+
+        <div class="row justify-content-center my-5">
+            <div class="col-lg-8">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    <div class="form-group">
+                        {{ render_field(form.salestartdate, class="form-control") }}
+                        {{ render_field(form.saleenddate, class="form-control") }}
+                    </div>
+                    <div class="mb-4 text-center">
+                        <input type="submit" value="Submit" class="btn btn-primary center"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

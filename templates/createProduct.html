@@ -29,6 +29,9 @@
                         {{ render_field(form.grp, class="form-control") }}
                     </div>
                     <div class="form-group">
+                        {{ render_field(form.sale, class="form-control") }}
+                    </div>
+                    <div class="form-group">
                         {{ render_field(form.image, class="form-control", id="finput" , **{'onchange':'previewFile()'} )  }}
                     </div>
 
