@@ -63,8 +63,10 @@ def view_regeve():
     regeve_list = []
     for key in regeve_dict:
         regeve = regeve_dict.get(key)
-        print("the user who registered is",regeve.get_first_name())
-        regeve_list.append(regeve)
+        print(regeve.get_first_name(), session['login_user'])
+        if regeve.get_first_name() == session['login_user']:
+            print("the user who registered is",regeve.get_first_name())
+            regeve_list.append(regeve)
 
     return render_template('userRegisteredEvents.html', regeve_list=regeve_list, count=len(regeve_list))
 
