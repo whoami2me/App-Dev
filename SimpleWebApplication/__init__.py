@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import date
 from idlelib import tooltip
 from flask import Flask, render_template, request, redirect, url_for, session
@@ -144,6 +145,8 @@ def register_event(evename):
 
     if request.method == 'POST' and create_regeve_form.validate():
 
+
+
         online_dict = {}
         db = shelve.open('online.db', 'r')
         online_dict = db['Online']
@@ -164,6 +167,8 @@ def register_event(evename):
             offline = offline_dict.get(key)
             offline_list.append(offline)
 
+
+
         regeve_dict = {}
         db = shelve.open('regeve.db', 'c')
 
@@ -179,6 +184,7 @@ def register_event(evename):
         for key in offline_list:
             if key.get_name() == evename:
                 reg_eve.set_eve(key)
+
 
         for key in online_list:
             if key.get_name() == evename:
