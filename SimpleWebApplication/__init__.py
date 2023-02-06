@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 from datetime import date
 from idlelib import tooltip
 from flask import Flask, render_template, request, redirect, url_for, session
@@ -70,6 +70,29 @@ def view_regeve():
             regeve_list.append(regeve)
 
     return render_template('userRegisteredEvents.html', regeve_list=regeve_list, count=len(regeve_list))
+
+
+#test route for counting the number of people who registered
+'''@app.route('/viewEE')
+def view_regev():
+
+    regeve_dict = {}
+    db = shelve.open('regeve.db', 'r')
+    regeve_dict = db['Register_Events']
+    db.close()
+
+    count = 0
+    regeve_list = []
+    for key in regeve_dict:
+        regeve = regeve_dict.get(key)
+        if regeve.get_event_name() == 'messi':
+            count += 1
+            regeve_list.append(regeve)
+
+    print(count)
+
+    return render_template('test.html', regeve_list=regeve_list, count=len(regeve_list))
+'''
 
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
@@ -146,7 +169,6 @@ def register_event(evename):
     if request.method == 'POST' and create_regeve_form.validate():
 
 
-
         online_dict = {}
         db = shelve.open('online.db', 'r')
         online_dict = db['Online']
@@ -167,8 +189,6 @@ def register_event(evename):
             offline = offline_dict.get(key)
             offline_list.append(offline)
 
-
-
         regeve_dict = {}
         db = shelve.open('regeve.db', 'c')
 
@@ -184,7 +204,6 @@ def register_event(evename):
         for key in offline_list:
             if key.get_name() == evename:
                 reg_eve.set_eve(key)
-
 
         for key in online_list:
             if key.get_name() == evename:
