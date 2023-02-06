@@ -8,13 +8,13 @@
 
 
     <div class="title text-center my-5">
-        <h2 class="">Welcome {{ session['user_registered'] }} to Registered Events</h2>
+        <h2 class="">Welcome {{ session['login_user'] }} to Registered Events</h2>
         {% if count == 0 %}
-        <lead>There are no online events.</lead>
+        <lead>There are no events registered.</lead>
         {% elif count == 1 %}
-        <lead>There is 1 online event.</lead>
+        <lead>There is 1 event registered.</lead>
         {% else %}
-        <lead>There are {{ count }} online events.</lead>
+        <lead>There are {{ count }} events registered.</lead>
         {% endif %}
     </div>
 

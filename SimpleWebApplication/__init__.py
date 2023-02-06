@@ -15,7 +15,7 @@ geolocator = Nominatim(user_agent='app')
 
 @app.route('/')
 def user_home():
-    session['login_user'] = 'James' #trisven to replace login user
+    session['login_user'] = 'linglong' #trisven to replace login user
     return render_template('loginevents.html')
 
 @app.route('/AdminDashboard')
@@ -63,11 +63,10 @@ def view_regeve():
     regeve_list = []
     for key in regeve_dict:
         regeve = regeve_dict.get(key)
-        if regeve.get_first_name() == session['login_user']:
-            print("yes the user is",regeve.get_first_name())
-            regeve_list.append(regeve)
+        print("the user who registered is",regeve.get_first_name())
+        regeve_list.append(regeve)
 
-    return render_template('userRegisteredEvents.html', regeve_list=regeve_list, count=len(regeve_list) )
+    return render_template('userRegisteredEvents.html', regeve_list=regeve_list, count=len(regeve_list))
 
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
