@@ -76,6 +76,7 @@ def view_regeve():
 '''@app.route('/viewEE')
 def view_regev():
 
+
     regeve_dict = {}
     db = shelve.open('regeve.db', 'r')
     regeve_dict = db['Register_Events']
@@ -168,7 +169,6 @@ def register_event(evename):
 
     if request.method == 'POST' and create_regeve_form.validate():
 
-
         online_dict = {}
         db = shelve.open('online.db', 'r')
         online_dict = db['Online']
@@ -199,6 +199,7 @@ def register_event(evename):
 
         today = date.today()
 
+
         reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data, evename)
 
         for key in offline_list:
@@ -219,7 +220,24 @@ def register_event(evename):
         session['event_registered'] = reg_eve.get_event_name()
 
         return redirect(url_for('events'))
-    return render_template('registerEvent.html', form=create_regeve_form)
+
+
+    else:
+
+        customers_dict = {}
+        db = shelve.open('customer.db', 'r')
+        customers_dict = db['Customers']
+        db.close()
+
+        for key in customers_dict:
+            customer = customers_dict.get(key)
+            if customer.get_first_name() == session['login_user']:
+                create_regeve_form.first_name.data = customer.get_first_name()
+                create_regeve_form.last_name.data = customer.get_last_name()
+                create_regeve_form.email.data = customer.get_email()
+                create_regeve_form.phone_number.data = customer.get_phone_number()
+
+            return render_template('registerEvent.html', form=create_regeve_form)
 
 
 @app.route('/retrieveEvents')

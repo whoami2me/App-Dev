@@ -157,6 +157,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Pax</th>
+                        <th>Registered Pax</th>
                         <th>Location</th>
                         <th>Event Date</th>
                         <th>Event Status</th>
@@ -169,6 +170,11 @@
                     <tr>
                         <td><img src="static/uploads/{{offline.get_image() }}" width="70" height="50"><a class="name" href="">{{ offline.get_name() }}</a></td>
                         <td>{{ offline.get_pax() }}</td>
+
+                        #for loop to implement
+                        <td>0</td>
+                        #end loop
+
                         <td>{{ offline.get_location() }}</td>
                         <td>{{ offline.get_date() }}</td>
 
