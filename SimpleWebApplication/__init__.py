@@ -1,8 +1,9 @@
 from datetime import date
 from idlelib import tooltip
-from flask import Flask, render_template, request, redirect, url_for
-from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm
-import shelve, OnlineEvents, OfflineEvents, folium
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, \
+    UpdateStaffForm, CreateCustomerForm, CreateStaffForm, Login
+import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
 
@@ -204,6 +205,249 @@ def update_offline(id):
         return render_template('updateOfflineEvent.html', form=update_offline_form, offline=offline)
 
 
+@app.route('/customerProfile')
+def customer_profile():
+    return render_template('customerProfile.html')
+
+@app.route('/createStaff', methods=['GET', 'POST'])
+def create_staff():
+    create_staff_form = CreateStaffForm(request.form)
+    if request.method == 'POST' and create_staff_form.validate():
+        staffs_dict = {}
+        db = shelve.open('staff.db', 'c')
+
+        try:
+            staffs_dict = db['Staffs']
+        except:
+            print("Error in retrieving Staffs from staff.db.")
+
+        today = date.today()
+        staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data,
+                            create_staff_form.email.data, create_staff_form.address1.data,
+                            create_staff_form.address2.data, create_staff_form.gender.data,   create_staff_form.password.data,
+                            create_staff_form.passwordcfm.data, today, create_staff_form.phone_number.data,
+                            create_staff_form.postal_code.data, create_staff_form.floor_number.data,
+                            create_staff_form.unit_number.data)
+        staffs_dict[staff.get_staff_id()] = staff
+        db['Staffs'] = staffs_dict
+
+        db.close()
+
+        return redirect(url_for('retrieve_staffs'))
+    return render_template('createStaff.html', form=create_staff_form)
+
+
+@app.route('/createCustomer', methods=['GET', 'POST'])
+def create_customer():
+    create_customer_form = CreateCustomerForm(request.form)
+    if request.method == 'POST' and create_customer_form.validate():
+        customers_dict = {}
+        db = shelve.open('customer.db', 'c')
+
+        try:
+            customers_dict = db['Customers']
+        except:
+            print("Error in retrieving Customers from customer.db.")
+
+        today = date.today()
+        customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
+                                     create_customer_form.gender.data, create_customer_form.email.data,
+                                     create_customer_form.address1.data, create_customer_form.address2.data,
+                                     create_customer_form.password.data, create_customer_form.passwordcfm.data,
+                                     today, create_customer_form.phone_number.data, create_customer_form.postal_code.data,
+                                     create_customer_form.floor_number.data, create_customer_form.unit_number.data)
+        ##        customers_dict[customer.get_customer_id()] = customer
+        customers_dict[customer.get_customer_id()] = customer
+        db['Customers'] = customers_dict
+
+        db.close()
+
+        return redirect(url_for('retrieve_customers'))
+    return render_template('createCustomer.html', form=create_customer_form)
+
+
+@app.route('/retrieveStaffs')
+def retrieve_staffs():
+    staffs_dict = {}
+    db = shelve.open('staff.db', 'r')
+    staffs_dict = db['Staffs']
+    db.close()
+
+    staffs_list = []
+    for key in staffs_dict:
+        staff = staffs_dict.get(key)
+        staffs_list.append(staff)
+
+    return render_template('retrieveStaffs.html', count=len(staffs_list), staffs_list=staffs_list)
+
+
+@app.route('/retrieveCustomers')
+def retrieve_customers():
+    customers_dict = {}
+    db = shelve.open('customer.db', 'r')
+    customers_dict = db['Customers']
+    db.close()
+
+    customers_list = []
+    for key in customers_dict:
+        customer = customers_dict.get(key)
+        customers_list.append(customer)
+
+    return render_template('retrieveCustomers.html', count=len(customers_list), customers_list=customers_list)
+
+
+@app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
+def update_staff(id):
+    update_staff_form = UpdateStaffForm(request.form)
+    if request.method == 'POST' and update_staff_form.validate():
+        staffs_dict = {}
+        db = shelve.open('staff.db', 'w')
+        staffs_dict = db['Staffs']
+
+        staff = staffs_dict.get(id)
+        staff.set_first_name(update_staff_form.first_name.data)
+        staff.set_last_name(update_staff_form.last_name.data)
+        staff.set_email(update_staff_form.email.data)
+        staff.set_address1(update_staff_form.address1.data)
+        staff.set_address2(update_staff_form.address2.data)
+        staff.set_gender(update_staff_form.gender.data)
+        staff.set_membership(update_staff_form.membership.data)
+        staff.set_phone_number(update_staff_form.phone_number.data)
+        staff.set_postal_code(update_staff_form.postal_code.data)
+        staff.set_floor_number(update_staff_form.floor_number.data)
+        staff.set_unit_number(update_staff_form.unit_number.data)
+        staff.set_status(update_staff_form.status.data)
+
+        db['Staffs'] = staffs_dict
+        db.close()
+
+        return redirect(url_for('retrieve_staffs'))
+    else:
+        staffs_dict = {}
+        db = shelve.open('staff.db', 'r')
+        staffs_dict = db['Staffs']
+        db.close()
+
+        staff = staffs_dict.get(id)
+        update_staff_form.first_name.data = staff.get_first_name()
+        update_staff_form.last_name.data = staff.get_last_name()
+        update_staff_form.email.data = staff.get_email()
+        update_staff_form.address1.data = staff.get_address1()
+        update_staff_form.address2.data = staff.get_address2()
+        update_staff_form.gender.data = staff.get_gender()
+        update_staff_form.membership.data = staff.get_membership()
+        update_staff_form.phone_number.data = staff.get_phone_number()
+        update_staff_form.postal_code.data = staff.get_postal_code()
+        update_staff_form.floor_number.data = staff.get_floor_number()
+        update_staff_form.unit_number.data = staff.get_unit_number()
+        update_staff_form.status.data = staff.get_status()
+
+        return render_template('updateStaff.html', form=update_staff_form)
+
+
+@app.route('/updateCustomer/<int:id>/', methods=['GET', 'POST'])
+def update_customer(id):
+    update_customer_form = UpdateCustomerForm(request.form)
+    if request.method == 'POST' and update_customer_form.validate():
+        customers_dict = {}
+        db = shelve.open('customer.db', 'w')
+        customers_dict = db['Customers']
+
+        customer = customers_dict.get(id)
+        customer.set_first_name(update_customer_form.first_name.data)
+        customer.set_last_name(update_customer_form.last_name.data)
+        customer.set_gender(update_customer_form.gender.data)
+        customer.set_email(update_customer_form.email.data)
+        customer.set_address1(update_customer_form.address1.data)
+        customer.set_address2(update_customer_form.address2.data)
+        customer.set_phone_number(update_customer_form.phone_number.data)
+        customer.set_floor_number(update_customer_form.floor_number.data)
+        customer.set_unit_number(update_customer_form.unit_number.data)
+        customer.set_postal_code(update_customer_form.postal_code.data)
+        customer.set_status(update_customer_form.status.data)
+
+        db['Customers'] = customers_dict
+        db.close()
+
+        return redirect(url_for('retrieve_customers'))
+    else:
+        customers_dict = {}
+        db = shelve.open('customer.db', 'r')
+        customers_dict = db['Customers']
+        db.close()
+
+        customer = customers_dict.get(id)
+        update_customer_form.first_name.data = customer.get_first_name()
+        update_customer_form.last_name.data = customer.get_last_name()
+        update_customer_form.gender.data = customer.get_gender()
+        update_customer_form.email.data = customer.get_email()
+        update_customer_form.address1.data = customer.get_address1()
+        update_customer_form.address2.data = customer.get_address2()
+        update_customer_form.phone_number.data = customer.get_phone_number()
+        update_customer_form.floor_number.data = customer.get_floor_number()
+        update_customer_form.unit_number.data = customer.get_unit_number()
+        update_customer_form.postal_code.data = customer.get_postal_code()
+        update_customer_form.status.data = customer.get_status()
+
+        return render_template('updateCustomer.html', form=update_customer_form)
+
+
+@app.route('/deleteStaff/<int:id>', methods=['POST'])
+def delete_staff(id):
+    staffs_dict = {}
+    db = shelve.open('staff.db', 'w')
+    staffs_dict = db['Staffs']
+
+    staffs_dict.pop(id)
+
+    db['Staffs'] = staffs_dict
+    db.close()
+
+    return redirect(url_for('retrieve_staffs'))
+
+
+@app.route('/deleteCustomer/<int:id>', methods=['POST'])
+def delete_customer(id):
+    customers_dict = {}
+    db = shelve.open('customer.db', 'w')
+    customers_dict = db['Customers']
+    customers_dict.pop(id)
+
+    db['Customers'] = customers_dict
+    db.close()
+
+    return redirect(url_for('retrieve_customers'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    login_form = Login(request.form)
+    customers_dict = {}
+    staff_dict = {}
+    db = shelve.open('customer.db', 'r')
+    customers_dict = db['Customers']
+    db.close()
+    db = shelve.open('staff.db', 'r')
+    staff_dict = db['Staffs']
+    db.close()
+    for key in customers_dict:
+        customer = customers_dict.get(key)
+        if customer.get_email() == login_form.email.data and customer.get_password() == login_form.password.data:
+            session['customer'] = customer.get_customer_id()
+            session['name'] = customer.get_name()
+            return redirect(url_for('/AdminDashboard'))
+    for key in staff_dict:
+        staff = staff_dict.get(key)
+        if staff.get_email() == login_form.email.data and staff.get_password() == login_form.password.data:
+            session['Staff'] = staff.get_staff_id()
+            session['name'] = staff.get_name()
+            return redirect(url_for('/AdminDashboard'))
+        else:
+            redirect('/login')
+            flash('login failed')
+    return render_template('login.html', form=login_form)
+
+
 @app.route('/get_map')
 def get_map():
     return render_template('map.html')
@@ -216,6 +460,7 @@ def page_not_found(e):
 @app.route('/img/<fname>')
 def legacy_images(fname):
     return app.redirect(app.url_for('static', filename='uploads/' + fname), code=301)
+
 
 if __name__ == '__main__':
     app.run()
