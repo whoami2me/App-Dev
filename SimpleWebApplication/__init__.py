@@ -430,17 +430,17 @@ def login():
     db = shelve.open('staff.db', 'r')
     staff_dict = db['Staffs']
     db.close()
-    for key in customers_dict:
-        customer = customers_dict.get(key)
+    for email in customers_dict:
+        customer = customers_dict.get(email)
         if customer.get_email() == login_form.email.data and customer.get_password() == login_form.password.data:
             session['customer'] = customer.get_customer_id()
-            session['name'] = customer.get_name()
+            session['name'] = customer.get_first_name()
             return redirect(url_for('/AdminDashboard'))
-    for key in staff_dict:
-        staff = staff_dict.get(key)
+    for email in staff_dict:
+        staff = staff_dict.get(email)
         if staff.get_email() == login_form.email.data and staff.get_password() == login_form.password.data:
             session['Staff'] = staff.get_staff_id()
-            session['name'] = staff.get_name()
+            session['name'] = staff.get_first_name()
             return redirect(url_for('/AdminDashboard'))
         else:
             redirect('/login')
