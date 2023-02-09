@@ -49,9 +49,8 @@ def events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
-        if offline.get_date() <= date.today() <= offline.get_end_date():
-            if offline.get_reg_pax() < offline.get_pax():
-                offline_list.append(offline)
+        if (offline.get_date() <= date.today() <= offline.get_end_date()) and (offline.get_reg_pax() < offline.get_pax()):
+            offline_list.append(offline)
 
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list)
