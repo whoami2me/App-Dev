@@ -15,6 +15,7 @@ class OfflineEvents(Events.Events):
         self.__event_status = event_status
         self.__reg_status = reg_status
         self.__date_created = date_created
+        self.__registered_pax = 0
 
     def set_pax(self, pax):
         self.__pax = pax
@@ -30,6 +31,9 @@ class OfflineEvents(Events.Events):
 
     def set_reg_status(self,reg_status):
         self.__reg_status = reg_status
+
+    def set_reg_pax(self, reg_pax):
+        self.__registered_pax = reg_pax
 
     def get_pax(self):
         return self.__pax
@@ -51,3 +55,6 @@ class OfflineEvents(Events.Events):
 
     def get_offline_event_id(self):
         return self.__offline_event_id
+
+    def get_reg_pax(self):
+        return self.__registered_pax

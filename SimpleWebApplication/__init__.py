@@ -50,8 +50,8 @@ def events():
     for key in offline_dict:
         offline = offline_dict.get(key)
         if offline.get_date() <= date.today() <= offline.get_end_date():
-            print('yes')
-            offline_list.append(offline)
+            if offline.get_reg_pax() < offline.get_pax():
+                offline_list.append(offline)
 
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list)
@@ -73,6 +73,7 @@ def view_regeve():
             regeve_list.append(regeve)
 
     return render_template('userRegisteredEvents.html', regeve_list=regeve_list, count=len(regeve_list))
+
 
 
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
@@ -178,7 +179,6 @@ def register_event(evename):
 
         today = date.today()
 
-
         reg_eve = registerEvent.registerEvent(create_regeve_form.first_name.data, create_regeve_form.last_name.data, create_regeve_form.email.data, today, create_regeve_form.phone_number.data, evename)
 
         for key in offline_list:
@@ -220,8 +220,22 @@ def register_event(evename):
 
 @app.route('/retrieveEvents')
 def retrieve_events():
+
+    regeve_dict = {}
+    db = shelve.open('regeve.db', 'r')
+    regeve_dict = db['Register_Events']
+    db.close()
+
+    regeve_list = []
+
+    list_dict = {}
+    for key in regeve_dict:
+        list_dict.update({regeve_dict.get(key).get_event_name(): 0})
+        if regeve_dict.get(key).get_event_name() in list_dict:
+            list_dict[regeve_dict.get(key).get_event_name()] += 1
+
     online_dict = {}
-    db = shelve.open('online.db', 'r')
+    db = shelve.open('online.db', 'w')
     online_dict = db['Online']
     db.close()
 
@@ -238,9 +252,11 @@ def retrieve_events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
-        offline_list.append(offline)
+        if offline.get_name() in list_dict:
+            offline.set_reg_pax(list_dict[offline.get_name()])
+            offline_list.append(offline)
 
-    return render_template('retrieveEvents.html', count=len(online_list) , count1=len(offline_list), online_list=online_list, offline_list=offline_list)
+    return render_template('retrieveEvents.html', count=len(online_list), count1=len(offline_list), online_list=online_list, offline_list=offline_list, list_dict=list_dict)
 
 
 @app.route('/updateEvent/<int:id>/', methods=['GET', 'POST'])
