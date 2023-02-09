@@ -25,6 +25,7 @@ class UpdateProduct(Form):
 class UpdateProductSale(Form):
     salestartdate = DateField('Sale start date:',validators = [validators.DataRequired()],format='%Y-%m-%d')
     saleenddate = DateField('Sale end date:',validators = [validators.DataRequired()],format='%Y-%m-%d')
+    saleprice = DecimalField('Sale percentage:',validators = [validators.DataRequired()])
     def validate_saleenddate(form, field):
         if field.data < form.salestartdate.data:
             raise ValidationError("End date must not be earlier than start date.")

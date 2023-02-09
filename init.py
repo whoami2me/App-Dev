@@ -133,7 +133,7 @@ def update_product_sale(id):
         product_id = products_dict.get(id)
         product_id.set_product_salestartdate(update_product_form.salestartdate.data) 
         product_id.set_product_saleenddate(update_product_form.saleenddate.data) 
-    
+        product_id.set_product_saleprice(update_product_form.saleprice.data)
         db['Products'] = products_dict
         db.close()
 
@@ -152,6 +152,7 @@ def update_product_sale(id):
         product_id = products_dict[id]
         update_product_form.salestartdate.data = product_id.get_product_salestartdate()
         update_product_form.saleenddate.data = product_id.get_product_saleenddate()
+        update_product_form.saleprice.data = product_id.get_product_saleprice1()
         
         return render_template('updateProductSale.html', form = update_product_form, product = product_id)
 

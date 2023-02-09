@@ -1,21 +1,38 @@
 TABLE IN RETRIEVE: 
-Add a sale status 
-Add a sale price
+Add a sale status (Done)
+Add a sale price (Done)
 
 PRODUCT CLASS:
-Add attribute for sale percentage 
-Add attribute for sale final price
-Add accessor and mutator functions
+Add attribute for sale percentage (Done)
+Add attribute for sale final price (Done)
+Add accessor and mutator functions (Done)
 
 UPDATEPRODUCTSALES FORMS:
-Add sale percentage field
+Add sale percentage field (Done)
 
 UPDATESALES HTML:
-Add sale percentage render field
+Add sale percentage render field (Done)
 
-INIT:
-Make changes accordingly (Add accessor and mutator)
+INITUpdateSales:
+Make changes accordingly (Add accessor and mutator) (Done)
 
 
-Plans for Future:
+TO DO:
+Overall:
+Grey out when unavailable (Low prio)
+Add Dashboard
+Add qty for product homepage
+ -Dynamic, autoupdate when bought
+Track who buy what (Wait for integration and add session)
+Seperate image update from general update
+Click product opens new window in customer side
+Add qty sold
+Dynamic sale start and end date
+
+
+ProductHomeHTML:
+Make it look nicer
+
+
+Plans for Future(Maybe):
 Add a modal for product ID, description, date created

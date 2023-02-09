@@ -46,11 +46,13 @@
                         <th>Product ID</th>
                         <th>Product Name</th>
                         <th>Price</th>
+                        <th>Sale Price</th>
                         <th>Description</th>
                         <th>Quantity</th>
                         <th>Category</th>
                         <th>Date Created</th>
                         <th>Status</th>
+                        <th>Sale Status</th>
                         <th>Action(s)</th>
                     </tr>
                 </thead>
@@ -70,6 +72,11 @@
                         <td>{{ product.get_product_id() }}</td>
                         <td>{{ product.get_product_name() }}</td>
                         <td>{{ product.get_product_priceformat() }}</td>
+                        {% if product.get_product_saleoption() == "Yes" %}
+                          <td>{{ product.get_product_saleprice() }}</td>
+                        {% elif product.get_product_saleoption() == "No" %}
+                          <td>Nil</td>
+                        {% endif %}
                         <td>{{ product.get_product_desc() }}</td>
                         <td>{{ product.get_product_qty() }}</td>    
                         <td>{{ product.get_product_group() }}</td>
@@ -79,6 +86,12 @@
                         {% elif product.get_product_status() == "Inactive" %}
                             <td><span class="status text-danger">&bull;</span>Inactive</td>
                         {% endif %}
+                        {% if product.get_product_saleoption() == "Yes" %}
+                          <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif product.get_product_saleoption() == "No" %}
+                          <td><span class="status text-danger">&bull;</span>Inactive</td>
+                        {% endif %}
+                        
                         <td> <div class="dropdown">
                             <button onclick="myFunction()" class="dropbtn btn btn-warning">Update</button>
                             <div id="myDropdown" class="dropdown-content">

@@ -59,7 +59,12 @@
                 <div class="featured-item">
                     <img src="static/productimages/{{products.get_product_image() }}" alt="" width="1000px" height="180px">
                     <h4>{{ products.get_product_name() }}</h4>
+                    {% if products.get_product_saleoption() == "No" %}
                     <h6>{{ products.get_product_priceformat() }}</h6>
+                    {% elif products.get_product_saleoption() == "Yes" %}
+                    <h6 style="text-decoration: line-through;">{{ products.get_product_priceformat() }}</h6>
+                    <h6>{{products.get_product_saleprice()}}</h6>
+                    {% endif %}
                 </div>
               </a>
             </div>

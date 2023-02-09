@@ -1,7 +1,7 @@
 import uuid
 from datetime import date, datetime
 class Product:
-    def __init__(self,name,price,desc,qty,grp,image,saleoption=None,status='Active',priceclass='item high col-md-4',salestartdate=date.today(),saleenddate=date.today()):
+    def __init__(self,name,price,desc,qty,grp,image,saleoption=None,status='Active',priceclass='item high col-md-4',salestartdate=date.today(),saleenddate=date.today(),saleprice=0):
     
         self.__name = name
         self.__price = price
@@ -16,19 +16,19 @@ class Product:
         self.__salepoption = saleoption
         self.__salestartdate = salestartdate
         self.__saleenddate = saleenddate
+        self.__saleprice = saleprice
     def get_product_name(self):
         return self.__name
     def get_product_price(self):
-        self.__price = float("{:.2f}".format(self.__price))
         return self.__price
     def get_product_priceformat(self):
-        self.__price = ("${:.2f}".format(float(self.__price)))
-        return self.__price
+        self.__price2 = ("${:.2f}".format(float(self.__price)))
+        return self.__price2
     def get_product_desc(self):
         return self.__desc
     def get_product_qty(self):
         return self.__qty
-    def get_product_group(self):
+    def get_product_group(self):    
         self.__grp=(','.join(self.__grp))
         return self.__grp
     def get_product_id(self):
@@ -49,6 +49,12 @@ class Product:
         return self.__salestartdate
     def get_product_saleenddate(self):
         return self.__saleenddate 
+    def get_product_saleprice(self):
+        salepercent = self.__saleprice
+        self.__saleprice2 = float(self.__price)-(float(self.__price)*float(self.__saleprice/100))
+        return ('${:.2f} (Discount: {}%)'.format(self.__saleprice2,salepercent))
+    def get_product_saleprice1(self):
+        return self.__saleprice
         
     def set_product_name(self,name):
         self.__name = name
@@ -70,3 +76,5 @@ class Product:
         self.__salestartdate = salestartdate
     def set_product_saleenddate(self,saleenddate):
         self.__saleenddate = saleenddate
+    def set_product_saleprice(self,saleprice):
+        self.__saleprice = saleprice
