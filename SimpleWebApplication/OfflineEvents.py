@@ -5,8 +5,8 @@ class OfflineEvents(Events.Events):
 
     count = 0
 
-    def __init__(self, name, image, description, date, location, pax, latitude, longitude, event_status, reg_status ,date_created):
-        super().__init__(name, image, description, date, location)
+    def __init__(self, name, image, description, date, end_date, location, pax, latitude, longitude, event_status, reg_status ,date_created):
+        super().__init__(name, image, description, date, end_date, location)
         OfflineEvents.count += 1
         self.__offline_event_id = OfflineEvents.count
         self.__pax = pax

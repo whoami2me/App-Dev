@@ -5,8 +5,8 @@ class OnlineEvents(Events.Events):
 
     count = 0
 
-    def __init__(self, name, image, description, date, location, event_status, reg_status ,date_created):
-        super().__init__(name, image, description, date, location)
+    def __init__(self, name, image, description, date, end_date, location, event_status, reg_status ,date_created):
+        super().__init__(name, image, description, date, end_date,location)
         OnlineEvents.count += 1
         self.__online_event_id = OnlineEvents.count
         self.__event_status = event_status
