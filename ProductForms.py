@@ -32,3 +32,6 @@ class UpdateProductSale(Form):
     def validate_salestartdate(form, field):
         if field.data < date.today():
             raise ValidationError("The start date cannot be in the past.")
+
+class UpdateProductImg(Form):
+    image = FileField('Image: ',validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])

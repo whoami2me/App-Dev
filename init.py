@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import shelve
 import Products
-from ProductForms import CreateProduct, UpdateProduct, UpdateProductSale
+from ProductForms import CreateProduct, UpdateProduct, UpdateProductSale, UpdateProductImg
 from werkzeug.datastructures import CombinedMultiDict
 
 app = Flask(__name__)
@@ -155,6 +155,40 @@ def update_product_sale(id):
         update_product_form.saleprice.data = product_id.get_product_saleprice1()
         
         return render_template('updateProductSale.html', form = update_product_form, product = product_id)
+
+@app.route('/updateProductImg/<uuid:id>/', methods=['GET','POST'])
+def update_product_img(id):
+    update_product_form = UpdateProductImg(CombinedMultiDict((request.files,request.form)))
+    
+    #Save changes
+    if request.method == 'POST' and update_product_form.validate():
+        
+        products_dict = {}
+        db=shelve.open('product.db','w')
+        products_dict = db['Products']
+        product_id = products_dict.get(id)
+        update_product_form.image.data.save(app.config['Product_Images_Dest'] + update_product_form.image.data.filename)
+        product_id.set_product_image(update_product_form.image.data.filename)
+        db['Products'] = products_dict
+        db.close()
+
+        return redirect(url_for('retrieve_products'))
+    #Return current product data
+    else:
+        products_dict = {}
+        db=shelve.open('product.db','r')
+        products_dict = db['Products']
+        db.close()
+        products_list = []
+        for key in products_dict:
+            p = products_dict.get(key)
+            products_list.append(p)
+
+        product_id = products_dict[id]
+        update_product_form.image.data = product_id.get_product_image() #Gives filename
+
+        
+        return render_template('updateProductImg.html', form = update_product_form, product = product_id)
 
 @app.route("/deleteProduct/<uuid:id>/", methods = ["POST"])
 def delete_product(id):

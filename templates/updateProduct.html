@@ -34,14 +34,7 @@
                     <div class="form-group">
                         {{ render_field(form.sale, class="form-control") }}
                     </div>
-                    <div class="form-group">
-                        {{ render_field(form.image, class="form-control", id="finput" , **{'onchange':'previewFile()'} )  }}
-                    </div>
-
-                    <div class="preview-img"><img id="preview" src="/static/productimages/{{product.get_product_image() }}" width="400px" height="175px" alt="Image preview" ></div>
-                    <div class="mb-4 text-center">
-                        <input type="submit" value="Submit" class="btn btn-primary center"/>
-                    </div>
+                    
                 </form>
             </div>
         </div>

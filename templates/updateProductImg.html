@@ -1,0 +1,30 @@
+{% extends "base2.html" %}
+{% block title %}Western Corp - Update Products{% endblock %}
+{% block silly %}Product Management{% endblock %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
+<section id="update-product">
+    <div class="container-lg">
+        <div class="text-center">
+            <h1 class="display-5">Update Product Image</h1>
+        </div>
+
+        <div class="row justify-content-center my-5">
+            <div class="col-lg-8">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    <div class="form-group">
+                        {{ render_field(form.image, class="form-control", id="finput" , **{'onchange':'previewFile()'} )  }}
+                    </div>
+
+                    <div class="preview-img"><img id="preview" src="/static/productimages/{{product.get_product_image() }}" width="400px" height="175px" alt="Image preview" ></div>
+                    <div class="mb-4 text-center">
+                        <input type="submit" value="Submit" class="btn btn-primary center"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
