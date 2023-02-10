@@ -63,7 +63,7 @@
                     <h6>{{ products.get_product_priceformat() }}&nbsp | Qty:{{ products.get_product_qty() }}</h6>
                     {% elif products.get_product_saleoption() == "Yes" %}
                     <h6 style="text-decoration: line-through;">{{ products.get_product_priceformat() }}</h6>
-                    <h6>{{products.get_product_saleprice()}}&nbsp| Qty:{{ products.get_product_qty() }}</h6>
+                    <h6>{{products.get_product_saleprice()}}&nbsp | Qty:{{ products.get_product_qty() }}</h6>
                     {% endif %}
                 </div>
               </a>
