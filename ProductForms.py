@@ -34,3 +34,6 @@ class UpdateProductSale(Form):
 
 class UpdateProductImg(Form):
     image = FileField('Image: ',validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
+
+class PurchaseProduct(Form):
+    qty = IntegerField('Quantity: ', [validators.InputRequired()])

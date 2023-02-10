@@ -29,6 +29,8 @@ Click product opens new window in customer side (Done)
 Add qty sold
 Dynamic sale start and end date (Done)
 
+Create new database for customer products
+ - Save the data with session, assign session to a variable and save within database noice
 
 ProductHomeHTML:
 Make it look nicer

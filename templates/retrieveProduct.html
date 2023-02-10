@@ -68,6 +68,7 @@
                         <th>Sale Price</th>
                         <th>Description</th>
                         <th>Quantity</th>
+                        <th>Amnt Sold</th>
                         <th>Category</th>
                         <th>Date Created</th>
                         <th>Product Status</th>
@@ -99,6 +100,7 @@
                         {% endif %}
                         <td>{{ product.get_product_desc() }}</td>
                         <td>{{ product.get_product_qty() }}</td>    
+                        <td>{{ product.get_product_sold() }}</td>
                         <td>{{ product.get_product_group() }}</td>
                         <td>{{ product.get_product_date() }}</td>
                         {% if product.get_product_status() == "Active" %}

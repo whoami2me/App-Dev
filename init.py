@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import shelve
 import Products
-from ProductForms import CreateProduct, UpdateProduct, UpdateProductSale, UpdateProductImg
+from ProductForms import CreateProduct, UpdateProduct, UpdateProductSale, UpdateProductImg, PurchaseProduct
 from werkzeug.datastructures import CombinedMultiDict
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
@@ -70,6 +70,7 @@ def retrieve_products():
     for key in products_dict:
         p = products_dict.get(key)
         products_list.append(p)
+
     return render_template('retrieveProduct.html', count = len(products_list), products_list = products_list, )
 
 @app.route('/updateProduct/<uuid:id>/', methods=['GET','POST'])
@@ -194,7 +195,7 @@ def home_product():
     db = shelve.open('product.db', 'r')
     products_dict = db['Products']
     db.close()
-
+    session[''] = 'TempCust' #Replace TempCust with customer object after integration 
     products_list = []
     products_list2 = [] #Excludes inactive products
     products_list3 = [] #Excludes active products
@@ -211,14 +212,27 @@ def home_product():
         
     return render_template('homeProduct.html',products = products_list2,products2 = products_list3)
 
-@app.route("/singleProduct/<uuid:id>/")
+@app.route("/singleProduct/<uuid:id>/", methods=['GET', 'POST'])
 def single_product(id):
+    purchase_product_form = PurchaseProduct(CombinedMultiDict((request.files,request.form)))
     products_dict = {}
     db = shelve.open('product.db', 'r')
     products_dict = db['Products']
     db.close()
     p = products_dict.get(id)
-    return render_template('singleProduct.html', product = p)
+
+    if request.method == 'POST' and purchase_product_form.validate():
+        products_dict = {}
+        db=shelve.open('product.db', 'w')
+        products_dict = db['Products']
+        product_id = products_dict.get(id)
+        totalsold = product_id.get_product_sold()+ purchase_product_form.qty.data
+        product_id.set_product_sold(totalsold)
+
+        db['Products'] = products_dict
+        db.close()
+        return render_template('purchaseProduct.html')
+    return render_template('singleProduct.html', product = p, form = purchase_product_form)
 
 
 @app.errorhandler(404)
