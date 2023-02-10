@@ -149,6 +149,16 @@ class RegisterEventForm(Form):
             raise validators.ValidationError(
                 'Invalid phone number,it must start with either 8 or 9 and be 8 digit long')
 
+class ChangePassword(Form):
+    password = PasswordField('Password', [validators.Length(min=1), validators.DataRequired()])
+    newpassword = PasswordField(validators=[validators.Length(min=8, message='Too short'), validators.DataRequired(), validators.Regexp(
+            r'^(?=(.*[a-z]){3,})(?=(.*[A-Z]){2,})(?=(.*[0-9]){2,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$',
+            message="Invalid password. It must contain at least one uppercase letter, one lowercase letter, one digit, one special character and be at least 8 characters long.")])
+    passwordcfm = PasswordField('Confirm Password', validators=[validators.EqualTo('password', 'Password mismatch')])
+
+class Login(Form):
+    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
+    password = PasswordField('Password', [validators.Length(min=1), validators.DataRequired()])
 
 #izwan
 def check_payment(form, field):
