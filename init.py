@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import shelve
 import Products
-from ProductForms import CreateProduct, UpdateProduct, UpdateProductSale, UpdateProductImg
+from ProductForms import CreateProduct, UpdateProduct, UpdateProductSale, UpdateProductImg, PurchaseProduct
 from werkzeug.datastructures import CombinedMultiDict
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
 app.config['Product_Images_Dest'] = 'static/productimages/'
+app.secret_key = 'any_random_string'
 
 
 
@@ -54,6 +55,7 @@ def create_product():
         products_dict[p.get_product_id()] = p
         db['Products'] = products_dict
         db.close()
+        session['product_created'] = ("ID:{} | Name:{}".format(p.get_product_id(),p.get_product_name()))
         return redirect(url_for('retrieve_products'))
     return render_template('createProduct.html', form=create_product_form)
 
@@ -68,6 +70,7 @@ def retrieve_products():
     for key in products_dict:
         p = products_dict.get(key)
         products_list.append(p)
+
     return render_template('retrieveProduct.html', count = len(products_list), products_list = products_list, )
 
 @app.route('/updateProduct/<uuid:id>/', methods=['GET','POST'])
@@ -80,7 +83,7 @@ def update_product(id):
         products_dict = {}
         db=shelve.open('product.db','w')
         products_dict = db['Products']
-       
+
         product_id = products_dict.get(id)
         product_id.set_product_name(update_product_form.name.data) 
         product_id.set_product_price(update_product_form.price.data) 
@@ -91,7 +94,7 @@ def update_product(id):
         product_id.set_product_saleoption(update_product_form.sale.data)
         db['Products'] = products_dict
         db.close()
-
+        session['product_updated'] = ("ID:{} | Name:{}".format(product_id.get_product_id(),product_id.get_product_name()))
         return redirect(url_for('retrieve_products'))
     #Return current product data
     else:
@@ -131,7 +134,7 @@ def update_product_sale(id):
         product_id.set_product_saleprice(update_product_form.saleprice.data)
         db['Products'] = products_dict
         db.close()
-
+        session['product_updated'] = ("ID:{} | Name:{}".format(product_id.get_product_id(),product_id.get_product_name()))
         return redirect(url_for('retrieve_products'))
     #Return current product data
     else:
@@ -161,7 +164,7 @@ def update_product_img(id):
         product_id.set_product_image(update_product_form.image.data.filename)
         db['Products'] = products_dict
         db.close()
-
+        session['product_updated'] = ("ID:{} | Name:{}".format(product_id.get_product_id(),product_id.get_product_name()))
         return redirect(url_for('retrieve_products'))
     #Return current product data
     else:
@@ -180,9 +183,10 @@ def delete_product(id):
     products_dict = {}
     db = shelve.open('product.db','w')
     products_dict = db['Products']
-    products_dict.pop(id)
+    p = products_dict.pop(id)
     db['Products'] = products_dict
     db.close()
+    session['product_deleted'] = ("ID:{} | Name:{}".format(p.get_product_id(),p.get_product_name()))
     return redirect(url_for('retrieve_products'))
 
 @app.route("/homeProduct")
@@ -191,7 +195,7 @@ def home_product():
     db = shelve.open('product.db', 'r')
     products_dict = db['Products']
     db.close()
-
+    session[''] = 'TempCust' #Replace TempCust with customer object after integration 
     products_list = []
     products_list2 = [] #Excludes inactive products
     products_list3 = [] #Excludes active products
@@ -208,14 +212,27 @@ def home_product():
         
     return render_template('homeProduct.html',products = products_list2,products2 = products_list3)
 
-@app.route("/singleProduct/<uuid:id>/")
+@app.route("/singleProduct/<uuid:id>/", methods=['GET', 'POST'])
 def single_product(id):
+    purchase_product_form = PurchaseProduct(CombinedMultiDict((request.files,request.form)))
     products_dict = {}
     db = shelve.open('product.db', 'r')
     products_dict = db['Products']
     db.close()
     p = products_dict.get(id)
-    return render_template('singleProduct.html', product = p)
+
+    if request.method == 'POST' and purchase_product_form.validate():
+        products_dict = {}
+        db=shelve.open('product.db', 'w')
+        products_dict = db['Products']
+        product_id = products_dict.get(id)
+        totalsold = product_id.get_product_sold()+ purchase_product_form.qty.data
+        product_id.set_product_sold(totalsold)
+
+        db['Products'] = products_dict
+        db.close()
+        return render_template('purchaseProduct.html')
+    return render_template('singleProduct.html', product = p, form = purchase_product_form)
 
 
 @app.errorhandler(404)

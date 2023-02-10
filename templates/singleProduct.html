@@ -2,6 +2,7 @@
 {% block title%}Western Corp - Products{% endblock %}
 
 {% block content %}
+{% from "includes/_formHelper.html" import render_field %}
 <!-- Bootstrap core CSS -->
 <link href="/static/css/vendorproduct/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <!-- Additional CSS Files -->
@@ -40,17 +41,18 @@
             <h6 style="text-decoration: line-through;">{{ product.get_product_priceformat() }}</h6>
             <h6>{{product.get_product_saleprice()}}</h6>
           {% endif %}
+          <p>Description:</p>
           <p>{{ product.get_product_desc() }}</p>
           <span>{{ product.get_product_qty() }} left on stock</span>
           <!--Change this form later-->
-          <form action="" method="get">
-            <label for="quantity">Quantity:</label>
-            <input name="quantity" type="quantity" class="quantity-text" id="quantity" 
-              onfocus="if(this.value == '1') { this.value = ''; }" 
-                onBlur="if(this.value == '') { this.value = '1';}"
-                value="1">
-            <input type="submit" class="button" value="Order Now!">
-          </form>
+          <form method="POST" action="" enctype="multipart/form-data">
+            <div class="form-group">
+                {{ render_field(form.qty, class="form-control") }}
+            </div>
+            <div class="mb-4 text-center">
+                <input type="submit" value="Submit" class="btn btn-primary center"/>
+            </div>
+        </form>
           <!---->
         </div>
       </div>

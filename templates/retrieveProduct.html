@@ -21,8 +21,24 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-<script src="../retrieveProduct.js"></script>
+<script src="/retrieveProduct.js"></script>
 
+{% if 'product_created' in session %}
+<div class="alert alert-success alert-dismissible">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ session.pop('product_created', None) }} was created.
+</div>
+{% elif 'product_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ session.pop('product_updated', None) }} was updated.
+</div>
+{% elif 'product_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ session.pop('product_deleted', None) }} was deleted.
+</div>
+{% endif %}
 <div class="container">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -52,6 +68,7 @@
                         <th>Sale Price</th>
                         <th>Description</th>
                         <th>Quantity</th>
+                        <th>Amnt Sold</th>
                         <th>Category</th>
                         <th>Date Created</th>
                         <th>Product Status</th>
@@ -83,6 +100,7 @@
                         {% endif %}
                         <td>{{ product.get_product_desc() }}</td>
                         <td>{{ product.get_product_qty() }}</td>    
+                        <td>{{ product.get_product_sold() }}</td>
                         <td>{{ product.get_product_group() }}</td>
                         <td>{{ product.get_product_date() }}</td>
                         {% if product.get_product_status() == "Active" %}

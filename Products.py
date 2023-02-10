@@ -1,7 +1,7 @@
 import uuid
 from datetime import date
 class Product:
-    def __init__(self,name,price,desc,qty,grp,image,saleoption=None,status='Active',priceclass='item high col-md-4',salestartdate=date.today(),saleenddate=date.today(),saleprice=0):
+    def __init__(self,name,price,desc,qty,grp,image,saleoption=None,status='Active',priceclass='item high col-md-4',salestartdate=date.today(),saleenddate=date.today(),saleprice=0,sold=0):
     
         self.__name = name
         self.__price = price
@@ -17,6 +17,8 @@ class Product:
         self.__salestartdate = salestartdate
         self.__saleenddate = saleenddate
         self.__saleprice = saleprice
+        self.__sold = sold
+
     def get_product_name(self):
         return self.__name
     def get_product_price(self):
@@ -71,6 +73,8 @@ class Product:
         return ('${:.2f} (Discount: {}%)'.format(self.__saleprice2,salepercent))
     def get_product_saleprice1(self): #For init to return percentage in update forms
         return self.__saleprice
+    def get_product_sold(self):
+        return self.__sold
         
     def set_product_name(self,name):
         self.__name = name
@@ -94,3 +98,5 @@ class Product:
         self.__saleenddate = saleenddate
     def set_product_saleprice(self,saleprice):
         self.__saleprice = saleprice
+    def set_product_sold(self,sold):
+        self.__sold = int(sold)
