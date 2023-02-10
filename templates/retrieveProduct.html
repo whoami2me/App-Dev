@@ -91,9 +91,9 @@
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-danger">&bull;</span></td>
                         {% endif %}
                         {% if product.get_product_saleoption() == "Active" %}
-                          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-success">&bull;</span>{{  product.get_product_saleoption() }}</td>
+                          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-success">&bull;</span></td>
                         {% elif product.get_product_saleoption() == "Inactive" %}
-                          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-danger">&bull;</span>{{  product.get_product_saleoption() }}</td>
+                          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-danger">&bull;</span></td>
                         {% endif %}
                         
                         <td> <div class="dropdown">

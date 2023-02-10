@@ -3,7 +3,6 @@ import shelve
 import Products
 from ProductForms import CreateProduct, UpdateProduct, UpdateProductSale, UpdateProductImg
 from werkzeug.datastructures import CombinedMultiDict
-from datetime import date
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
@@ -119,7 +118,6 @@ def update_product(id):
 @app.route('/updateProductSale/<uuid:id>/', methods=['GET','POST'])
 def update_product_sale(id):
     update_product_form = UpdateProductSale(CombinedMultiDict((request.files,request.form)))
-    print(date.today())
     #Save changes
     if request.method == 'POST' and update_product_form.validate():
         
@@ -150,9 +148,6 @@ def update_product_sale(id):
         update_product_form.salestartdate.data = product_id.get_product_salestartdate()
         update_product_form.saleenddate.data = product_id.get_product_saleenddate()
         update_product_form.saleprice.data = product_id.get_product_saleprice1()
-        print(product_id.get_product_saleenddate())
-        if product_id.get_product_saleenddate()< date.today():
-            print("im gay")
         return render_template('updateProductSale.html', form = update_product_form, product = product_id)
 
 @app.route('/updateProductImg/<uuid:id>/', methods=['GET','POST'])
