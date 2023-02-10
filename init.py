@@ -139,10 +139,6 @@ def update_product_sale(id):
         db=shelve.open('product.db','r')
         products_dict = db['Products']
         db.close()
-        products_list = []
-        for key in products_dict:
-            p = products_dict.get(key)
-            products_list.append(p)
 
         product_id = products_dict[id]
         update_product_form.salestartdate.data = product_id.get_product_salestartdate()
@@ -173,14 +169,9 @@ def update_product_img(id):
         db=shelve.open('product.db','r')
         products_dict = db['Products']
         db.close()
-        products_list = []
-        for key in products_dict:
-            p = products_dict.get(key)
-            products_list.append(p)
 
         product_id = products_dict[id]
         update_product_form.image.data = product_id.get_product_image() #Gives filename
-
         
         return render_template('updateProductImg.html', form = update_product_form, product = product_id)
 
@@ -216,6 +207,15 @@ def home_product():
             products_list3.append(i)
         
     return render_template('homeProduct.html',products = products_list2,products2 = products_list3)
+
+@app.route("/singleProduct/<uuid:id>/")
+def single_product(id):
+    products_dict = {}
+    db = shelve.open('product.db', 'r')
+    products_dict = db['Products']
+    db.close()
+    p = products_dict.get(id)
+    return render_template('singleProduct.html', product = p)
 
 
 @app.errorhandler(404)

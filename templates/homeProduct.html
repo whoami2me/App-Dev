@@ -1,4 +1,3 @@
-<!--Foundation for product home page on customer side-->
 {% extends "base.html" %}
 {% block title%}Western Corp - Products{% endblock %}
 
@@ -55,7 +54,7 @@
       <div class="row posts">
         {% for products in products %}
             <div id="{{ loop.index }}" class="{{ products.get_product_priceclass() }}">
-              <a href="single-product.html">
+              <a href="/singleProduct/{{products.get_product_id()}}">
                 <div class="featured-item">
                     <img src="static/productimages/{{products.get_product_image() }}" alt="" width="1000px" height="180px">
                     <h4>{{ products.get_product_name() }}</h4>
@@ -73,7 +72,7 @@
         <div class="row posts">
           {% for products in products2 %}
               <div id="{{ loop.index }}" class="{{ products.get_product_priceclass() }}">
-                <a href="single-product.html">
+                <a href="/singleProduct/{{products.get_product_id()}}">
                   <div class="featured-item">
                       <img src="static/productimages/{{products.get_product_image() }}" alt="" width="1000px" height="180px" style="opacity:0.5;">
                       <h4 style="opacity:0.5;">{{ products.get_product_name() }}</h4>
