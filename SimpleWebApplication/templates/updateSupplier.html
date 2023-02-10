@@ -1,0 +1,46 @@
+{% extends "base2.html" %}
+{% block title %}Library Loan System - Update Supplier{% endblock %}
+{% block silly %}Update Supplier{% endblock %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<h1 class="display-4">Update Supplier</h1>
+
+<form method="POST" action="">
+  <div class="form-group">
+   {{ render_field(form.Company_name, class="form-control") }}
+    {{ render_field(form.telephone, class="form-control") }}
+     {{ render_field(form.website, class="form-control") }}
+     {{ render_field(form.email, class="form-control") }}
+  </div>
+   <div class="form-group">
+ {{ render_field(form.Address1, class="form-control") }}
+    <div class="form-group row">
+  <div class="col">
+    Unit Number {{ render_field(form.floor_number, class="form-control") }}
+  </div>
+    <div class="col">
+        {{ render_field(form.unit_number, class="form-control")}}
+    </div>
+  </div>
+     {{ render_field(form.postal, class="form-control") }}
+ </div>
+  <div class="form-group">
+    {{ render_field(form.Payment, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.Categories_select, class="form-check", style="list-style-type:none") }}
+  </div>
+   <div class="form-group">
+    {{ render_field(form.Product_name, class="form-control") }}
+  </div>
+    <div class="form-group">
+      {{ render_field(form.remarks, class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.status,  class="form-check", style="list-style-type:none") }}
+    </div>
+    <br>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+{% endblock %}
