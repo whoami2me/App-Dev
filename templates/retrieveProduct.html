@@ -23,6 +23,22 @@
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script src="/retrieveProduct.js"></script>
 
+{% if 'product_created' in session %}
+<div class="alert alert-success alert-dismissible">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ session.pop('product_created', None) }} was created.
+</div>
+{% elif 'product_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ session.pop('product_updated', None) }} was updated.
+</div>
+{% elif 'product_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ session.pop('product_deleted', None) }} was deleted.
+</div>
+{% endif %}
 <div class="container">
     <div class="table-responsive">
         <div class="table-wrapper">

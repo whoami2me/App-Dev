@@ -7,6 +7,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
 app.config['Product_Images_Dest'] = 'static/productimages/'
+app.secret_key = 'any_random_string'
 
 
 
@@ -54,6 +55,7 @@ def create_product():
         products_dict[p.get_product_id()] = p
         db['Products'] = products_dict
         db.close()
+        session['product_created'] = ("ID:{} | Name:{}".format(p.get_product_id(),p.get_product_name()))
         return redirect(url_for('retrieve_products'))
     return render_template('createProduct.html', form=create_product_form)
 
@@ -80,7 +82,7 @@ def update_product(id):
         products_dict = {}
         db=shelve.open('product.db','w')
         products_dict = db['Products']
-       
+
         product_id = products_dict.get(id)
         product_id.set_product_name(update_product_form.name.data) 
         product_id.set_product_price(update_product_form.price.data) 
@@ -91,7 +93,7 @@ def update_product(id):
         product_id.set_product_saleoption(update_product_form.sale.data)
         db['Products'] = products_dict
         db.close()
-
+        session['product_updated'] = ("ID:{} | Name:{}".format(product_id.get_product_id(),product_id.get_product_name()))
         return redirect(url_for('retrieve_products'))
     #Return current product data
     else:
@@ -131,7 +133,7 @@ def update_product_sale(id):
         product_id.set_product_saleprice(update_product_form.saleprice.data)
         db['Products'] = products_dict
         db.close()
-
+        session['product_updated'] = ("ID:{} | Name:{}".format(product_id.get_product_id(),product_id.get_product_name()))
         return redirect(url_for('retrieve_products'))
     #Return current product data
     else:
@@ -161,7 +163,7 @@ def update_product_img(id):
         product_id.set_product_image(update_product_form.image.data.filename)
         db['Products'] = products_dict
         db.close()
-
+        session['product_updated'] = ("ID:{} | Name:{}".format(product_id.get_product_id(),product_id.get_product_name()))
         return redirect(url_for('retrieve_products'))
     #Return current product data
     else:
@@ -180,9 +182,10 @@ def delete_product(id):
     products_dict = {}
     db = shelve.open('product.db','w')
     products_dict = db['Products']
-    products_dict.pop(id)
+    p = products_dict.pop(id)
     db['Products'] = products_dict
     db.close()
+    session['product_deleted'] = ("ID:{} | Name:{}".format(p.get_product_id(),p.get_product_name()))
     return redirect(url_for('retrieve_products'))
 
 @app.route("/homeProduct")
