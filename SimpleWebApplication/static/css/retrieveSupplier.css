@@ -26,3 +26,9 @@ background: #F64A17;
 .function{
 width: 170%;
 }
+td{
+text-align: center;
+}
+th{
+text-align: center;
+}

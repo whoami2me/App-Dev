@@ -7,8 +7,8 @@
 
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}" >
-#xmlns:style="http://www.w3.org/1999/xhtml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}" >
+    <link xmlns:style="http://www.w3.org/1999/xhtml">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
     <script src="https://kit.fontawesome.com/48c37b3e43.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/retrieveSupplier.css') }}">
@@ -49,10 +49,13 @@
         <th>Supplier Name</th>
         <th>Categories</th>
         <th>Products</th>
+        <th>Stock in stall (Qty)</th>
         <th>Remarks</th>
         <th>Status</th>
         <th></th>
-
+        <th></th>
+        <th></th>
+        <th>Order</th>
       </tr>
     </thead>
 
@@ -73,6 +76,7 @@
             <td>Accessories</td>
           {% endif %}
           <td>{{ suppliers.get_Product_name() }}</td>
+          <td>{{ suppliers.get_Qty() }}</td>
           <td>{{ suppliers.get_remarks() }}</td>
           {% if suppliers.get_status() == "Available" %}
             <td><span class="status text-success">&bull;</span>Available</td>
@@ -112,6 +116,7 @@
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
+                                          <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p>> </div>
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
                                             {% if suppliers.get_status() == "Available" %}
                                             <div class="Type"><p>Status: <span>Available</span></p></div>
@@ -130,10 +135,12 @@
                             </div>
                           </div>
                         </div>
+         </td>
 
-
-
-              <a href="/updateSupplier/{{suppliers.get_Suppliers_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="fa-solid fa-pen-to-square"></i>
+         <td>
+             <a href="/updateSupplier/{{suppliers.get_Suppliers_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="fa-solid fa-pen-to-square"></i></a>
+         </td>
+         <td>
             <form action="{{url_for('delete_Supplier', id=suppliers.get_Suppliers_id())}}" method="POST">
 <!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{suppliers.get_Company_name()}}?');"-->
         <!-- Button to Open the Modal -->
@@ -165,8 +172,12 @@
   </div>
 </div>
          </form>
-     </td>
+      </td>
+      <td>
 
+
+
+      </td>
 
      </tr>
 

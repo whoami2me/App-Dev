@@ -1,8 +1,6 @@
 class Inventory:
-
     count_id = 0
     def __init__(self,Categories_select,Product_name,Qty,remarks,date):
-
         Inventory.count_id +=1
         self.__Inventory_id = Inventory.count_id
         self.__Categories_select = Categories_select

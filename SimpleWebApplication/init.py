@@ -28,7 +28,7 @@ def create_Suppliers():
         today = date.today()
         supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,
                                        create_Supplier_form.Address1.data, create_Supplier_form.floor_number.data,create_Supplier_form.unit_number.data,create_Supplier_form.postal.data,
-                                       create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.remarks.data,
+                                       create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.Qty.data,create_Supplier_form.remarks.data,
                                        today, 'Available')
         Suppliers_dict[supplier.get_Suppliers_id()] = supplier
         db['Supplier'] = Suppliers_dict
@@ -124,18 +124,18 @@ def delete_Supplier(id):
 def create_Inventory():
     create_Inventory_form = CreateInventoryForm(request.form)
     if request.method == 'POST' and create_Inventory_form.validate():
-        Inventory_dict = {}
+        inventory_dict = {}
         db = shelve.open('inventory.db', 'c')
         try:
-            Inventory_dict = db['inventory']
+            inventory_dict = db['Inventory']
         except:
             print("Error in retrieving supply from Inventory.db.")
         today = date.today()
-        supply = Inventory.Inventory(create_Inventory_form.Categories_select.data,create_Inventory_form.Product_name.data,create_Inventory_form.Qty.data,
-                                     create_Inventory_form.remarks.data,today)
+        supply = Inventory.Inventory(create_Inventory_form.Categories_select.data,create_Inventory_form.Product_name.data,
+                                     create_Inventory_form.Qty.data,create_Inventory_form.remarks.data,today)
 
-        Inventory_dict[Inventory.get_Inventory_id()] = supply
-        db['inventory'] = Inventory_dict
+        inventory_dict[Inventory.get_Inventory_id()] = supply
+        db['Inventory'] = inventory_dict
 
         db.close()
 
@@ -147,12 +147,12 @@ def create_Inventory():
 def retrieve_Inventory():
     Inventory_dict = {}
     db = shelve.open('inventory.db', 'r')
-    Inventory_dict = db['inventory']
+    inventory_dict = db['inventory']
     db.close()
 
     Inventory_list = []
-    for key in Inventory_dict:
-        supplies = Inventory_dict.get(key)
+    for key in inventory_dict:
+        supplies = inventory_dict.get(key)
         Inventory_list.append(supplies)
 
     return render_template('retrieveInventory.html', count=len(Inventory_list), Inventory_list=Inventory_list)
