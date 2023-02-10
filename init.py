@@ -82,14 +82,12 @@ def update_product(id):
         db=shelve.open('product.db','w')
         products_dict = db['Products']
        
-        update_product_form.image.data.save(app.config['Product_Images_Dest'] + update_product_form.image.data.filename)
         product_id = products_dict.get(id)
         product_id.set_product_name(update_product_form.name.data) 
         product_id.set_product_price(update_product_form.price.data) 
         product_id.set_product_desc(update_product_form.desc.data) 
         product_id.set_product_qty(update_product_form.qty.data) 
         product_id.set_product_group(update_product_form.grp.data)
-        product_id.set_product_image(update_product_form.image.data.filename)
         product_id.set_product_status(update_product_form.status.data)
         product_id.set_product_saleoption(update_product_form.sale.data)
         db['Products'] = products_dict
@@ -113,7 +111,6 @@ def update_product(id):
         update_product_form.desc.data = product_id.get_product_desc()
         update_product_form.qty.data = product_id.get_product_qty()
         update_product_form.grp.data = product_id.get_product_group()
-        update_product_form.image.data = product_id.get_product_image() #Gives filename
         update_product_form.status.data = product_id.get_product_status()
         update_product_form.sale.data = product_id.get_product_saleoption()
         
@@ -209,6 +206,7 @@ def home_product():
 
     products_list = []
     products_list2 = [] #Excludes inactive products
+    products_list3 = [] #Excludes active products
 
     for key in products_dict:
         p = products_dict.get(key)
@@ -216,8 +214,11 @@ def home_product():
     for i in products_list:
         if i.get_product_status() == 'Active':
             products_list2.append(i)
+    for i in products_list:
+        if i.get_product_status() == 'Inactive':
+            products_list3.append(i)
         
-    return render_template('homeProduct.html',products = products_list2)
+    return render_template('homeProduct.html',products = products_list2,products2 = products_list3)
 
 
 @app.errorhandler(404)

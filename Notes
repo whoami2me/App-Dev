@@ -19,9 +19,9 @@ Make changes accordingly (Add accessor and mutator) (Done)
 
 TO DO:
 Overall:
-Grey out when unavailable (Low prio)
+Grey out when unavailable (Done)
 Add Dashboard
-Add qty for product homepage
+Add qty for product homepage (Foundation done)
  -Dynamic, autoupdate when bought
 Track who buy what (Wait for integration and add session)
 Seperate image update from general update (Done)

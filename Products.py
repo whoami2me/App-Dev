@@ -40,8 +40,20 @@ class Product:
     def get_product_status(self):
         return self.__status
     def get_product_priceclass(self):
-        if self.__price <=100:
-            self.__priceclass = 'item low col-md-4'
+        self.__saleprice2 = float(self.__price)-(float(self.__price)*float(self.__saleprice/100))
+        if self.__status == 'Inactive':
+            self.__priceclass = 'item new col-md-4'
+        else:
+            if self.__salepoption == 'Yes':
+                if self.__saleprice2 <= 100:
+                    self.__priceclass = 'item low col-md-4'
+                else:
+                    self.__priceclass = 'item high col-md-4'
+            else:
+                if self.__price <=100:
+                    self.__priceclass = 'item low col-md-4'
+                else:
+                    self.__priceclass = 'item high col-md-4'
         return self.__priceclass
     def get_product_saleoption(self):
         return self.__salepoption

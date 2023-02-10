@@ -60,16 +60,29 @@
                     <img src="static/productimages/{{products.get_product_image() }}" alt="" width="1000px" height="180px">
                     <h4>{{ products.get_product_name() }}</h4>
                     {% if products.get_product_saleoption() == "No" %}
-                    <h6>{{ products.get_product_priceformat() }}</h6>
+                    <h6>{{ products.get_product_priceformat() }}&nbsp | Qty:{{ products.get_product_qty() }}</h6>
                     {% elif products.get_product_saleoption() == "Yes" %}
                     <h6 style="text-decoration: line-through;">{{ products.get_product_priceformat() }}</h6>
-                    <h6>{{products.get_product_saleprice()}}</h6>
+                    <h6>{{products.get_product_saleprice()}}&nbsp| Qty:{{ products.get_product_qty() }}</h6>
                     {% endif %}
                 </div>
               </a>
             </div>
         {% endfor %}
         </div>
+        <div class="row posts">
+          {% for products in products2 %}
+              <div id="{{ loop.index }}" class="{{ products.get_product_priceclass() }}">
+                <a href="single-product.html">
+                  <div class="featured-item">
+                      <img src="static/productimages/{{products.get_product_image() }}" alt="" width="1000px" height="180px" style="opacity:0.5;">
+                      <h4 style="opacity:0.5;">{{ products.get_product_name() }}</h4>
+                      <h6>Unavailable</h6>
+                  </div>
+                </a>
+              </div>
+          {% endfor %}
+          </div>
 
     </div>
             

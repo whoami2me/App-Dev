@@ -17,7 +17,6 @@ class UpdateProduct(Form):
     price = DecimalField('Price: ', [validators.DataRequired()])
     qty = IntegerField('Quantity: ', [validators.DataRequired()])
     grp = SelectMultipleField("Category: ",[validators.DataRequired()], choices=[('Shoes','Shoes'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories')])
-    image = FileField('Image: ',validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     sale = RadioField('Enable sale?:', validators=[validators.DataRequired()], choices=[('Yes','Yes'),('No','No')],default='No')
     status = SelectField('Status: ',[validators.DataRequired()], choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
     sale = RadioField('Enable sale?:', validators=[validators.DataRequired()], choices=[('Yes','Yes'),('No','No')],default='No')
