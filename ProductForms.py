@@ -9,7 +9,7 @@ class CreateProduct(Form):
     qty = IntegerField('Quantity: ', [validators.InputRequired()])
     grp = SelectMultipleField("Category: ",[validators.DataRequired()], choices=[('Shoes','Shoes'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories')])
     image = FileField('Image: ',validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
-    sale = RadioField('Enable sale?:', validators=[validators.DataRequired()], choices=[('Yes','Yes'),('No','No')],default='No')
+    sale = SelectField('Sale Status:', validators=[validators.DataRequired()], choices=[('Active', 'Active'), ('Inactive', 'Inactive')],default='Inactive')
 
 class UpdateProduct(Form):
     name = StringField('Name: ', [validators.DataRequired()])
@@ -18,8 +18,8 @@ class UpdateProduct(Form):
     qty = IntegerField('Quantity: ', [validators.InputRequired()])
     grp = SelectMultipleField("Category: ",[validators.DataRequired()], choices=[('Shoes','Shoes'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories')])
     sale = RadioField('Enable sale?:', validators=[validators.DataRequired()], choices=[('Yes','Yes'),('No','No')],default='No')
-    status = SelectField('Status: ',[validators.DataRequired()], choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
-    sale = RadioField('Enable sale?:', validators=[validators.DataRequired()], choices=[('Yes','Yes'),('No','No')],default='No')
+    status = SelectField('Product Status: ',[validators.DataRequired()], choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
+    sale = SelectField('Sale Status:', validators=[validators.DataRequired()], choices=[('Active', 'Active'), ('Inactive', 'Inactive')],default='Inactive')
 
 class UpdateProductSale(Form):
     salestartdate = DateField('Sale start date:',validators = [validators.DataRequired()],format='%Y-%m-%d')

@@ -59,9 +59,9 @@
                 <div class="featured-item">
                     <img src="static/productimages/{{products.get_product_image() }}" alt="" width="1000px" height="180px">
                     <h4>{{ products.get_product_name() }}</h4>
-                    {% if products.get_product_saleoption() == "No" %}
+                    {% if products.get_product_saleoption() == "Inactive" %}
                     <h6>{{ products.get_product_priceformat() }}&nbsp | Qty:{{ products.get_product_qty() }}</h6>
-                    {% elif products.get_product_saleoption() == "Yes" %}
+                    {% elif products.get_product_saleoption() == "Active" %}
                     <h6 style="text-decoration: line-through;">{{ products.get_product_priceformat() }}</h6>
                     <h6>{{products.get_product_saleprice()}}&nbsp | Qty:{{ products.get_product_qty() }}</h6>
                     {% endif %}

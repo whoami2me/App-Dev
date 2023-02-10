@@ -76,9 +76,9 @@
                         <td>{{ product.get_product_id() }}</td>
                         <td>{{ product.get_product_name() }}</td>
                         <td>{{ product.get_product_priceformat() }}</td>
-                        {% if product.get_product_saleoption() == "Yes" %}
+                        {% if product.get_product_saleoption() == "Active" %}
                           <td>{{ product.get_product_saleprice() }}</td>
-                        {% elif product.get_product_saleoption() == "No" %}
+                        {% elif product.get_product_saleoption() == "Inactive" %}
                           <td>Nil</td>
                         {% endif %}
                         <td>{{ product.get_product_desc() }}</td>
@@ -90,17 +90,17 @@
                         {% elif product.get_product_status() == "Inactive" %}
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-danger">&bull;</span></td>
                         {% endif %}
-                        {% if product.get_product_saleoption() == "Yes" %}
-                          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-success">&bull;</span></td>
-                        {% elif product.get_product_saleoption() == "No" %}
-                          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-danger">&bull;</span></td>
+                        {% if product.get_product_saleoption() == "Active" %}
+                          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-success">&bull;</span>{{  product.get_product_saleoption() }}</td>
+                        {% elif product.get_product_saleoption() == "Inactive" %}
+                          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-danger">&bull;</span>{{  product.get_product_saleoption() }}</td>
                         {% endif %}
                         
                         <td> <div class="dropdown">
                             <button class="dropbtn btn btn-warning" type="button" data-toggle="dropdown">Update</button>
                             <div id="myDropdown" class="dropdown-menu">
                               <li><a href="/updateProduct/{{product.get_product_id()}}">Update general details</a></li>
-                              {% if product.get_product_saleoption() == "Yes" %}
+                              {% if product.get_product_saleoption() == "Active" %}
                               <li><a href="/updateProductSale/{{product.get_product_id()}}">Update sale details</a></li>
                               {% endif %}
                               <li><a href="/updateProductImg/{{product.get_product_id()}}">Update image</a></li>

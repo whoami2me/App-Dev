@@ -1,5 +1,5 @@
 import uuid
-from datetime import date, datetime
+from datetime import date
 class Product:
     def __init__(self,name,price,desc,qty,grp,image,saleoption=None,status='Active',priceclass='item high col-md-4',salestartdate=date.today(),saleenddate=date.today(),saleprice=0):
     
@@ -46,7 +46,7 @@ class Product:
         if self.__status == 'Inactive':
             self.__priceclass = 'item new col-md-4'
         else:
-            if self.__salepoption == 'Yes':
+            if self.__salepoption == 'Active':
                 if self.__saleprice2 <= 100:
                     self.__priceclass = 'item low col-md-4'
                 else:
@@ -58,6 +58,8 @@ class Product:
                     self.__priceclass = 'item high col-md-4'
         return self.__priceclass
     def get_product_saleoption(self):
+        if self.__saleenddate<date.today():
+            self.__salepoption = 'Inactive'
         return self.__salepoption
     def get_product_salestartdate(self):
         return self.__salestartdate
@@ -67,7 +69,7 @@ class Product:
         salepercent = self.__saleprice
         self.__saleprice2 = float(self.__price)-(float(self.__price)*float(self.__saleprice/100))
         return ('${:.2f} (Discount: {}%)'.format(self.__saleprice2,salepercent))
-    def get_product_saleprice1(self):
+    def get_product_saleprice1(self): #For init to return percentage in update forms
         return self.__saleprice
         
     def set_product_name(self,name):
