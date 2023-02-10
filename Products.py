@@ -38,6 +38,8 @@ class Product:
     def get_product_image(self):
         return self.__image
     def get_product_status(self):
+        if self.__qty <=0:
+            self.__status = 'Inactive'
         return self.__status
     def get_product_priceclass(self):
         self.__saleprice2 = float(self.__price)-(float(self.__price)*float(self.__saleprice/100))
