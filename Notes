@@ -1,39 +1,19 @@
-TABLE IN RETRIEVE: 
-Add a sale status (Done)
-Add a sale price (Done)
-
-PRODUCT CLASS:
-Add attribute for sale percentage (Done)
-Add attribute for sale final price (Done)
-Add accessor and mutator functions (Done)
-
-UPDATEPRODUCTSALES FORMS:
-Add sale percentage field (Done)
-
-UPDATESALES HTML:
-Add sale percentage render field (Done)
-
-INITUpdateSales:
-Make changes accordingly (Add accessor and mutator) (Done)
 
 
 TO DO:
 Overall:
 Grey out when unavailable (Done)
-Add Dashboard
 Add qty for product homepage (Foundation done)
  -Dynamic, autoupdate when bought (Done)
-Track who buy what (Wait for integration and add session)
 Seperate image update from general update (Done)
 Click product opens new window in customer side (Done)
 Add qty sold (Done)
 Dynamic sale start and end date (Done)
 
+Add Dashboard
+Track who buy what (Wait for integration and add session)
 Create new database for customer products
  - Save the data with session, assign session to a variable and save within database noice
-
-ProductHomeHTML:
-Make it look nicer
 
 
 Plans for Future(Maybe):
