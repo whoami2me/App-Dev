@@ -41,18 +41,15 @@
             <h6 style="text-decoration: line-through;">{{ product.get_product_priceformat() }}</h6>
             <h6>{{product.get_product_saleprice()}}</h6>
           {% endif %}
-          <p>Description:</p>
-          <p>{{ product.get_product_desc() }}</p>
-          <span>{{ product.get_product_qty() }} left on stock</span>
+          <p>Description: <br> {{ product.get_product_desc() }}</p>
+          <span style="font-weight: bold;">{{ product.get_product_qty() }} left on stock</span>
           <!--Change this form later-->
           <form method="POST" action="" enctype="multipart/form-data">
-            <div class="form-group">
-                {{ render_field(form.qty, class="form-control") }}
+            <div class="form-group" >
+                {{ render_field(form.qty, class="quantity-text") }}
+                <input type="submit" value="Purchase" class="button"/>
             </div>
-            <div class="mb-4 text-center">
-                <input type="submit" value="Submit" class="btn btn-primary center"/>
-            </div>
-        </form>
+          </form>
           <!---->
         </div>
       </div>
