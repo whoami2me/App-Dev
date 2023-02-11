@@ -6,7 +6,7 @@
 
 
 
-<section id="create-event">
+<section id="create-Inventory">
     <div class="container-lg">
         <div class="text-center">
             <h1 class="display-5">Create Inventory</h1>
@@ -23,10 +23,14 @@
    <div class="form-group">
        {{ render_field(form.Product_name, class="form-control") }}
    </div>
+   <div class="form-group">
+       {{ render_field(form.Qty, class="form-control") }}
+   </div>
  <br>
  <div class="form-group">
  {{ render_field(form.remarks, class="form-control") }}
  </div>
+                    <br>
  <div class="mb-4 text-center">
                         <input type="submit" value="Submit" class="btn btn-primary center"/>
                     </div>

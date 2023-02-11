@@ -36,9 +36,10 @@ class CreateSuppliersForm(Form):
     Payment = IntegerField("Payment Details", [validators.InputRequired(), check_payment])
     Categories_select = SelectField('Categories', [validators.DataRequired()], choices=[('', 'Select'), ('Ball', 'Ball'), ('Footwear', 'Footwear'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories')],default='')
     Product_name = StringField('Name of product', [validators.Length(min=1, max=150), validators.DataRequired()])
+    Qty = IntegerField('Quantity: ',[validators.NumberRange(min=1,max=1000),validators.DataRequired()])
     remarks = TextAreaField('Remarks', [validators.Optional()])
-    status = RadioField('Status',[validators.DataRequired()], choices=[('A', 'Available'), ('NA', 'Not available')], default='A')
+    status = RadioField('Status',[validators.DataRequired()], choices=[('Available', 'Available'), ('Not Available', 'Not available')], default='')
 
 
 
-    # membership = RadioField('Membership', choices=[('F', 'Fellow'), ('S', 'Senior'), ('P', 'Professional')], default='F')
+

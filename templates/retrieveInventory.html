@@ -1,8 +1,8 @@
 {% extends "base2.html" %}
-{% block title %}Western Corp - Retrieve Events{% endblock %}
+{% block title %}Western Corp - Retrieve Inventory{% endblock %}
 
 
-{% block silly %}Retrieve Inventory{% endblock %}
+{% block silly %}Inventory{% endblock %}
 
 
 {% block head %}
@@ -37,12 +37,38 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
+                        <th>No.</th>
                         <th>Product Name</th>
                         <th>Categories</th>
-                        <th>Products</th>
-                        <th>Status</th>
                         <th>Quantity</th>
-                        <th>Action</th>
+                        <th>Date Created</th>
+
                     </tr>
+
                 </thead>
                 <tbody>
+                {% for supply in Inventory_list %}
+                <tr>
+                    <td>{{ supply.get_Inventory_id() }}</td>
+                    {% if supply.get_Categories_select() == "Ball" %}
+                        <td>Ball</td>
+                    {% elif supply.get_Categories_select() == "Footwear" %}
+                        <td>Footwear</td>
+                    {% elif supply.get_Categories_select() == "Shirts" %}
+                        <td>Shirts</td>
+                    {% elif supply.get_Categories_select() == "Pants" %}
+                        <td>Pants</td>
+                    {% elif supply.get_Categories_select() == "Accessories" %}
+                        <td>Accessories</td>
+                    {% endif %}
+                    <td>{{ supply.get_Product_name() }}</td>
+                    <td>{{ supply.get_remarks() }}</td>
+                    <td>{{ supply.get_date() }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+    </div>
+</div>
+{% endblock %}

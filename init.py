@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for
 from SuppliersForms import CreateSuppliersForm
 from InventoryForms import CreateInventoryForm
 import shelve,Suppliers,Inventory
@@ -28,8 +28,8 @@ def create_Suppliers():
         today = date.today()
         supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,
                                        create_Supplier_form.Address1.data, create_Supplier_form.floor_number.data,create_Supplier_form.unit_number.data,create_Supplier_form.postal.data,
-                                       create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.remarks.data,
-                                       'Available',today)
+                                       create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.Qty.data,create_Supplier_form.remarks.data,
+                                       today, 'Available')
         Suppliers_dict[supplier.get_Suppliers_id()] = supplier
         db['Supplier'] = Suppliers_dict
 
@@ -75,6 +75,8 @@ def update_Supplier(id):
         Supplier.set_Categories_select(update_Supplier_form.Categories_select.data)
         Supplier.set_Product_name(update_Supplier_form.Product_name.data)
         Supplier.set_remarks(update_Supplier_form.remarks.data)
+        Supplier.set_status(update_Supplier_form.status.data)
+
 
         db['Supplier'] = Suppliers_dict
         db.close()
@@ -102,7 +104,7 @@ def update_Supplier(id):
         update_Supplier_form.Categories_select.data = Supplier.get_Categories_select()
         update_Supplier_form.Product_name.data = Supplier.get_Product_name()
         update_Supplier_form.remarks.data = Supplier.get_remarks()
-
+        update_Supplier_form.status.data = Supplier.get_status()
         return render_template('updateSupplier.html', form=update_Supplier_form)
 
 @app.route('/deleteSupplier/<int:id>', methods=['POST'])
@@ -122,36 +124,39 @@ def delete_Supplier(id):
 def create_Inventory():
     create_Inventory_form = CreateInventoryForm(request.form)
     if request.method == 'POST' and create_Inventory_form.validate():
-        Inventory_dict = {}
-        db = shelve.open('Inventory.db', 'c')
-
+        inventory_dict = {}
+        db = shelve.open('inventory.db', 'c')
         try:
-            Inventory_dict = db['Inventory']
+            inventory_dict = db['Inventory']
         except:
             print("Error in retrieving supply from Inventory.db.")
         today = date.today()
-        supply = Inventory.Inventory(create_Inventory_form.Categories_select.data,create_Inventory_form.Product_name.data,create_Inventory_form.Qty.data,create_Inventory_form.remarks.data ,today)
-        Inventory_dict[Inventory.get_Inventory_id()] = supply
-        db['Inventory'] = Inventory_dict
+        supply = Inventory.Inventory(create_Inventory_form.Categories_select.data,create_Inventory_form.Product_name.data,
+                                     create_Inventory_form.Qty.data,create_Inventory_form.remarks.data,today)
+
+        inventory_dict[Inventory.get_Inventory_id()] = supply
+        db['Inventory'] = inventory_dict
 
         db.close()
 
         return redirect(url_for('retrieve_Inventory'))
     return render_template('createInventory.html', form=create_Inventory_form)
 
+
 @app.route('/retrieveInventory')
 def retrieve_Inventory():
     Inventory_dict = {}
-    db = shelve.open('Inventory.db', 'r')
-    Inventory_dict = db['Inventory']
+    db = shelve.open('inventory.db', 'r')
+    inventory_dict = db['inventory']
     db.close()
 
     Inventory_list = []
-    for key in Inventory_dict:
-        supp = Inventory_dict.get(key)
-        Inventory_list.append(supp)
+    for key in inventory_dict:
+        supplies = inventory_dict.get(key)
+        Inventory_list.append(supplies)
 
     return render_template('retrieveInventory.html', count=len(Inventory_list), Inventory_list=Inventory_list)
+
 
 @app.errorhandler(404)
 def page_not_found(e):

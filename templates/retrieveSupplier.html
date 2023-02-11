@@ -7,7 +7,10 @@
 
 {% block head %}
 {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}" >
+    <link xmlns:style="http://www.w3.org/1999/xhtml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
+    <script src="https://kit.fontawesome.com/48c37b3e43.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/retrieveSupplier.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
@@ -46,10 +49,13 @@
         <th>Supplier Name</th>
         <th>Categories</th>
         <th>Products</th>
+        <th>Stock in stall (Qty)</th>
         <th>Remarks</th>
         <th>Status</th>
         <th></th>
         <th></th>
+        <th></th>
+        <th>Order</th>
       </tr>
     </thead>
 
@@ -70,15 +76,16 @@
             <td>Accessories</td>
           {% endif %}
           <td>{{ suppliers.get_Product_name() }}</td>
+          <td>{{ suppliers.get_Qty() }}</td>
           <td>{{ suppliers.get_remarks() }}</td>
-          {% if suppliers.get_status() == "A" %}
+          {% if suppliers.get_status() == "Available" %}
             <td><span class="status text-success">&bull;</span>Available</td>
-          {% elif suppliers.get_status() == "NA" %}
+          {% elif suppliers.get_status() == "Not Available" %}
             <td><span class="status text-danger">&bull;</span>Not Available</td>
             {% endif %}
-         <td><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal1_{{suppliers.get_Suppliers_id()}}">
-                View
-                </button>
+         <td id="function">
+
+             <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal1_{{suppliers.get_Suppliers_id()}}"><i class="material-icons">remove_red_eye</i></a>
          <div class="modal fade" id="exampleModal1_{{suppliers.get_Suppliers_id()}}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -109,15 +116,16 @@
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
+                                          <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p>> </div>
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
-                                          {% if suppliers.get_status() == "A" %}
+                                            {% if suppliers.get_status() == "Available" %}
                                             <div class="Type"><p>Status: <span>Available</span></p></div>
-                                            {% elif suppliers.get_status() == "NA" %}
+                                            {% elif suppliers.get_status() == "Not Available" %}
                                             <div class="Type"><p>Status: <span>Not Available</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Date created: <span>{{ suppliers.get_date() }}</span></p></div>
                                       </div>
-f
+
                                    </div>
 
                               </div>
@@ -129,15 +137,15 @@ f
                         </div>
          </td>
 
-         <td><a href="/updateSupplier/{{suppliers.get_Suppliers_id()}}" class="btn btn-warning">Update</a></td>
-          <td>
+         <td>
+             <a href="/updateSupplier/{{suppliers.get_Suppliers_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="fa-solid fa-pen-to-square"></i></a>
+         </td>
+         <td>
             <form action="{{url_for('delete_Supplier', id=suppliers.get_Suppliers_id())}}" method="POST">
 <!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{suppliers.get_Company_name()}}?');"-->
         <!-- Button to Open the Modal -->
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{suppliers.get_Suppliers_id()}}">
-                Delete
-                </button>
 
+ <a href="#" class="text-danger" title="delete" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myModal_{{suppliers.get_Suppliers_id()}}"><i class="fas fa-trash-can"></i></a>
 <!-- The Modal -->
 <div class="modal" id="myModal_{{suppliers.get_Suppliers_id()}}">
   <div class="modal-dialog">
@@ -163,8 +171,14 @@ f
     </div>
   </div>
 </div>
-          </form>
-        </td>
+         </form>
+      </td>
+      <td>
+
+
+
+      </td>
+
      </tr>
 
                     {% endfor %}
