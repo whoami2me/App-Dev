@@ -22,11 +22,11 @@ Overall:
 Grey out when unavailable (Done)
 Add Dashboard
 Add qty for product homepage (Foundation done)
- -Dynamic, autoupdate when bought
+ -Dynamic, autoupdate when bought (Done)
 Track who buy what (Wait for integration and add session)
 Seperate image update from general update (Done)
 Click product opens new window in customer side (Done)
-Add qty sold
+Add qty sold (Done)
 Dynamic sale start and end date (Done)
 
 Create new database for customer products
@@ -38,3 +38,6 @@ Make it look nicer
 
 Plans for Future(Maybe):
 Add a modal for product ID, description, date created
+
+
+

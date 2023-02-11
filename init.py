@@ -226,9 +226,14 @@ def single_product(id):
         db=shelve.open('product.db', 'w')
         products_dict = db['Products']
         product_id = products_dict.get(id)
-        totalsold = product_id.get_product_sold()+ purchase_product_form.qty.data
-        product_id.set_product_sold(totalsold)
-
+        if purchase_product_form.qty.data > product_id.get_product_qty(): #Validate user input if more than stock
+            purchase_product_form.qty.errors.append('Quantity selected was more than stock')
+            return render_template('singleProduct.html',product = p, form = purchase_product_form)
+        else:
+            totalsold = product_id.get_product_sold()+ purchase_product_form.qty.data
+            product_id.set_product_sold(totalsold)
+            qtyremaning = product_id.get_product_qty()-purchase_product_form.qty.data
+            product_id.set_product_qty(qtyremaning)
         db['Products'] = products_dict
         db.close()
         return render_template('purchaseProduct.html')
