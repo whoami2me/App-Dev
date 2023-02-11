@@ -1,8 +1,7 @@
 {% extends "base2.html" %}
 {% block title %}Western Corp - Retrieve Suppliers{% endblock %}
-
-
 {% block silly %}Retrieve Suppliers{% endblock %}
+{% from "includes/_formHelper.html" import render_field %}
 
 
 {% block head %}
@@ -49,7 +48,7 @@
         <th>Supplier Name</th>
         <th>Categories</th>
         <th>Products</th>
-        <th>Stock in stall (Qty)</th>
+        <th>Stock in store (Qty)</th>
         <th>Remarks</th>
         <th>Status</th>
         <th></th>
@@ -116,7 +115,7 @@
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
-                                          <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p>> </div>
+                                          <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
                                             {% if suppliers.get_status() == "Available" %}
                                             <div class="Type"><p>Status: <span>Available</span></p></div>
@@ -175,9 +174,48 @@
       </td>
       <td>
 
+          <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2_{{suppliers.get_Suppliers_id()}}"><i class="fa-brands fa-jedi-order"></i></a>
+         <div class="modal fade" id="exampleModal2_{{suppliers.get_Suppliers_id()}}" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header bg-primary">
+                                <h5 class="modal-title text-white" id="exampleModalLabel2">{{ suppliers.get_Product_name() }}</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+
+                                  <div class="row">
+                                      <div class="col-md-12">
+                                          <div class="desc"><p>From: <span>{{ suppliers.get_Company_name() }}</span></p></div>
+                                            {% if suppliers.get_Categories_select() == "Ball" %}
+                                            <div class="Type"><p>Type: <span>Ball</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "Footwear" %}
+                                            <div class="Type"><p>Type: <span>Footwear</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "Shirts" %}
+                                            <div class="Type"><p>Type: <span>Shirts</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "Pants" %}
+                                            <div class="Type"><p>Type: <span>Pants</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "Accessories" %}
+                                            <div class="Type"><p>Type: <span>Accessories</span></p></div>
+                                            {% endif %}
+                                          <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
 
 
-      </td>
+
+                                          <button type="button" class="btn btn-warning" onclick="location.href='/createInventory'">Order</button>
+                                          <form action="{{url_for('create_Inventory', id=suppliers.get_Suppliers_id())}}" method="POST">
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+
+         </div>
+
+
+
+
+         </td>
 
      </tr>
 

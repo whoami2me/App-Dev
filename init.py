@@ -44,12 +44,10 @@ def retrieve_Supplier():
     db = shelve.open('supplier.db', 'r')
     Suppliers_dict = db['Supplier']
     db.close()
-
     Suppliers_list = []
     for key in Suppliers_dict:
         supp = Suppliers_dict.get(key)
         Suppliers_list.append(supp)
-
     return render_template('retrieveSupplier.html', count=len(Suppliers_list), Suppliers_list=Suppliers_list)
 
 @app.route('/updateSupplier/<int:id>/', methods=['GET', 'POST'])
@@ -74,6 +72,7 @@ def update_Supplier(id):
         Supplier.set_Payment(update_Supplier_form.Payment.data)
         Supplier.set_Categories_select(update_Supplier_form.Categories_select.data)
         Supplier.set_Product_name(update_Supplier_form.Product_name.data)
+        Supplier.set_Qty(update_Supplier_form.Qty.data)
         Supplier.set_remarks(update_Supplier_form.remarks.data)
         Supplier.set_status(update_Supplier_form.status.data)
 
@@ -103,8 +102,10 @@ def update_Supplier(id):
         update_Supplier_form.Payment.data = Supplier.get_Payment()
         update_Supplier_form.Categories_select.data = Supplier.get_Categories_select()
         update_Supplier_form.Product_name.data = Supplier.get_Product_name()
+        update_Supplier_form.Qty.data = Supplier.get_Qty()
         update_Supplier_form.remarks.data = Supplier.get_remarks()
         update_Supplier_form.status.data = Supplier.get_status()
+
         return render_template('updateSupplier.html', form=update_Supplier_form)
 
 @app.route('/deleteSupplier/<int:id>', methods=['POST'])
@@ -125,14 +126,20 @@ def create_Inventory():
     create_Inventory_form = CreateInventoryForm(request.form)
     if request.method == 'POST' and create_Inventory_form.validate():
         inventory_dict = {}
+        Suppliers_dict = {}
         db = shelve.open('inventory.db', 'c')
         try:
             inventory_dict = db['Inventory']
         except:
             print("Error in retrieving supply from Inventory.db.")
+
+        db1 = shelve.open('supplier.db', 'r')
+        try:
+            Suppliers_dict = db1['Supplier']
+        except:
+            print("Error in retrieving Users from supplier.db for closing")
         today = date.today()
-        supply = Inventory.Inventory(create_Inventory_form.Categories_select.data,create_Inventory_form.Product_name.data,
-                                     create_Inventory_form.Qty.data,create_Inventory_form.remarks.data,today)
+        supply = Inventory.Inventory(create_Inventory_form.Qty.data,today)
 
         inventory_dict[Inventory.get_Inventory_id()] = supply
         db['Inventory'] = inventory_dict
