@@ -516,7 +516,7 @@ def create_customer():
         db['Customers'] = customers_dict
         db.close()
 
-        return redirect(url_for('retrieve_customers'))
+        return redirect(url_for('login'))
     return render_template('createCustomer.html', form=create_customer_form)
 
 

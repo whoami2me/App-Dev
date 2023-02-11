@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registered Users</title>
+</head>
+<body>
+
+<p>There are {{ count_users }} registered.</p>
+
+{% for users in regeve_list %}
+
+<p>{{ users.get_first_name() }}</p>
+<p>{{ users.get_last_name() }}</p>
+<p>{{ users.get_email() }}</p>
+<p>{{ users.get_phone_number() }}</p>
+
+{% endfor %}
+
+</body>
+</html>

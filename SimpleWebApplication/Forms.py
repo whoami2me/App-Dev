@@ -157,8 +157,8 @@ class ChangePassword(Form):
     passwordcfm = PasswordField('Confirm Password', validators=[validators.EqualTo('password', 'Password mismatch')])
 
 class Login(Form):
-    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
-    password = PasswordField('Password', [validators.Length(min=1), validators.DataRequired()])
+    email = EmailField('', [validators.Email(), validators.DataRequired()])
+    password = PasswordField('', [validators.Length(min=1), validators.DataRequired()])
 
 #izwan
 def check_payment(form, field):
