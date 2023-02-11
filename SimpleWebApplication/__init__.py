@@ -1,17 +1,22 @@
 from datetime import date
 from idlelib import tooltip
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, \
     UpdateStaffForm, CreateCustomerForm, CreateStaffForm, CreateSuppliersForm, CreateInventoryForm, RegisterEventForm, \
     Login
-import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers, registerEvent
+import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers, registerEvent, pdfkit
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
 
+
+
 app = Flask(__name__)
+path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
 geolocator = Nominatim(user_agent='app')
+
 
 
 @app.route('/')
@@ -845,6 +850,27 @@ def page_not_found(e):
 @app.route('/img/<fname>')
 def legacy_images(fname):
     return app.redirect(app.url_for('static', filename='uploads/' + fname), code=301)
+
+@app.route("/getPDF/<evename>")
+def get_pdf(evename):
+
+    regeve_dict = {}
+    db = shelve.open('regeve.db', 'r')
+    regeve_dict = db['Register_Events']
+    db.close()
+
+    regeve_list = []
+    for key in regeve_dict:
+        regeve = regeve_dict.get(key)
+        regeve_list.append(regeve)
+
+    name = "Giovanni Smith"
+    html = render_template("registeredList.html", name=name, regeve_list=regeve_list, count_users=len(regeve_list))
+    pdf = pdfkit.from_string(html, False, configuration=config)
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=output.pdf"
+    return response
 
 
 if __name__ == '__main__':

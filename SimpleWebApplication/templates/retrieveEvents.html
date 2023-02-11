@@ -84,6 +84,8 @@
                         <td>
                             <a href="/updateEvent/{{online.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
                             <a href="#" class="delete" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myOutput{{ online.get_event_id() }}"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="/getPDF/{{ online.get_name() }}" class="download" title="Download" data-toggle="tooltip"><i class="material-icons">file_download</i></a>
+
                         </td>
                     </tr>
                 {% endfor %}
@@ -201,6 +203,8 @@
                         <td>
                             <a href="/updateOfflineEvent/{{offline.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
                             <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myOutput{{ offline.get_event_id() }}"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="/getPDF/ {{ offline.get_name() }}" class="download" title="Download" data-toggle="tooltip"><i class="material-icons">file_download</i></a>
+
                         </td>
 
                         {% endfor %}
