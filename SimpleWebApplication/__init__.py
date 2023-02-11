@@ -21,8 +21,6 @@ geolocator = Nominatim(user_agent='app')
 
 @app.route('/')
 def user_home():
-    print(session['name'])
-    print(session['Customer'])
     return render_template('loginevents.html')
 
 @app.route('/AdminDashboard')
@@ -398,18 +396,27 @@ def login():
         if customer.get_email() == login_form.email.data and customer.get_password() == login_form.password.data:
             session['Customer'] = customer.get_customer_id()
             session['name'] = customer.get_first_name()
-            return redirect(url_for('profile_page'))
+            return redirect(url_for('user_home'))
+        else:
+            redirect('/login')
+            flash('login failed')
+
     for email in staff_dict:
         staff = staff_dict.get(email)
         if staff.get_email() == login_form.email.data and staff.get_password() == login_form.password.data:
             session['Staff'] = staff.get_staff_id()
             session['name'] = staff.get_first_name()
-            print(staff.get_first_name())
             return redirect(url_for('admin_home'))
         else:
             redirect('/login')
             flash('login failed')
     return render_template('login.html', form=login_form)
+
+@app.route('/logout')
+def logout():
+    session.pop('Customer', None)
+    session.pop('Staff', None)
+    return redirect(url_for('user_home'))
 
 @app.route('/profile/<int:id>/', methods=['GET', 'POST'])
 def profile_page(id):
@@ -435,7 +442,7 @@ def profile_page(id):
         db['Customers'] = customers_dict
         db.close()
 
-        return redirect(url_for('profile_page'))
+        return redirect(url_for('user_home'))
     else:
         customers_dict = {}
         db = shelve.open('customer.db', 'r')
@@ -456,10 +463,6 @@ def profile_page(id):
         update_customer_form.status.data = customer.get_status()
 
         return render_template('customerProfilePage.html', form=update_customer_form)
-
-@app.route('/customerProfile')
-def customer_profile():
-    return render_template('customerProfile.html')
 
 @app.route('/createStaff', methods=['GET', 'POST'])
 def create_staff():
@@ -668,28 +671,6 @@ def delete_customer(id):
     db.close()
 
     return redirect(url_for('retrieve_customers'))
-
-
-@app.route('/customerLogin', methods=['GET', 'POST'])
-def cslogin():
-    error = None
-    if request.method == 'POST':
-        if request.form['Customers'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid Credentials. Please try again.'
-        else:
-            return redirect(url_for('customerHome'))
-    return render_template('customerLogin.html', error=error)
-
-
-@app.route('/staffLogin', methods=['GET', 'POST'])
-def stafflogin():
-    error = None
-    if request.method == 'POST':
-        if request.form['Staffs'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid Credentials. Please try again.'
-        else:
-            return redirect(url_for('dashboard'))
-    return render_template('staffLogin.html', error=error)
 
 #end of trisven portion
 
