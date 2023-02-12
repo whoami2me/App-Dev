@@ -21,7 +21,7 @@
       <div class="col-md-12">
         <div class="section-heading">
           <div class="line-dec"></div>
-          <h1>Thanks for your Purchase!</h1>
+          <h1 style="text-align: center;">Thanks for your Purchase!</h1>
         </div>
       </div>
       <div class="col-md-6">
@@ -38,6 +38,12 @@
       <div class="col-md-6">
         <div class="right-content">
           <h4>{{ product.get_product_name() }}</h4>
+          <h6>Quantity Purchased: {{ pqty }}</h6>
+          <br>
+          <br>
+          <a href="http://127.0.0.1:5000/homeProduct">
+          <button class="button" >Back to home</button>
+          </a>
         </div>
       </div>
     </div>

@@ -1187,7 +1187,7 @@ def single_product(id):
         ######################################################################## Here ^
         db['purchaseProducts'] = purchaseproducts_dict
         db.close()
-        return render_template('purchaseProduct.html') #Return the object and loop in html [TO DO]
+        return render_template('purchaseProduct.html',product = p, pqty = purchase_product_form.qty.data) #Return the object and loop in html [TO DO]
 
     return render_template('singleProduct.html', product=p, form=purchase_product_form)
 
