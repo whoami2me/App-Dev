@@ -1180,10 +1180,11 @@ def single_product(id):
             purchaseproducts_dict = db['purchaseProducts']
         except:
             print("Error in retrieving Product from database")
-
+        ####################################################################### Here to
         custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),product_id.get_product_price(),session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc())
         
         purchaseproducts_dict[session['Customer']] = custpurchase
+        ######################################################################## Here ^
         db['purchaseProducts'] = purchaseproducts_dict
         db.close()
         return render_template('purchaseProduct.html') #Return the object and loop in html [TO DO]
@@ -1209,12 +1210,15 @@ def viewpurchaseproduct():
             purchaseproduct = purchaseproductdict.get(key2) #Key2 is userid
             if product.get_product_id() == purchaseproduct.get_pProduct_id():
                 customer_list.append(purchaseproduct)'''
+    ###################################### Here to
     for key in purchaseproductdict: #Key is userid
         purchaseproduct = purchaseproductdict.get(key)
-        if key == session['Customer']:
+        if key == session['Customer']: #So if the key(userid) is the same as the ID of the logged in customer, it will append the product object. But because of line 1183 to 1187,
+                                       #I override my previous product object since i save with the customer ID. So now it will replace the old object with the new one since customer ID is same
+                                       # Hence in summary, when the customer purchases another product, it will override the old on in the database since I save with customer ID
             customer_list.append(purchaseproduct)
             #Works but only for 1 product
-
+    ###################################### here
     return render_template('viewpurchaseproduct.html',customer = customer_list)
 
 # end of rayden portion
