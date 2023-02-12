@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from idlelib import tooltip
 from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, \
@@ -24,6 +24,31 @@ def user_home():
 
 @app.route('/AdminDashboard')
 def admin_home():
+
+    regeve_dict = {}
+    db = shelve.open('regeve.db', 'r')
+    regeve_dict = db['Register_Events']
+    db.close()
+
+    main_dict = {}
+    list_dict = {}
+
+    for key in regeve_dict:
+        list_dict.update({regeve_dict.get(key).get_event_name(): 0})
+
+    for key in regeve_dict:
+        if regeve_dict.get(key).get_event_name() in list_dict:
+            list_dict[regeve_dict.get(key).get_event_name()] += 1
+            month = datetime.strptime(str(regeve_dict.get(key).get_date_created().month), "%m").strftime("%b")
+            main_dict[month] = {}
+            main_dict[month][regeve_dict.get(key).get_event_name()] = list_dict[regeve_dict.get(key).get_event_name()]
+
+    print(main_dict)
+
+    months = []
+    events = []
+    registered = []
+
     return render_template('home.html')
     
 @app.route('/contactUs')
@@ -1225,6 +1250,7 @@ def get_pdf(evename):
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "inline; filename=registeredUserLists.pdf"
+
     return response'''
 
 
