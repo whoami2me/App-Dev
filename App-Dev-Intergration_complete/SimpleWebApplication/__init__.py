@@ -1182,6 +1182,7 @@ def single_product(id):
             print("Error in retrieving Product from database")
 
         custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),product_id.get_product_price(),session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc())
+        
         purchaseproducts_dict[session['Customer']] = custpurchase
         db['purchaseProducts'] = purchaseproducts_dict
         db.close()
@@ -1202,12 +1203,17 @@ def viewpurchaseproduct():
     db = shelve.open('product.db','r')
     productdict = db['Products']
     db.close()
-    for key in productdict:
-        product = productdict.get(key)
-        for key2 in purchaseproductdict:
-            purchaseproduct = purchaseproductdict.get(key2)
+    '''for key in productdict:
+        product = productdict.get(key) #Key is productid
+        for key2 in purchaseproductdict: 
+            purchaseproduct = purchaseproductdict.get(key2) #Key2 is userid
             if product.get_product_id() == purchaseproduct.get_pProduct_id():
-                customer_list.append(purchaseproduct)
+                customer_list.append(purchaseproduct)'''
+    for key in purchaseproductdict: #Key is userid
+        purchaseproduct = purchaseproductdict.get(key)
+        if key == session['Customer']:
+            customer_list.append(purchaseproduct)
+            #Works but only for 1 product
 
     return render_template('viewpurchaseproduct.html',customer = customer_list)
 
@@ -1244,8 +1250,9 @@ def get_pdf(evename):
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "inline; filename=registeredUserLists.pdf"
-    return response
-'''
+
+    return response'''
+
 
 if __name__ == '__main__':
     app.run(debug=True)
