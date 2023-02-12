@@ -10,8 +10,8 @@ from werkzeug.datastructures import CombinedMultiDict
 
 
 app = Flask(__name__)
-path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+#path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+#config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
 app.config['Product_Images_Dest'] = 'static/productimages/'
@@ -1225,7 +1225,7 @@ def page_not_found(e):
 def legacy_images(fname):
     return app.redirect(app.url_for('static', filename='uploads/' + fname), code=301)
 
-@app.route("/getPDF/<evename>")
+'''@app.route("/getPDF/<evename>")
 def get_pdf(evename):
 
     regeve_dict = {}
@@ -1245,7 +1245,7 @@ def get_pdf(evename):
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "inline; filename=registeredUserLists.pdf"
     return response
-
+'''
 
 if __name__ == '__main__':
     app.run(debug=True)
