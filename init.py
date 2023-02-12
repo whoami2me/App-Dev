@@ -28,7 +28,7 @@ def create_Suppliers():
         today = date.today()
         supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,
                                        create_Supplier_form.Address1.data, create_Supplier_form.floor_number.data,create_Supplier_form.unit_number.data,create_Supplier_form.postal.data,
-                                       create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.Qty.data,create_Supplier_form.remarks.data,
+                                       create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.price.data,create_Supplier_form.Qty.data,create_Supplier_form.remarks.data,
                                        today, 'Available')
         Suppliers_dict[supplier.get_Suppliers_id()] = supplier
         db['Supplier'] = Suppliers_dict
@@ -71,9 +71,11 @@ def update_Supplier(id):
         Supplier.set_Address1(update_Supplier_form.Address1.data)
         Supplier.set_floor_number(update_Supplier_form.floor_number.data)
         Supplier.set_unit_number(update_Supplier_form.unit_number.data)
+        Supplier.set_postal(update_Supplier_form.postal.data)
         Supplier.set_Payment(update_Supplier_form.Payment.data)
         Supplier.set_Categories_select(update_Supplier_form.Categories_select.data)
         Supplier.set_Product_name(update_Supplier_form.Product_name.data)
+        Supplier.set_price(update_Supplier_form.price.data)
         Supplier.set_Qty(update_Supplier_form.Qty.data)
         Supplier.set_remarks(update_Supplier_form.remarks.data)
         Supplier.set_status(update_Supplier_form.status.data)
@@ -101,9 +103,11 @@ def update_Supplier(id):
         update_Supplier_form.Address1.data = Supplier.get_Address1()
         update_Supplier_form.floor_number.data = Supplier.get_floor_number()
         update_Supplier_form.unit_number.data = Supplier.get_unit_number()
+        update_Supplier_form.postal.data = Supplier.get_postal()
         update_Supplier_form.Payment.data = Supplier.get_Payment()
         update_Supplier_form.Categories_select.data = Supplier.get_Categories_select()
         update_Supplier_form.Product_name.data = Supplier.get_Product_name()
+        update_Supplier_form.price.data = Supplier.get_price()
         update_Supplier_form.Qty.data = Supplier.get_Qty()
         update_Supplier_form.remarks.data = Supplier.get_remarks()
         update_Supplier_form.status.data = Supplier.get_status()
@@ -123,19 +127,21 @@ def delete_Supplier(id):
 
     return redirect(url_for('retrieve_Supplier'))
 
-@app.route('/createInventory', methods=['GET', 'POST'])
-def create_Inventory():
-    Suppliers_dict = {}
+@app.route('/createInventory/<int:id>', methods=['GET', 'POST'])
+def create_Inventory(id):
     create_Inventory_form = CreateInventoryForm(request.form)
-    db1 = shelve.open('supplier.db', 'r')
-    Suppliers_dict = db1['Supplier']
-    db1.close()
-
+    Suppliers_dict = {}
+    db = shelve.open('supplier.db', 'r')
+    try:
+        Suppliers_dict = db['Supplier']
+    except:
+        print("Error in retrieving Users from supplier.db for closing")
+    Suppliers_dict.get(id)
+    db.close()
     Suppliers_list = []
     for key in Suppliers_dict:
         supp = Suppliers_dict.get(key)
         Suppliers_list.append(supp)
-
     if request.method == 'POST' and create_Inventory_form.validate():
         Inventory_dict = {}
         db = shelve.open('inventory.db', 'c')
@@ -152,7 +158,7 @@ def create_Inventory():
         db.close()
 
         return redirect(url_for('retrieve_Inventory'))
-    return render_template('createInventory.html', form=create_Inventory_form)
+    return render_template('createInventory.html', form=create_Inventory_form, count=len(Suppliers_list), Suppliers_list=Suppliers_list)
 
 
 

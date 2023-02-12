@@ -115,6 +115,7 @@
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
+                                          <div class="desc"><p>Price (per unit): $<span>{{suppliers.get_price()}}</span></p></div>
                                           <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
                                             {% if suppliers.get_status() == "Available" %}
@@ -198,11 +199,12 @@
                                             {% elif suppliers.get_Categories_select() == "Accessories" %}
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
+                                          <div class="desc"><p>Price /unit: $<span>{{suppliers.get_price()}}</span></p></div>
                                           <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
 
 
 
-                                          <button type="button" class="btn btn-warning" onclick="location.href='/createInventory'">Order</button>
+                                          <button type="button" class="btn btn-warning" onclick="location.href='/createInventory/{{suppliers.get_Suppliers_id()}}'" data-bs-target="{{suppliers.get_Suppliers_id()}}">Order</button>
                                           <form action="{{url_for('create_Inventory', id=suppliers.get_Suppliers_id())}}" method="POST">
                                       </div>
                                   </div>

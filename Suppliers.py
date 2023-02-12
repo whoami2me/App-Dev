@@ -1,6 +1,6 @@
 class Suppliers:
     count_id = 0
-    def __init__(self,Company_name,telephone,website,email,Address1,floor_number, unit_number,postal,Payment,Categories_select,Product_name,Qty,remarks,date,status,):
+    def __init__(self,Company_name,telephone,website,email,Address1,floor_number, unit_number,postal,Payment,Categories_select,Product_name,price,Qty,remarks,date,status,):
         Suppliers.count_id +=1
         self.__Suppliers_id = Suppliers.count_id
         self.__Company_name = Company_name
@@ -14,6 +14,7 @@ class Suppliers:
         self.__Payment = Payment
         self.__Categories_select = Categories_select
         self.__Product_name = Product_name
+        self.__price = price
         self.__Qty = Qty
         self.__remarks = remarks
         self.__date = date
@@ -43,6 +44,8 @@ class Suppliers:
         return self.__Categories_select
     def get_Product_name(self):
         return self.__Product_name
+    def get_price(self):
+        return self.__price
     def get_Qty(self):
         return self.__Qty
     def get_remarks(self):
@@ -76,6 +79,8 @@ class Suppliers:
         self.__Categories_select = Categories_select
     def set_Product_name(self,Product_name):
         self.__Product_name = Product_name
+    def set_price(self,price):
+        self.__price = price
     def set_Qty(self,Qty):
         self.__Qty = Qty
     def set_remarks(self,remarks):
