@@ -1,0 +1,252 @@
+{% extends "base2.html" %}
+{% block title %}Western Corp - Retrieve Events{% endblock %}
+
+
+{% block silly %}Retrieve Events{% endblock %}
+
+
+{% block head %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h2><b>Online Event Management</b></h2>
+                        <div>
+                          {% if count == 0 %}
+                          <p>There are no online events.</p>
+                          {% elif count == 1 %}
+                          <p>There is 1 online event.</p>
+                          {% else %}
+                          <p>There are {{ count }} online events.</p>
+                          {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Event Start Date</th>
+                        <th>Event End Date</th>
+                        <th>Event Status</th>
+                        <th>Reg Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for online in online_list %}
+                    <tr>
+                        <td><img src="static/uploads/{{online.get_image() }}" width="70" height="50"><a class="name" href="">{{ online.get_name() }}</a></td>
+                        {% if online.get_location() == "Z" %}
+                        <td>Zoom</td>
+                        {% elif online.get_location() == "G" %}
+                        <td>Google Meets</td>
+                        {% elif online.get_location() == "C" %}
+                        <td>Cisco Webex</td>
+                        {% endif %}
+
+                        <td>{{ online.get_date() }}</td>
+                        <td>{{ online.get_end_date() }}</td>
+
+
+                        {% if online.get_event_status() == "A" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif online.get_event_status() == "C" %}
+                        <td><span class="status text-danger">&bull;</span>Closed</td>
+                        {% elif online.get_event_status() == "O" %}
+                        <td><span class="status text-primary">&bull;</span>Open In Advance</td>
+                        {% elif online.get_event_status() == "Active" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% endif %}
+
+                        {% if online.get_reg_status() == "A" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif online.get_reg_status() == "C" %}
+                        <td><span class="status text-danger">&bull;</span>Closed</td>
+                        {% elif online.get_reg_status() == "Active" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% endif %}
+
+                        <td>
+                            <a href="/updateEvent/{{online.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
+                            <a href="#" class="delete" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myOutput{{ online.get_event_id() }}"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="/getPDF/{{ online.get_name() }}" class="download" title="Download" data-toggle="tooltip"><i class="material-icons">file_download</i></a>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% for online in online_list %}
+<div class="modal fade" id="myOutput{{ online.get_event_id() }}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="exampleModalLabel1">Event Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="row">
+
+                    <div class="col-md-5">
+                        <img src="static/uploads/{{online.get_image() }}" alt="teste" class="img-thumbnail" height="100">
+
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="name"><p>Name: <span>{{ online.get_name() }}</span></p></div>
+                        <div class="eventid"><p>Event ID: <span>{{online.get_event_id()}}</span></p></div>
+                        <div class="desc"><p>Description: <span>{{online.get_description()}}</span></p></div>
+                        <div class="eventdate"><p>Event Date: <span>{{online.get_date()}}</span></p></div>
+                        {% if online.get_location() == "Z" %}
+                        <div class="location"><p>Location: <span>Zoom</span></p></div>
+                        {% elif online.get_location() == "G" %}
+                        <div class="location"><p>Location: <span>Google Meets</span></p></div>
+                        {% elif online.get_location() == "C" %}
+                        <div class="location"><p>Location: <span>Cisco Webex</span></p></div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<div class="container">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h2><b>Offline Event Management</b></h2>
+                        <div>
+                          {% if count1 == 0 %}
+                          <p>There are no offline events.</p>
+                          {% elif count1 == 1 %}
+                          <p>There is 1 offline event.</p>
+                          {% else %}
+                          <p>There are {{ count1 }} offline events.</p>
+                          {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Pax</th>
+                        <th>Reg Pax</th>
+                        <th>Location</th>
+                        <th>Event Start Date</th>
+                        <th>Event End Date</th>
+                        <th>Event Status</th>
+                        <th>Reg Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for offline in offline_list %}
+                    <tr>
+                        <td><img src="static/uploads/{{offline.get_image() }}" width="70" height="50"><a class="name" href="">{{ offline.get_name() }}</a></td>
+                        <td>{{ offline.get_pax() }}</td>
+                        <td>{{ offline.get_reg_pax() }}</td>
+                        <td>{{ offline.get_location() }}</td>
+                        <td>{{ offline.get_date() }}</td>
+                        <td>{{ offline.get_end_date() }}</td>
+
+
+                        {% if offline.get_event_status() == "A" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif offline.get_event_status() == "C" %}
+                        <td><span class="status text-danger">&bull;</span>>Closed</td>
+                        {% elif offline.get_event_status() == "O" %}
+                        <td><span class="status text-primary">&bull;</span>Open In Advance</td>
+                        {% elif offline.get_event_status() == "Active" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% endif %}
+
+                        {% if offline.get_reg_status() == "A" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% elif offline.get_reg_status() == "C" %}
+                        <td><span class="status text-danger">&bull;</span>Closed</td>
+                        {% elif offline.get_reg_status() == "Active" %}
+                        <td><span class="status text-success">&bull;</span>Active</td>
+                        {% endif %}
+
+                        <td>
+                            <a href="/updateOfflineEvent/{{offline.get_event_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
+                            <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myOutput{{ offline.get_event_id() }}"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="/getPDF/ {{ offline.get_name() }}" class="download" title="Download" data-toggle="tooltip"><i class="material-icons">file_download</i></a>
+
+                        </td>
+
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% for offline in offline_list %}
+<div class="modal fade" id="myOutput{{ offline.get_event_id() }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="exampleModalLabel">Event Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row d-flex">
+                    <div class="col-md-5">
+                        <img src="static/uploads/{{offline.get_image() }}" alt="teste" class="img-thumbnail" height="100">
+                        <iframe class="map", src="/get_map" width="180" height="180"></iframe>
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="name"><p>Name: <span>{{ offline.get_name() }}</span></p></div>
+                        <div class="eventid"><p>Event ID: <span>{{offline.get_event_id()}}</span></p></div>
+                        <div class="desc"><p>Description: <span>{{offline.get_description()}}</span></p></div>
+                        <div class="eventdate"><p>Event Date: <span>{{offline.get_date()}}</span></p></div>
+                        <div class="pax"><p>Pax: <span>{{offline.get_pax()}}</span></p></div>
+                        <div class="location"><p>Location: <span>{{offline.get_location()}}</span></p></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

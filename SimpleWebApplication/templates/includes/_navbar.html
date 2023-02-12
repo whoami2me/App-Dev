@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-info p-1.2 mb-3">
+  <div class="container-fluid">
+      <a class="navbar-brand" href="/"><div class="sidebar-heading text-left py-4 primary-text fs-4 fw-bold first-text text-white"><i class="fas fa-futbol me-2 text-light"></i><strong>Western Corp</strong></div></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class=" collapse navbar-collapse " id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto ">
+        <li class="nav-item">
+          <a class="nav-link mx-2 active text-white text-uppercase fw-bold" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-white text-uppercase fw-bold" href="#">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mx-2 text-white text-uppercase fw-bold" href="#">Pricing</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link mx-2 text-white text-uppercase fw-bold" href="/Events">Events</a>
+        </li>
+      </ul>
+        {% if 'Customer' in session %}
+      <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
+          <li class="nav-item dropdown">
+          <a class="nav-link mx-4 dropdown-toggle text-white " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="static/ProfilePic/{{ customer.get_image() }}" width="40" height="40" class="rounded-circle"> Welcome, {{ session['name'] }}
+          </a>
+          <ul class="dropdown-menu pr-3" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="/profile/{{ session['Customer'] }}">Account Settings</a></li>
+            <li><a class="dropdown-item" href="/viewRegisteredEvents">Registered Events</a></li>
+            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+        {% else %}
+      <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
+          <a href="/login" class="btn btn-warning" style="float: right; background-color: turquoise; border: 0px;">Login</a>
+          &nbsp; &nbsp;
+        <a href="/createCustomer" class="btn btn-warning" style="float: right; background-color: turquoise; border: 0px;">Create Customer</a>
+      </ul>
+        {% endif %}
+    </div>
+  </div>
+</nav>
+
+</body>
+</html>
