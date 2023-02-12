@@ -418,7 +418,7 @@ def delete_customer(id):
 
     return redirect(url_for('retrieve_customers'))
 
-
+#need to add
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = Login(request.form)
@@ -433,19 +433,68 @@ def login():
     for email in customers_dict:
         customer = customers_dict.get(email)
         if customer.get_email() == login_form.email.data and customer.get_password() == login_form.password.data:
-            session['customer'] = customer.get_customer_id()
+            session['Customer'] = customer.get_customer_id()
             session['name'] = customer.get_first_name()
-            return redirect(url_for('/AdminDashboard'))
+            return redirect(url_for('profile_page'))
     for email in staff_dict:
         staff = staff_dict.get(email)
         if staff.get_email() == login_form.email.data and staff.get_password() == login_form.password.data:
             session['Staff'] = staff.get_staff_id()
             session['name'] = staff.get_first_name()
-            return redirect(url_for('/AdminDashboard'))
+            print(staff.get_first_name())
+            return redirect(url_for('admin_home'))
         else:
             redirect('/login')
             flash('login failed')
     return render_template('login.html', form=login_form)
+
+
+#
+@app.route('/profile/<int:id>/', methods=['GET', 'POST'])
+def profile_page(id):
+    update_customer_form = UpdateCustomerForm(request.form)
+    if request.method == 'POST' and update_customer_form.validate():
+        customers_dict = {}
+        db = shelve.open('customer.db', 'w')
+        customers_dict = db['Customers']
+
+        customer = customers_dict.get(id)
+        customer.set_first_name(update_customer_form.first_name.data)
+        customer.set_last_name(update_customer_form.last_name.data)
+        customer.set_gender(update_customer_form.gender.data)
+        customer.set_email(update_customer_form.email.data)
+        customer.set_address1(update_customer_form.address1.data)
+        customer.set_address2(update_customer_form.address2.data)
+        customer.set_phone_number(update_customer_form.phone_number.data)
+        customer.set_floor_number(update_customer_form.floor_number.data)
+        customer.set_unit_number(update_customer_form.unit_number.data)
+        customer.set_postal_code(update_customer_form.postal_code.data)
+        customer.set_status(update_customer_form.status.data)
+
+        db['Customers'] = customers_dict
+        db.close()
+
+        return redirect(url_for('profile_page'))
+    else:
+        customers_dict = {}
+        db = shelve.open('customer.db', 'r')
+        customers_dict = db['Customers']
+        db.close()
+
+        customer = customers_dict.get(id)
+        update_customer_form.first_name.data = customer.get_first_name()
+        update_customer_form.last_name.data = customer.get_last_name()
+        update_customer_form.gender.data = customer.get_gender()
+        update_customer_form.email.data = customer.get_email()
+        update_customer_form.address1.data = customer.get_address1()
+        update_customer_form.address2.data = customer.get_address2()
+        update_customer_form.phone_number.data = customer.get_phone_number()
+        update_customer_form.floor_number.data = customer.get_floor_number()
+        update_customer_form.unit_number.data = customer.get_unit_number()
+        update_customer_form.postal_code.data = customer.get_postal_code()
+        update_customer_form.status.data = customer.get_status()
+
+        return render_template('customerProfilePage.html')
 
 
 @app.route('/get_map')
