@@ -40,7 +40,8 @@
                         <th>No.</th>
                         <th>Product Name</th>
                         <th>Categories</th>
-                        <th>Quantity</th>
+                        <th>Order Quantity</th>
+                        <th>Remarks</th>
                         <th>Date Created</th>
 
                     </tr>
@@ -50,6 +51,7 @@
                 {% for supply in Inventory_list %}
                 <tr>
                     <td>{{ supply.get_Inventory_id() }}</td>
+                    <td>{{ supply.get_Product_name() }}</td>
                     {% if supply.get_Categories_select() == "Ball" %}
                         <td>Ball</td>
                     {% elif supply.get_Categories_select() == "Footwear" %}
@@ -61,11 +63,12 @@
                     {% elif supply.get_Categories_select() == "Accessories" %}
                         <td>Accessories</td>
                     {% endif %}
-                    <td>{{ supply.get_Product_name() }}</td>
+                    <td>{{ supply.get_Qty() }}</td>
                     <td>{{ supply.get_remarks() }}</td>
                     <td>{{ supply.get_date() }}</td>
+                    {% endfor %}
                 </tr>
-                {% endfor %}
+
                 </tbody>
             </table>
             </div>
