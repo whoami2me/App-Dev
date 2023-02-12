@@ -1,0 +1,50 @@
+<!--Not done-->
+
+
+{% extends "base.html" %}
+{% block title%}Western Corp - Products{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<!-- Bootstrap core CSS -->
+<link href="/static/css/vendorproduct/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- Additional CSS Files -->
+<link rel="stylesheet" href="/static/css/assetsproduct/css/fontawesome.css">
+<link rel="stylesheet" href="/static/css/assetsproduct/css/tooplate-main.css">
+<link rel="stylesheet" href="/static/css/assetsproduct/css/owl.css">
+<link rel="stylesheet" href="/static/css/assetsproduct/css/flex-slider.css">
+
+<!-- Single Starts Here -->
+<div class="single-product">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <div class="line-dec"></div>
+          <h1>Thanks for your Purchase!</h1>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="product-slider">
+          <div id="slider" class="flexslider"  >
+            <ul class="slides">
+              <li style="display: block;">
+                <img src="/static/productimages/{{product.get_product_image() }}" />
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="right-content">
+          <h4>{{ product.get_product_name() }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Single Page Ends Here -->
+
+
+
+{% endblock %}

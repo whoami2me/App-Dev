@@ -1,0 +1,58 @@
+{% extends "base2.html" %}
+{% block title %}Western Corp - Create Online Event{% endblock %}
+
+
+{% block silly %}Create Online Event{% endblock %}
+
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+
+
+<section id="register-event">
+    <div class="container-lg">
+        <div class="text-center">
+            <h1 class="display-5">Create Online Event</h1>
+            <p class="lead">Sign up for events</p>
+        </div>
+
+        <div class="row justify-content-center my-5">
+            <div class="col-lg-8">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    <div class="form-group">
+                    {{ render_field(form.name, class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                    {{ render_field(form.description, class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                    {{ render_field(form.date, class="form-control") }}
+                    </div>
+
+                    <div class="form-group">
+                    {{ render_field(form.end_date, class="form-control") }}
+                    </div>
+
+                    <div class="form-group">
+                    {{ render_field(form.location, class="form-control") }}
+                    </div>
+                    <div class="form-group">{{ render_field(form.image, id="fileinput" , class="form-control", **{'onchange':'previewFile()'}) }}</div>
+                    <div class="preview-img"><img id="preview" src="" width="400px" height="175px" alt="Image preview" /></div>
+
+                    <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <div class="mb-4 text-center">
+                        <input type="submit" value="Submit" class="btn btn-primary center"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
+

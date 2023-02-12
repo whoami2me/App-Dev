@@ -1,0 +1,35 @@
+
+
+.hero-image {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.skysports.com%2Ffootball%2Fnews%2F11095%2F12798953%2Fcristiano-ronaldo-al-nassr-head-coach-rudi-garcia-says-striker-will-return-to-europe-at-end-of-saudi-arabia-contract&psig=AOvVaw09WjfwBPkT-ifHQQgDc3DA&ust=1675270598610000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCPC5xbmj8vwCFQAAAAAdAAAAABAJ");
+  height: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.hero-text {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
+.hero-text button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 10px 25px;
+  color: black;
+  background-color: #ddd;
+  text-align: center;
+  cursor: pointer;
+}
+
+.hero-text button:hover {
+  background-color: #555;
+  color: white;
+}

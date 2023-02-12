@@ -1,0 +1,28 @@
+TO DO:
+Overall:
+Grey out when unavailable (Done)
+Add qty for product homepage (Foundation done)
+ -Dynamic, autoupdate when bought (Done)
+Seperate image update from general update (Done)
+Click product opens new window in customer side (Done)
+Add qty sold (Done)
+Dynamic sale start and end date (Done)
+
+Add Dashboard
+Track who buy what (Wait for integration and add session) (Done)
+Create new database for customer products
+ - Save the data with session, assign session to a variable and save within database noice (Done)
+
+
+
+Do calculate total price and show price during that given time (sale or not)
+Do purchase redirect page
+Do shopping cart
+- Add a add to cart function
+
+
+Plans for Future(Maybe):
+Add a modal for product ID, description, date created
+
+
+
