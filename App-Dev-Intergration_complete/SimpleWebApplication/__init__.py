@@ -1125,7 +1125,6 @@ def home_product():
 
     return render_template('homeProduct.html', products=products_list2, products2=products_list3)
 
-
 @app.route("/singleProduct/<uuid:id>/", methods=['GET', 'POST'])
 def single_product(id):
     purchase_product_form = PurchaseProduct(CombinedMultiDict((request.files, request.form)))
