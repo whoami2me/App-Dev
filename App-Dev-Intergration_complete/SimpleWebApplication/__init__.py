@@ -1192,9 +1192,18 @@ def single_product(id):
             custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),price,session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc(),totalprice)
             
             purchaseproducts_dict[custpurchase.get_tempvar()] = custpurchase
-
+            
             db['purchaseProducts'] = purchaseproducts_dict
             db.close()
+            products_dict = {}
+            db = shelve.open('product.db', 'w')
+            products_dict = db['Products']
+            product_id = products_dict.get(id)
+            totalearned = product_id.get_total_earned() + calctotalprice
+            product_id.set_total_earned(totalearned)
+            db['Products'] = products_dict
+            db.close()
+
             return render_template('purchaseProduct.html',product = p, pqty = purchase_product_form.qty.data) 
         elif purchase_product_form.option.data == 'Add to cart':
             addproduct_dict = {}
@@ -1281,7 +1290,10 @@ def purchasecartproduct(id):
     productobj.set_product_sold(totalsold)
     qtyremaining = productobj.get_product_qty() - productcartobj.get_pProduct_qty()
     productobj.set_product_qty(qtyremaining)
-
+    calctotalpricestr = productcartobj.get_pProduct_totalprice()
+    calctotalpricenum = re.sub('[^0-9.]','',calctotalpricestr)
+    totalearned = productobj.get_total_earned() + float(calctotalpricenum)
+    productobj.set_total_earned(totalearned)
     db['Products'] = products_dict
     db.close()
 
@@ -1290,10 +1302,17 @@ def purchasecartproduct(id):
     addproductdict.pop(id)
     db['addProducts'] = addproductdict
     db.close()
-
-
-    
     return redirect(url_for('home_product'))
+
+@app.route('/removecartProduct/<uuid:id>/', methods = ['POST'])
+def removecartproduct(id):
+    db = shelve.open('addproduct.db', 'w')
+    addproductdict = db['addProducts']
+    p = addproductdict.get(id)
+    addproductdict.pop(id)
+    db['addProducts'] = addproductdict
+    db.close()
+    return redirect(url_for('viewcartproduct'))
 
 
 # end of rayden portion

@@ -39,7 +39,7 @@
 {{ session.pop('product_deleted', None) }} was deleted.
 </div>
 {% endif %}
-<div class="container">
+<div class="container" style="max-width: 1365px;">
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
@@ -69,6 +69,7 @@
                         <th>Description</th>
                         <th>Quantity</th>
                         <th>Amnt Sold</th>
+                        <th>Total earned</th>
                         <th>Category</th>
                         <th>Date Created</th>
                         <th>Product Status</th>
@@ -101,6 +102,7 @@
                         <td>{{ product.get_product_desc() }}</td>
                         <td>{{ product.get_product_qty() }}</td>    
                         <td>{{ product.get_product_sold() }}</td>
+                        <td>{{ product.get_total_earned2() }}</td>
                         <td>{{ product.get_product_group() }}</td>
                         <td>{{ product.get_product_date() }}</td>
                         {% if product.get_product_status() == "Active" %}
