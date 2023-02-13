@@ -10,6 +10,18 @@
 
 
 {% block content %}
+{% with changed = get_flashed_messages(category_filter=["passwordSuccess"]) %}
+        {% if changed %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in changed %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endwith %}
                     <!-- Content Row -->
                     <div class="row">
 

@@ -11,11 +11,9 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-2"></i>Welcome, {{ session['name'] }}
+                                <img src="/profimg/{{ session['image'] }}" width="40" height="40" class="rounded-circle">Welcome, {{ session['name'] }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/staffprofile/{{ session['Staff'] }}">Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
                                 <li><a class="dropdown-item" href="/">Logout</a></li>
                             </ul>
                         </li>

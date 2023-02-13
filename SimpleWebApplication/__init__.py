@@ -7,6 +7,7 @@ from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, Cre
 import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers, registerEvent
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
+import sys
 
 
 
@@ -394,6 +395,7 @@ def login():
         if customer.get_email() == login_form.email.data and customer.get_password() == login_form.password.data:
             session['Customer'] = customer.get_customer_id()
             session['name'] = customer.get_first_name()
+            session['image'] = customer.get_image()
             if customer.get_status() == 'Active':
                 return redirect(url_for('user_home'))
             else:
@@ -408,6 +410,8 @@ def login():
         if staff.get_email() == login_form.email.data and staff.get_password() == login_form.password.data:
             session['Staff'] = staff.get_staff_id()
             session['name'] = staff.get_first_name()
+            session['image'] = staff.get_image()
+            session['membership'] = staff.get_membership()
             if staff.get_status() == 'Active':
                 return redirect(url_for('admin_home'))
             else:
@@ -435,21 +439,22 @@ def profile_page(id):
         customer = customers_dict.get(id)
         customer.set_first_name(update_customer_form.first_name.data)
         customer.set_last_name(update_customer_form.last_name.data)
-        customer.set_gender(update_customer_form.gender.data)
         customer.set_email(update_customer_form.email.data)
         customer.set_address1(update_customer_form.address1.data)
         customer.set_address2(update_customer_form.address2.data)
+        customer.set_gender(update_customer_form.gender.data)
         customer.set_phone_number(update_customer_form.phone_number.data)
+        customer.set_postal_code(update_customer_form.postal_code.data)
         customer.set_floor_number(update_customer_form.floor_number.data)
         customer.set_unit_number(update_customer_form.unit_number.data)
-        customer.set_postal_code(update_customer_form.postal_code.data)
-        customer.set_image(update_customer_form.image.data)
+        customer.set_image(update_customer_form.image.data.filename)
 
-        update_customer_form.image.data.save(app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_customer_form.image.data.filename)
+        update_customer_form.image.data.save(
+            app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_customer_form.image.data.filename)
 
         db['Customers'] = customers_dict
         db.close()
-        flash('Profile has been updated!', 'profileSuccess')
+
         return redirect(url_for('user_home'))
     else:
         customers_dict = {}
@@ -460,15 +465,16 @@ def profile_page(id):
         customer = customers_dict.get(id)
         update_customer_form.first_name.data = customer.get_first_name()
         update_customer_form.last_name.data = customer.get_last_name()
-        update_customer_form.gender.data = customer.get_gender()
         update_customer_form.email.data = customer.get_email()
         update_customer_form.address1.data = customer.get_address1()
         update_customer_form.address2.data = customer.get_address2()
+        update_customer_form.gender.data = customer.get_gender()
         update_customer_form.phone_number.data = customer.get_phone_number()
+        update_customer_form.postal_code.data = customer.get_postal_code()
         update_customer_form.floor_number.data = customer.get_floor_number()
         update_customer_form.unit_number.data = customer.get_unit_number()
-        update_customer_form.postal_code.data = customer.get_postal_code()
         update_customer_form.image.data = customer.get_image()
+        session['image'] = customer.get_image()
 
         return render_template('customerProfilePage.html', form=update_customer_form, customer=customer)
 
@@ -505,30 +511,30 @@ def customer_change_password(id):
 def staff_change_password(id):
     staff_change_password_form = ChangePassword(request.form)
     if request.method == 'POST' and staff_change_password_form.validate():
-        customers_dict = {}
-        db = shelve.open('customer.db', 'w')
-        customers_dict = db['Customers']
+        staffs_dict = {}
+        db = shelve.open('staff.db', 'w')
+        staffs_dict = db['Staffs']
 
-        customer = customers_dict.get(id)
-        customer.set_password(staff_change_password_form.password.data)
-        customer.set_passwordcfm(staff_change_password_form.passwordcfm.data)
+        staff = staffs_dict.get(id)
+        staff.set_password(staff_change_password_form.password.data)
+        staff.set_passwordcfm(staff_change_password_form.passwordcfm.data)
 
-        db['Customers'] = customers_dict
+        db['Staffs'] = staffs_dict
         db.close()
         flash('Password has been changed!', 'passwordSuccess')
-        return redirect(url_for('user_home'))
+        return redirect(url_for('admin_home'))
 
     else:
-        customers_dict = {}
-        db = shelve.open('customer.db', 'r')
-        customers_dict = db['Customers']
+        staffs_dict = {}
+        db = shelve.open('staff.db', 'r')
+        staffs_dict = db['Staffs']
         db.close()
 
-        customer = customers_dict.get(id)
-        staff_change_password_form.password.data = customer.get_password()
-        staff_change_password_form.passwordcfm.data = customer.get_passwordcfm()
+        staff = staffs_dict.get(id)
+        staff_change_password_form.password.data = staff.get_password()
+        staff_change_password_form.passwordcfm.data = staff.get_passwordcfm()
 
-    return render_template('customerChangePassword.html', form=staff_change_password_form)
+    return render_template('staffChangePassword.html', form=staff_change_password_form)
 
 
 @app.route('/staffprofile/<int:id>/', methods=['GET', 'POST'])
@@ -737,23 +743,24 @@ def update_customer(id):
         customer = customers_dict.get(id)
         customer.set_first_name(update_customer_form.first_name.data)
         customer.set_last_name(update_customer_form.last_name.data)
-        customer.set_gender(update_customer_form.gender.data)
         customer.set_email(update_customer_form.email.data)
         customer.set_address1(update_customer_form.address1.data)
         customer.set_address2(update_customer_form.address2.data)
+        customer.set_gender(update_customer_form.gender.data)
         customer.set_phone_number(update_customer_form.phone_number.data)
+        customer.set_postal_code(update_customer_form.postal_code.data)
         customer.set_floor_number(update_customer_form.floor_number.data)
         customer.set_unit_number(update_customer_form.unit_number.data)
-        customer.set_postal_code(update_customer_form.postal_code.data)
         customer.set_status(update_customer_form.status.data)
-        customer.set_image(update_customer_form.image.data)
+        customer.set_image(update_customer_form.image.data.filename)
 
-        update_customer_form.image.data.save(app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_customer_form.image.data.filename)
+        update_customer_form.image.data.save(
+            app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_customer_form.image.data.filename)
 
         db['Customers'] = customers_dict
         db.close()
 
-        return redirect(url_for('user_home'))
+        return redirect(url_for('retrieve_customers'))
     else:
         customers_dict = {}
         db = shelve.open('customer.db', 'r')
@@ -763,14 +770,14 @@ def update_customer(id):
         customer = customers_dict.get(id)
         update_customer_form.first_name.data = customer.get_first_name()
         update_customer_form.last_name.data = customer.get_last_name()
-        update_customer_form.gender.data = customer.get_gender()
         update_customer_form.email.data = customer.get_email()
         update_customer_form.address1.data = customer.get_address1()
         update_customer_form.address2.data = customer.get_address2()
+        update_customer_form.gender.data = customer.get_gender()
         update_customer_form.phone_number.data = customer.get_phone_number()
+        update_customer_form.postal_code.data = customer.get_postal_code()
         update_customer_form.floor_number.data = customer.get_floor_number()
         update_customer_form.unit_number.data = customer.get_unit_number()
-        update_customer_form.postal_code.data = customer.get_postal_code()
         update_customer_form.status.data = customer.get_status()
         update_customer_form.image.data = customer.get_image()
 
@@ -966,7 +973,6 @@ def legacy_images(fname):
 @app.route('/profimg/<fname>')
 def profile_images(fname):
     return app.redirect(app.url_for('static', filename='ProfilePic/' + fname), code=301)
-
 
 if __name__ == '__main__':
     app.run()
