@@ -1,7 +1,7 @@
 import uuid
 from datetime import date
 class Product:
-    def __init__(self,name,price,desc,qty,grp,image,saleoption=None,status='Active',priceclass='item high col-md-4',salestartdate=date.today(),saleenddate=date.today(),saleprice=0,sold=0):
+    def __init__(self,name,price,desc,qty,grp,image,saleoption=None,status='Active',priceclass='item high col-md-4',salestartdate=date.today(),saleenddate=date.today(),saleprice=0,sold=0,totalearned=0):
     
         self.__name = name
         self.__price = price
@@ -18,6 +18,7 @@ class Product:
         self.__saleenddate = saleenddate
         self.__saleprice = saleprice
         self.__sold = sold
+        self.__total_earned = totalearned
 
     def get_product_name(self):
         return self.__name
@@ -80,6 +81,11 @@ class Product:
         return str(self.__saleprice2)
     def get_product_sold(self):
         return self.__sold
+    def get_total_earned(self):
+        return self.__total_earned
+    def get_total_earned2(self):
+        self.__total_earned2 = "${:.2f}".format(self.__total_earned)
+        return self.__total_earned2
         
     def set_product_name(self,name):
         self.__name = name
@@ -105,4 +111,6 @@ class Product:
         self.__saleprice = saleprice
     def set_product_sold(self,sold):
         self.__sold = int(sold)
+    def set_total_earned(self,earned):
+        self.__total_earned = float(earned)
 
