@@ -10,6 +10,18 @@
 
 
 {% block content %}
+{% with updated = get_flashed_messages(category_filter=["profileSuccess"]) %}
+        {% if updated %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in updated %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endwith %}
 {% with changed = get_flashed_messages(category_filter=["passwordSuccess"]) %}
         {% if changed %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">

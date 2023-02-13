@@ -64,35 +64,6 @@
                             <a href="#" class="view" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myViewModal_{{customer.get_customer_id()}}" style="color: turquoise"><i class="material-icons">remove_red_eye</i></a>
                       </td>
 
-            <!-- Button to Open the Modal -->
-                <td><a href="#" class="delete" title="delete" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myDeleteModal_{{customer.get_customer_id()}}" style="color: Red"><i class="material-icons">remove_circle</i></a></td>
-
-            <!-- The Delete Modal -->
-            <div class="modal" id="myDeleteModal_{{customer.get_customer_id()}}">
-              <div class="modal-dialog">
-                <div class="modal-content">
-
-                  <!-- Modal Header -->
-                  <div class="modal-header">
-                    <h4 class="modal-title">Delete Confirmation</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                  </div>
-
-                  <!-- Modal body -->
-                  <div class="modal-body">
-                    Are you sure you want to delete {{customer.get_first_name()}} {{customer.get_last_name()}}?
-                  </div>
-
-                  <!-- Modal footer -->
-                  <div class="modal-footer">
-                    <input type="submit" value="Delete" class="btn btn-danger">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
              <div class="modal" id="myViewModal_{{customer.get_customer_id()}}">
               <div class="modal-dialog">
                 <div class="modal-content">

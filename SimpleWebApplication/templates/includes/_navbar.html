@@ -37,7 +37,10 @@
           <ul class="dropdown-menu pr-3" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="/profile/{{ session['Customer'] }}">Account Settings</a></li>
             <li><a class="dropdown-item" href="/changepassword/{{ session['Customer'] }}">Change Password</a></li>
+            <li><a class="dropdown-item" href="/viewRegisteredEvents">Vouchers</a></li>
+            <li><a class="dropdown-item" href="/viewcartProduct/{{ session['Customer'] }}">Shopping Cart</a></li>
             <li><a class="dropdown-item" href="/viewRegisteredEvents">Registered Events</a></li>
+            <li><a class="dropdown-item" href="/viewpurchaseProduct/{{ session['Customer'] }}">Purchase History</a></li>
             <li><a class="dropdown-item" href="/logout">Logout</a></li>
           </ul>
         </li>
@@ -46,7 +49,7 @@
       <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
           <a href="/login" class="btn btn-warning" style="float: right; background-color: turquoise; border: 0px;">Login</a>
           &nbsp; &nbsp;
-        <a href="/createCustomer" class="btn btn-warning" style="float: right; background-color: turquoise; border: 0px;">Create Customer</a>
+        <a href="/createCustomer" class="btn btn-warning" style="float: right; background-color: turquoise; border: 0px;">Create Account</a>
       </ul>
         {% endif %}
     </div>

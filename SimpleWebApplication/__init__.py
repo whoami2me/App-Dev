@@ -454,7 +454,8 @@ def profile_page(id):
 
         db['Customers'] = customers_dict
         db.close()
-
+        session['image'] = customer.get_image()
+        flash('Profile has been updated!', 'profileSuccess')
         return redirect(url_for('user_home'))
     else:
         customers_dict = {}
@@ -565,6 +566,8 @@ def staff_profile_page(id):
         db['Staffs'] = staffs_dict
         db.close()
 
+        flash('Profile has been updated!', 'profileSuccess')
+        session['image'] = staff.get_image()
         return redirect(url_for('admin_home'))
     else:
         staffs_dict = {}
@@ -585,6 +588,7 @@ def staff_profile_page(id):
         update_staff_form.floor_number.data = staff.get_floor_number()
         update_staff_form.unit_number.data = staff.get_unit_number()
         update_staff_form.image.data = staff.get_image()
+        session['image'] = staff.get_image()
 
         return render_template('staffProfilePage.html', form=update_staff_form, staff=staff)
 
@@ -705,6 +709,7 @@ def update_staff(id):
         update_staff_form.image.data.save(app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_staff_form.image.data.filename)
 
         db['Staffs'] = staffs_dict
+        session['image'] = staff.get_image()
         db.close()
 
         return redirect(url_for('retrieve_staffs'))
@@ -728,6 +733,7 @@ def update_staff(id):
         update_staff_form.unit_number.data = staff.get_unit_number()
         update_staff_form.status.data = staff.get_status()
         update_staff_form.image.data = staff.get_image()
+        session['image'] = staff.get_image()
 
         return render_template('updateStaff.html', form=update_staff_form, staff=staff)
 
@@ -782,33 +788,6 @@ def update_customer(id):
         update_customer_form.image.data = customer.get_image()
 
         return render_template('updateCustomer.html', form=update_customer_form, customer=customer)
-
-
-@app.route('/deleteStaff/<int:id>', methods=['POST'])
-def delete_staff(id):
-    staffs_dict = {}
-    db = shelve.open('staff.db', 'w')
-    staffs_dict = db['Staffs']
-
-    staffs_dict.pop(id)
-
-    db['Staffs'] = staffs_dict
-    db.close()
-
-    return redirect(url_for('retrieve_staffs'))
-
-
-@app.route('/deleteCustomer/<int:id>', methods=['POST'])
-def delete_customer(id):
-    customers_dict = {}
-    db = shelve.open('customer.db', 'w')
-    customers_dict = db['Customers']
-    customers_dict.pop(id)
-
-    db['Customers'] = customers_dict
-    db.close()
-
-    return redirect(url_for('retrieve_customers'))
 
 #end of trisven portion
 

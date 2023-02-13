@@ -3,73 +3,100 @@
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
-<h5 class="display-5">Create Account</h5>
-<hr>
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/createACC.css') }}">
+
+<style>
+	.form-group{
+	color: white;
+	}
+</style>
+</head>
 <form method="POST" action="" enctype="multipart/form-data">
-  <div class="preview-imgPP"><img id="preview" src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" width="175px" height="175px" class="rounded-circle" alt="Image preview" /></div>
-  <div class="form-group">{{ render_field(form.image, id="fileinput" , class="form-control", **{'onchange':'previewFile()'}) }}</div>
-  <div class="row">
-	<div class="col-md-6">
-		<div class="form-group">
-			{{ render_field(form.first_name, class="form-control") }}
+	<div class="container">
+	<div class="d-flex justify-content-center h-100">
+		<div class="card">
+			<div class="card-header">
+				<h3>Create Account</h3>
+			</div>
+			<div class="card-body">
+				<form>
+					<div class="preview-imgPP"><img id="preview" src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" width="175px" height="175px" class="rounded-circle" alt="Image preview" /></div>
+					  <div class="form-group">{{ render_field(form.image, id="fileinput" , class="form-control", **{'onchange':'previewFile()'}) }}</div>
+					  <div class="row">
+						<div class="col-md-6">
+							<div class="form-group" style="color: white">
+								{{ render_field(form.first_name, class="form-control") }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{ render_field(form.last_name, class="form-control") }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{ render_field(form.email, class="form-control") }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{ render_field(form.phone_number, class="form-control") }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{ render_field(form.address1, class="form-control") }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{ render_field(form.address2, class="form-control") }}
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-6">
+								Unit Number {{ render_field(form.floor_number, class="form-control") }}
+							</div>
+							<div class="col-md-6">
+								{{ render_field(form.unit_number, class="form-control")}}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{ render_field(form.postal_code, class="form-control") }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{ render_field(form.gender, class="form-control") }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{ render_field(form.password, class="form-control") }}
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{ render_field(form.passwordcfm, class="form-control") }}
+							</div>
+						</div>
+					  </div>
+					  <br>
+					<div class="form-group">
+						<input type="submit" value="Submit" class="btn btn-primary create_btn"/>
+					</div>
+				</form>
+			</div>
+			<div class="card-footer">
+				<div class="d-flex justify-content-center links">
+					Have an account?<a href="/login">Login Now</a>
+				</div>
+			</div>
 		</div>
 	</div>
-	<div class="col-md-6">
-		<div class="form-group">
-			{{ render_field(form.last_name, class="form-control") }}
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="form-group">
-			{{ render_field(form.email, class="form-control") }}
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="form-group">
-			{{ render_field(form.phone_number, class="form-control") }}
-		</div>
-	</div>
-    <div class="col-md-6">
-	    <div class="form-group">
-			{{ render_field(form.address1, class="form-control") }}
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="form-group">
-			{{ render_field(form.address2, class="form-control") }}
-		</div>
-	</div>
-    <div class="form-group row">
-		<div class="col-md-6">
-			Unit Number {{ render_field(form.floor_number, class="form-control") }}
-		</div>
-	    <div class="col-md-6">
-			{{ render_field(form.unit_number, class="form-control")}}
-	    </div>
-	</div>
-    <div class="col-md-6">
-		<div class="form-group">
-			{{ render_field(form.postal_code, class="form-control") }}
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="form-group">
-			{{ render_field(form.gender, class="form-control") }}
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="form-group">
-			{{ render_field(form.password, class="form-control") }}
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="form-group">
-			{{ render_field(form.passwordcfm, class="form-control") }}
-		</div>
-	</div>
-  </div>
-  <br>
-  <input type="submit" value="Submit" class="btn btn-primary"/>
+</div>
 </form>
 {% endblock %}
 
