@@ -15,10 +15,13 @@ Create new database for customer products
 
 
 
-Do calculate total price and show price during that given time (sale or not)
-Do purchase redirect page
-Do shopping cart
-- Add a add to cart function
+Do calculate total price and show price during that given time (sale or not) (Done)
+Do purchase redirect page (Done)
+Do shopping cart (Done)
+- Add a add to cart function (Done)
+
+Integrate with Izwans Inventory for Qty
+Integrate with Azami Voucher for discounts
 
 
 Plans for Future(Maybe):
