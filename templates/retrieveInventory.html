@@ -43,35 +43,26 @@
                         <th>Order Quantity</th>
                         <th>Remarks</th>
                         <th>Date Created</th>
+                        <th></th>
 
                     </tr>
 
                 </thead>
                 <tbody>
-                {% for supply in Suppliers_list %}
                 {% for order in Inventory_list %}
                 <tr>
                     <td>{{ order.get_Inventory_id() }}</td>
-                    <td>{{ supply.get_Product_name() }}</td>
-                    {% if supply.get_Categories_select() == "Ball" %}
-                        <td>Ball</td>
-                    {% elif supply.get_Categories_select() == "Footwear" %}
-                        <td>Footwear</td>
-                    {% elif supply.get_Categories_select() == "Shirts" %}
-                        <td>Shirts</td>
-                    {% elif supply.get_Categories_select() == "Pants" %}
-                        <td>Pants</td>
-                    {% elif supply.get_Categories_select() == "Accessories" %}
-                        <td>Accessories</td>
-                    {% endif %}
-
+                    <td>{{ order.get_Product_name() }}</td>
+                    <td>{{ order.get_type() }}</td>
                     <td>{{ order.get_Qty() }}</td>
                     <td>{{ order.get_remarks() }}</td>
                     <td>{{ order.get_date() }}</td>
-
+                    <td>
+                        <button type="button" class="btn btn-warning" onclick="location.href='/invoice/{{order.get_Inventory_id()}}'" data-bs-target="{{order.get_Inventory_id()}}">view</button>
+                                          <form action="{{url_for('invoice', id=order.get_Inventory_id())}}" method="POST">
+                    </td>
                 </tr>
                 </tbody>
-                {% endfor %}
                 {% endfor %}
             </table>
             </div>

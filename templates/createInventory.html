@@ -8,31 +8,19 @@
 
 <section id="create-Inventory">
     <div class="container-lg">
-        {% for suppliers in Suppliers_list %}
         <div class="text-center">
 
-            <h1 class="display-5">{{ suppliers.get_Product_name() }}</h1>
+            <h1 class="display-5">Ordering supply</h1>
         </div>
 
         <div class="row justify-content-center my-5">
             <div class="col-lg-8">
-
-                <div class="desc"><p>From: <span>{{ suppliers.get_Company_name() }}</span></p></div>
-                                            {% if suppliers.get_Categories_select() == "Ball" %}
-                                            <div class="Type"><p>Type: <span>Ball</span></p></div>
-                                            {% elif suppliers.get_Categories_select() == "Footwear" %}
-                                            <div class="Type"><p>Type: <span>Footwear</span></p></div>
-                                            {% elif suppliers.get_Categories_select() == "Shirts" %}
-                                            <div class="Type"><p>Type: <span>Shirts</span></p></div>
-                                            {% elif suppliers.get_Categories_select() == "Pants" %}
-                                            <div class="Type"><p>Type: <span>Pants</span></p></div>
-                                            {% elif suppliers.get_Categories_select() == "Accessories" %}
-                                            <div class="Type"><p>Type: <span>Accessories</span></p></div>
-                                            {% endif %}
-                <div class="desc"><p>Price /unit: $<span>{{suppliers.get_price()}}</span></p></div>
-                <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
-                {% endfor %}
                 <form method="POST" action="" enctype="multipart/form-data">
+    <div class="form-group">
+       {{ render_field(form.name, class="form-check", style="list-style-type:none") }}
+       {{ render_field(form.type, class="form-check", style="list-style-type:none") }}
+       {{ render_field(form.Product_name, class="form-check", style="list-style-type:none") }}
+    </div>
    <div class="form-group">
        {{ render_field(form.Qty, class="form-control") }}
    </div>
