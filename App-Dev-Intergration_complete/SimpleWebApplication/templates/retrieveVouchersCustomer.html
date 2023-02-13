@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Retrieve Vouchers{% endblock %}
+
+{% block head %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+
+<h1 class="display-4">View Voucher</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no vouchers.</p>
+  {% elif count == 1 %}
+  <p>There is 1 voucher.</p>
+  {% else %}
+  <p>There are {{ count }} vouchers.</p>
+  {% endif %}
+                    </div>
+                    </div>
+                </div>
+            </div>
+<table class="table table-striped table-hover" style="table-layout: 50px">
+    <thead>
+      <tr>
+        <th>Voucher ID</th>
+        <th style="table-width: 10px">Name</th>
+        <th>Type</th>
+          <th>Amount</th>
+        <th>Min.spend</th>
+          <th>Cap</th>
+          <th>Category</th>
+          <th>Start date</th>
+        <th>Expiry date</th>
+        <th>Description</th>
+          <th>status</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for voucher in vouchers_list %}
+     <tr>
+        <td>{{ voucher.get_voucher_id() }}</td>
+        <td><img src="static/uploads/{{voucher.get_picture() }}" width="70" height="50"> {{ voucher.get_name() }}</td>
+         <td>{{ voucher.get_type() }}</td>
+        <td>{{ voucher.get_amount() }}</td>
+         <td>{{ voucher.get_min_spend() }}</td>
+         <td>{{ voucher.get_cap() }}</td>
+        <td>{{ voucher.get_category() }}</td>
+         <td>{{ voucher.get_start() }}</td>
+         <td>{{  voucher.get_expiry() }}</td>
+        <td>{{ voucher.get_description() }}</td>
+         <td>{{ voucher.get_status() }}</td>
+        <td><a href="/updateVoucher/{{voucher.get_voucher_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_voucher', id=voucher.get_voucher_id())}}" method="POST">
+<!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{voucher.get_name()}}?');">-->
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{voucher.get_voucher_id()}}">
+  Delete
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="myModal_{{voucher.get_voucher_id()}}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Confirmation</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to delete {{voucher.get_name()}}?
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <input type="submit" value="Delete" class="btn btn-danger">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+          </form>
+        </td>
+     </tr>
+    {% endfor %}
+    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

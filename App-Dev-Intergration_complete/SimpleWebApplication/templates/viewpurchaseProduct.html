@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title%}Western Corp - Products{% endblock %}
+
+{% block content %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/purchasecss/css/style.css">
+
+<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-4">
+					<h2 class="heading-section">Purchase History</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="h5 mb-4 text-center">Placeholder</h3>
+					<div class="table-wrap">
+						<table class="table">
+						  <thead class="thead-primary" style="background: #17a2b8;">
+						    <tr>
+						    	<th>&nbsp;</th>
+						    	<th>&nbsp;</th>
+						    	<th>Product</th>
+								<th>Date Purchased</th>
+						        <th>Quantity</th>
+						        <th>Unit Price</th>
+						        <th>Total price</th>
+						        <th>&nbsp;</th>
+						    </tr>
+						  </thead>
+						  <tbody style="border: 0px;">
+                            {% for product in customer %}
+						    <tr class="alert" role="alert">
+						    	<td>
+						    	</td>
+						    	<td><img class="myImages" id="myImg" src="/static/productimages/{{product.get_pProduct_image() }}" alt= "{{ product.get_pProduct_name() }}&nbspImage" width="200" height="100">
+						      <td>
+						      	<div class="email">
+						      		<span>{{ product.get_pProduct_name() }} </span>
+						      		<span>{{ product.get_pProduct_desc() }}</span>
+						      	</div>
+						      </td>
+							  <td>{{ product.get_pProduct_date() }}</td>
+                              <td>{{ product.get_pProduct_qty() }}</td>
+						      <td>{{ product.get_pProduct_price() }}</td>
+							  <td>{{ product.get_pProduct_totalprice() }}</td>
+						    </tr>
+                            {% endfor %}
+						  </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+    <script src="/static/purchasejs/js/jquery.min.js"></script>
+    <script src="/static/purchasejs/js/popper.js"></script>
+    <script src="/static/purchasejs/js/bootstrap.min.js"></script>
+    <script src="/static/purchasejs/js/main.js"></script>
+
+	</body>
+
+
+
+
+
+
+{% endblock %}
