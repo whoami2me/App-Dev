@@ -11,8 +11,8 @@ import re
 
 
 app = Flask(__name__)
-#path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-#config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
 app.config['Product_Images_Dest'] = 'static/productimages/'
@@ -66,8 +66,7 @@ def events():
     online_list = []
     for key in online_dict:
         online = online_dict.get(key)
-        if online.get_date() <= date.today() <= online.get_end_date():
-            print('yes')
+        if (online.get_date() <= date.today() <= online.get_end_date()) and (online.get_reg_status() == 'Active' or online.get_reg_status() == 'A'):
             online_list.append(online)
 
     offline_dict = {}
@@ -78,10 +77,8 @@ def events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
-        if offline.get_date() <= date.today() <= offline.get_end_date():
-            print(offline.get_reg_pax(), offline.get_pax())
-            if offline.get_reg_pax() < offline.get_pax():
-                offline_list.append(offline)
+        if (offline.get_date() <= date.today() <= offline.get_end_date()) and (offline.get_reg_pax() < offline.get_pax()) and (offline.get_reg_status() == 'Active' or offline.get_reg_status() == 'A'):
+            offline_list.append(offline)
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list)
 
@@ -1235,7 +1232,7 @@ def page_not_found(e):
 def legacy_images(fname):
     return app.redirect(app.url_for('static', filename='uploads/' + fname), code=301)
 
-'''@app.route("/getPDF/<evename>")
+@app.route("/getPDF/<evename>")
 def get_pdf(evename):
 
     regeve_dict = {}
@@ -1255,7 +1252,7 @@ def get_pdf(evename):
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "inline; filename=registeredUserLists.pdf"
 
-    return response'''
+    return response
 
 
 if __name__ == '__main__':
