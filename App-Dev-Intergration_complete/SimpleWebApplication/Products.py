@@ -60,6 +60,8 @@ class Product:
                     self.__priceclass = 'item high col-md-4'
         return self.__priceclass
     def get_product_saleoption(self):
+        if self.__salestartdate > date.today():
+            self.__salepoption = 'Inactive'
         if self.__saleenddate<date.today():
             self.__salepoption = 'Inactive'
         return self.__salepoption
