@@ -978,7 +978,7 @@ def delete_voucher(id):
 #end of azami portion
 
 
-# start of rayden portion
+#Start of Rayden's portion
 @app.route('/createProduct', methods=['GET', 'POST'])
 def create_product():
     create_product_form = CreateProduct(CombinedMultiDict((request.files, request.form)))
@@ -1335,8 +1335,8 @@ def removecartproduct(id):
     db.close()
     return redirect(url_for('viewcartproduct'))
 
+# End of Rayden's portion
 
-# end of rayden portion
 @app.route('/get_map')
 def get_map():
     return render_template('map.html')

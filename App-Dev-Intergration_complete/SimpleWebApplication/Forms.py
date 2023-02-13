@@ -5,7 +5,7 @@ from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields import EmailField, DateField, PasswordField
 import re
 
-
+# Dong En's Event Portion
 class CreateEventForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150,message="It should be in a range from 1 to 150!"), validators.DataRequired(), validators.Regexp('[a-zA-Z0-9_-]+$', message="It should only contain letters, numbers , underscores and dashes")])
     image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
@@ -64,7 +64,7 @@ class CreateOffEventForm(Form):
             raise ValidationError("The date cannot be in the past!")
 
 
-#trisven membership portion
+# Trisven's membership portion
 def check_phone_number(form, field):
     if not re.match(r'^[89][0-9]{7}$', str(field.data)):
         raise validators.ValidationError('Invalid phone number,it must start with either 8 or 9 and be 8 digit long')
@@ -161,7 +161,7 @@ class Login(Form):
     email = EmailField('', [validators.Email(), validators.DataRequired()])
     password = PasswordField('', [validators.Length(min=1), validators.DataRequired()])
 
-#izwan
+#Izwan's inventory portion
 def check_payment(form, field):
     if not re.match(r'[0-9]{16}$', str(field.data)):
         raise validators.ValidationError('Invalid card details. It must be 16 digit long')
@@ -192,6 +192,7 @@ class CreateInventoryForm(Form):
 
 categories = ["All", "Ball", "Shoe", "Shin guards", "Shirt", "Shorts", "Socks"]
 
+#Azami's Voucher Portion
 class CreateVoucherForm(Form):
     def validate_date(form, field):
         if field.data < datetime.date(datetime.now()):
@@ -222,7 +223,7 @@ class CreateVoucherForm(Form):
             return True
 
         return False
-#Rayden
+#Rayden's Product Portion
 class CreateProduct(Form):
     name = StringField('Name: ', [validators.DataRequired()])
     desc = TextAreaField('Description: ', [validators.Optional()])
