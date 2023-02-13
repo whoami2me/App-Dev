@@ -11,8 +11,8 @@ import re
 
 
 app = Flask(__name__)
-path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+'''path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)'''
 app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
 app.config['Product_Images_Dest'] = 'static/productimages/'
@@ -1164,37 +1164,64 @@ def single_product(id):
         if purchase_product_form.qty.data > product_id.get_product_qty():  # Validate user input if more than stock
             purchase_product_form.qty.errors.append('Quantity selected was more than stock')
             return render_template('singleProduct.html', product=p, form=purchase_product_form)
-        else:
+
+        
+        if purchase_product_form.option.data == 'Purchase':
+            purchaseproducts_dict = {}
             totalsold = product_id.get_product_sold() + purchase_product_form.qty.data
             product_id.set_product_sold(totalsold) 
             qtyremaning = product_id.get_product_qty() - purchase_product_form.qty.data
             product_id.set_product_qty(qtyremaning)
-        db['Products'] = products_dict
-        db.close()
-        purchaseproducts_dict = {}
-        db = shelve.open('purchaseproduct.db', 'c')
-        try:
-            purchaseproducts_dict = db['purchaseProducts']
-        except:
-            print("Error in retrieving Product from database")
-        
-        if product_id.get_product_saleoption() == 'Active':
-            price = product_id.get_product_saleprice()
-            price2 = product_id.get_product_saleprice2() 
+            db['Products'] = products_dict
+            db.close()
+            db = shelve.open('purchaseproduct.db', 'c')
+            try:
+                purchaseproducts_dict = db['purchaseProducts']
+            except:
+                print("Error in retrieving Product from database")
+            if product_id.get_product_saleoption() == 'Active':
+                price = product_id.get_product_saleprice()
+                price2 = product_id.get_product_saleprice2() 
+            else:
+                price = "${:.2f}".format(product_id.get_product_price())
+                price2 = "${}".format(product_id.get_product_price())
+
+            numericprice = re.sub('[^0-9.]','',price2)
+            calctotalprice = float(numericprice)*float(purchase_product_form.qty.data)
+            totalprice = "${:.2f}".format(calctotalprice)
+            custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),price,session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc(),totalprice)
+            
+            purchaseproducts_dict[custpurchase.get_tempvar()] = custpurchase
+
+            db['purchaseProducts'] = purchaseproducts_dict
+            db.close()
+            return render_template('purchaseProduct.html',product = p, pqty = purchase_product_form.qty.data) 
+        elif purchase_product_form.option.data == 'Add to cart':
+            addproduct_dict = {}
+            db = shelve.open('addproduct.db', 'c')
+            try:
+                addproduct_dict = db['addProducts']
+            except:
+                print("Error in retrieving product from database")
+            if product_id.get_product_saleoption() == 'Active':
+                price = product_id.get_product_saleprice()
+                price2 = product_id.get_product_saleprice2() 
+            else:
+                price = "${:.2f}".format(product_id.get_product_price())
+                price2 = "${}".format(product_id.get_product_price())
+
+            numericprice = re.sub('[^0-9.]','',price2)
+            calctotalprice = float(numericprice)*float(purchase_product_form.qty.data)
+            totalprice = "${:.2f}".format(calctotalprice)
+            custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),price,session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc(),totalprice)
+            
+            addproduct_dict[custpurchase.get_tempvar()] = custpurchase
+            print(custpurchase.get_tempvar())
+            db['addProducts'] = addproduct_dict
+            db.close()
+            return render_template('addcartProduct.html',product = p, pqty = purchase_product_form.qty.data)
         else:
-            price = "${:.2f}".format(product_id.get_product_price())
-            price2 = "${}".format(product_id.get_product_price())
-
-        numericprice = re.sub('[^0-9.]','',price2)
-        calctotalprice = float(numericprice)*float(purchase_product_form.qty.data)
-        totalprice = "${:.2f}".format(calctotalprice)
-        custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),price,session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc(),totalprice)
-        
-        purchaseproducts_dict[custpurchase.get_tempvar()] = custpurchase
-
-        db['purchaseProducts'] = purchaseproducts_dict
-        db.close()
-        return render_template('purchaseProduct.html',product = p, pqty = purchase_product_form.qty.data) 
+            print('Error')
     return render_template('singleProduct.html', product=p, form=purchase_product_form)
 
 @app.route('/viewpurchaseProduct')
@@ -1205,18 +1232,69 @@ def viewpurchaseproduct():
     db.close()
     customer_list = []
 
-
-    productdict = {}    
-    db = shelve.open('product.db','r')
-    productdict = db['Products']
-    db.close()
-
     for key in purchaseproductdict: #Key is tempvar (uuid)
         purchaseproduct = purchaseproductdict.get(key)
         if purchaseproduct.get_pProduct_userid() == session['Customer']: 
             customer_list.append(purchaseproduct)
 
     return render_template('viewpurchaseproduct.html',customer = customer_list)
+
+@app.route('/viewcartProduct')
+def viewcartproduct():
+    addproductdict = {}
+    db = shelve.open('addproduct.db', 'r')
+    addproductdict = db['addProducts']
+    db.close()
+    customer_list = []
+    for key in addproductdict: #Key is tempvar (uuid)
+        purchaseproduct = addproductdict.get(key)
+        print(key)
+        if purchaseproduct.get_pProduct_userid() == session['Customer']: 
+            customer_list.append(purchaseproduct)
+    return render_template('viewcartProduct.html',customer = customer_list)
+
+@app.route('/purchasecartProduct/<uuid:id>/')
+def purchasecartproduct(id):
+    
+
+    db = shelve.open('addproduct.db', 'r')
+    addproductdict = db['addProducts']
+    db.close()
+
+    purchaseproductdict = {}
+    db = shelve.open('purchaseproduct.db','w')
+    purchaseproductdict = db['purchaseProducts']
+    
+    
+    productcartobj = addproductdict.get(id)
+    print(productcartobj)
+    purchaseproductdict[id] = productcartobj
+    db['purchaseProducts'] = purchaseproductdict
+    db.close()
+
+    products_dict = {}
+    db = shelve.open('product.db','w')
+    products_dict = db['Products']
+    product_id = productcartobj.get_pProduct_id()
+    productobj = products_dict.get(product_id)
+    totalsold = productobj.get_product_sold() + productcartobj.get_pProduct_qty()
+    productobj.set_product_sold(totalsold)
+    qtyremaining = productobj.get_product_qty() - productcartobj.get_pProduct_qty()
+    productobj.set_product_qty(qtyremaining)
+
+    db['Products'] = products_dict
+    db.close()
+
+    db = shelve.open('addproduct.db', 'w')
+    addproductdict = db['addProducts']
+    addproductdict.pop(id)
+    db['addProducts'] = addproductdict
+    db.close()
+
+
+    
+    return redirect(url_for('home_product'))
+
 
 # end of rayden portion
 @app.route('/get_map')
@@ -1232,7 +1310,7 @@ def page_not_found(e):
 def legacy_images(fname):
     return app.redirect(app.url_for('static', filename='uploads/' + fname), code=301)
 
-@app.route("/getPDF/<evename>")
+'''@app.route("/getPDF/<evename>")
 def get_pdf(evename):
 
     regeve_dict = {}
@@ -1252,7 +1330,7 @@ def get_pdf(evename):
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "inline; filename=registeredUserLists.pdf"
 
-    return response
+    return response'''
 
 
 if __name__ == '__main__':

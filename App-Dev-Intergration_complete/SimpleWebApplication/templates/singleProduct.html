@@ -47,7 +47,13 @@
           <form method="POST" action="" enctype="multipart/form-data">
             <div class="form-group" >
                 {{ render_field(form.qty, class="quantity-text") }}
-                <input type="submit" value="Purchase" class="button"/>
+                {% for subfield in form.option %}
+                <br><tr>
+                    <td>{{ subfield }}</td>
+                    <td>{{ subfield.label }}</td>
+                </tr>
+                {% endfor %}
+                <input type="submit" value="Proceed" class="button"/>
             </div>
           </form>
           <!---->
