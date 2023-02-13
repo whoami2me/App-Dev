@@ -47,8 +47,29 @@ def admin_home():
     for keys in list_dict:
         events.append(keys)
         registered.append(list_dict[keys])
+    
 
-    return render_template('home.html', events= json.dumps(events), reg_pax = json.dumps(registered))
+    products_dict = {}
+    db=shelve.open('product.db','r')
+    products_dict = db['Products']
+    productname_list = []
+    productsales_list = []
+    for key in products_dict:
+        productobj = products_dict.get(key)
+        productname = productobj.get_product_name()
+        productsales = productobj.get_total_earned2()
+        productsalesnum = float(re.sub('[^0-9.]','',productsales))
+        productname_list.append(productname)
+        productsales_list.append(productsalesnum)
+
+
+    print(events)
+    print(registered)
+    print(productname_list)
+    print(productsales_list)
+    
+
+    return render_template('home.html', events= json.dumps(events), reg_pax = json.dumps(registered),productname = json.dumps(productname_list),productsales = json.dumps(productsales_list))
 
     
 @app.route('/contactUs')
