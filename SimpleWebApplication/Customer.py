@@ -2,7 +2,7 @@
 class Customer:
     count_id = 0
 
-    def __init__(self, first_name, last_name, gender, email, address1, address2, password, passwordcfm, date_created, phone_number, postal_code, floor_number, unit_number, image, status='Active'):
+    def __init__(self, first_name, last_name, gender, email, address1, address2, password, passwordcfm, date_created, phone_number, postal_code, floor_number, unit_number, image, membership='Customer', status='Active'):
         Customer.count_id += 1
         self.__customer_id = Customer.count_id
         self.__first_name = first_name
@@ -20,6 +20,7 @@ class Customer:
         self.__floor_number = floor_number
         self.__unit_number = unit_number
         self.__image = image
+        self.membership = membership
 
     # accessor methods
     def get_customer_id(self):

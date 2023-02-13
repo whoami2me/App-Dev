@@ -68,3 +68,25 @@ color: white;
 .links a{
 margin-left: 4px;
 }
+
+.next_btn{
+color: black;
+background-color: #FFC312;
+width: 100px;
+}
+
+.next_btn:hover{
+color: black;
+background-color: white;
+}
+
+.back_btn{
+color: black;
+background-color: #FFC312;
+width: 100px;
+}
+
+.back_btn:hover{
+color: black;
+background-color: white;
+}

@@ -403,7 +403,7 @@ def login():
                 redirect('login')
         else:
             flash('login failed', 'fail')
-            redirect('/login')
+            redirect('login')
 
     for email in staff_dict:
         staff = staff_dict.get(email)
@@ -478,6 +478,7 @@ def profile_page(id):
         session['image'] = customer.get_image()
 
         return render_template('customerProfilePage.html', form=update_customer_form, customer=customer)
+
 
 @app.route('/changepassword/<int:id>/', methods=['GET', 'POST'])
 def customer_change_password(id):

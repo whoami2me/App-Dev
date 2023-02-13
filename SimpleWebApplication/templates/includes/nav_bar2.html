@@ -47,6 +47,7 @@
   </style>
 </head>
 <body>
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
       <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <div class="sidebar-heading text-left py-4 primary-text fs-4 fw-bold first-text text-white border-bottom"><i
@@ -153,4 +154,5 @@
   }
   </script>
 </body>
+{% endif %}
 </html>

@@ -3,6 +3,7 @@
 {% block silly %}Account Management{% endblock %}
 
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 {% from "includes/_formHelper.html" import render_field %}
 <h5 class="display-5">Update Staff Detail</h5>
 <hr>
@@ -72,5 +73,8 @@
   <br>
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 {% endblock %}
 
