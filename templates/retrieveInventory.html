@@ -48,9 +48,10 @@
 
                 </thead>
                 <tbody>
-                {% for supply in Inventory_list %}
+                {% for supply in Suppliers_list %}
+                {% for order in Inventory_list %}
                 <tr>
-                    <td>{{ supply.get_Inventory_id() }}</td>
+                    <td>{{ order.get_Inventory_id() }}</td>
                     <td>{{ supply.get_Product_name() }}</td>
                     {% if supply.get_Categories_select() == "Ball" %}
                         <td>Ball</td>
@@ -63,13 +64,15 @@
                     {% elif supply.get_Categories_select() == "Accessories" %}
                         <td>Accessories</td>
                     {% endif %}
-                    <td>{{ supply.get_Qty() }}</td>
-                    <td>{{ supply.get_remarks() }}</td>
-                    <td>{{ supply.get_date() }}</td>
-                    {% endfor %}
-                </tr>
 
+                    <td>{{ order.get_Qty() }}</td>
+                    <td>{{ order.get_remarks() }}</td>
+                    <td>{{ order.get_date() }}</td>
+
+                </tr>
                 </tbody>
+                {% endfor %}
+                {% endfor %}
             </table>
             </div>
     </div>

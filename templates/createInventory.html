@@ -29,8 +29,8 @@
                                             {% elif suppliers.get_Categories_select() == "Accessories" %}
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
-                                          <div class="desc"><p>Price /unit: $<span>{{suppliers.get_price()}}</span></p></div>
-                                          <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
+                <div class="desc"><p>Price /unit: $<span>{{suppliers.get_price()}}</span></p></div>
+                <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
                 {% endfor %}
                 <form method="POST" action="" enctype="multipart/form-data">
    <div class="form-group">
@@ -47,6 +47,7 @@
                 </form>
             </div>
         </div>
+
     </div>
 </section>
 

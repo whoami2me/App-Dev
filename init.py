@@ -142,24 +142,24 @@ def create_Inventory(id):
     for key in Suppliers_dict:
         supp = Suppliers_dict.get(key)
         Suppliers_list.append(supp)
-    if request.method == 'POST' and create_Inventory_form.validate():
-        Inventory_dict = {}
-        db = shelve.open('inventory.db', 'c')
-        try:
-            Inventory_dict = db['inventory']
-        except:
-            print("Error in retrieving supply from Inventory.db.")
-        today = date.today()
-        inventory = Inventory.Inventory(create_Inventory_form.Qty.data,create_Inventory_form.remarks.data,today)
-        print("Phase 1 complete")
-        Inventory_dict[inventory.get_Inventory_id()] = inventory
+        if request.method == 'POST' and create_Inventory_form.validate():
+            Inventory_dict = {}
+            db = shelve.open('inventory.db', 'c')
+            try:
+                Inventory_dict = db['inventory']
+            except:
+                print("Error in retrieving supply from Inventory.db.")
+            today = date.today()
+            inventory = Inventory.Inventory(create_Inventory_form.Qty.data,create_Inventory_form.remarks.data,today)
+            print("Phase 1 complete")
+            Inventory_dict[inventory.get_Inventory_id()] = inventory
+            db['inventory'] = Inventory_dict
+            print("Phase 2 complete")
+            db.close()
+            print("Closing successful")
 
-        db['inventory'] = Inventory_dict
-        print("Phase 2 complete")
-        db.close()
-        print("Closing successful")
-        return redirect(url_for('retrieve_Inventory'))
-    return render_template('createInventory.html', form=create_Inventory_form, count=len(Suppliers_list), Suppliers_list=Suppliers_list)
+            return redirect(url_for('retrieve_Inventory'))
+    return render_template('createInventory.html', form=create_Inventory_form, Suppliers_list=Suppliers_list)
 
 
 
@@ -187,10 +187,10 @@ def retrieve_Inventory():
     for key in Inventory_dict:
         supplies = Inventory_dict.get(key)
         Inventory_list.append(supplies)
-        Inventory_list.append(Suppliers_list)
 
 
-    return render_template('retrieveInventory.html',count=(len(Suppliers_list),(Inventory_list)),Suppliers_list=Suppliers_list, Inventory_list=Inventory_list)
+
+    return render_template('retrieveInventory.html',count=len(Inventory_list),Suppliers_list=Suppliers_list, Inventory_list=Inventory_list)
 
 
 @app.errorhandler(404)
