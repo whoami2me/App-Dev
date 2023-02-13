@@ -32,10 +32,11 @@
       <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
           <li class="nav-item dropdown">
           <a class="nav-link mx-4 dropdown-toggle text-white " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="static/ProfilePic/{{ customer.get_image() }}" width="40" height="40" class="rounded-circle"> Welcome, {{ session['name'] }}
+              <img src="" width="40" height="40" class="rounded-circle"> Welcome, {{ session['name'] }}
           </a>
           <ul class="dropdown-menu pr-3" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="/profile/{{ session['Customer'] }}">Account Settings</a></li>
+            <li><a class="dropdown-item" href="/changepassword/{{ session['Customer'] }}">Change Password</a></li>
             <li><a class="dropdown-item" href="/viewRegisteredEvents">Registered Events</a></li>
             <li><a class="dropdown-item" href="/logout">Logout</a></li>
           </ul>

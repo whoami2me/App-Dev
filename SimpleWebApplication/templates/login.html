@@ -22,6 +22,31 @@
 </head>
 <body>
 <form method="POST" action="">
+	{% with errors = get_flashed_messages(category_filter=["error"]) %}
+        {% if errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in errors %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		{% endif %}
+        {% endwith %}
+
+	{% with fails = get_flashed_messages(category_filter=["fail"]) %}
+        {% if fails %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in fails %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endwith %}
 <div class="container">
 	<div class="d-flex justify-content-center h-100">
 		<div class="card">

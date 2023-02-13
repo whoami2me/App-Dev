@@ -94,7 +94,7 @@ class CreateStaffForm(Form):
     postal_code = IntegerField('Postal Code', [validators.input_required(), check_postal_code])
     floor_number = IntegerField('#', [validators.input_required(), check_floor_number])
     unit_number = IntegerField('-', [validators.input_required(), check_unit_number])
-    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg' ,'gif'])])
+    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
 
 class CreateCustomerForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
@@ -129,12 +129,13 @@ class UpdateStaffForm(Form):
     image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
 
 class UpdateCustomerForm(Form):
-    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired(message='First Name is empty')])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired(message='Last Name is empty')])
     gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     address1 = StringField('Address Line 1', [validators.length(max=100), validators.DataRequired()])
     address2 = StringField('Address Line 2 (Optional)', [validators.length(max=100)])
+    membership = SelectField('Membership', choices=[('Employee', 'Employee'), ('Admin', 'Admin')], default='Employee')
     phone_number = IntegerField('Phone Number', [validators.InputRequired(), check_phone_number])
     postal_code = IntegerField('Postal Code', [validators.input_required(), check_postal_code])
     floor_number = IntegerField('#', [validators.input_required(), check_floor_number])
@@ -154,11 +155,10 @@ class RegisterEventForm(Form):
                 'Invalid phone number,it must start with either 8 or 9 and be 8 digit long')
 
 class ChangePassword(Form):
-    password = PasswordField('Password', [validators.Length(min=1), validators.DataRequired()])
-    newpassword = PasswordField(validators=[validators.Length(min=8, message='Too short'), validators.DataRequired(), validators.Regexp(
+    password = PasswordField(validators=[validators.Length(min=8, message='Too short'), validators.DataRequired(), validators.Regexp(
             r'^(?=(.*[a-z]){3,})(?=(.*[A-Z]){2,})(?=(.*[0-9]){2,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$',
             message="Invalid password. It must contain at least one uppercase letter, one lowercase letter, one digit, one special character and be at least 8 characters long.")])
-    passwordcfm = PasswordField('Confirm Password', validators=[validators.EqualTo('password', 'Password mismatch')])
+    passwordcfm = PasswordField('', validators=[validators.EqualTo('password', 'Password mismatch')])
 
 class Login(Form):
     email = EmailField('', [validators.Email(), validators.DataRequired()])

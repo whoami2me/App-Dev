@@ -3,7 +3,7 @@ from idlelib import tooltip
 from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, \
     UpdateStaffForm, CreateCustomerForm, CreateStaffForm, CreateSuppliersForm, CreateInventoryForm, RegisterEventForm, \
-    Login
+    Login, ChangePassword
 import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers, registerEvent
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
@@ -15,7 +15,6 @@ app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
 app.config['UPLOADED_PROFILE_IMAGES_DEST'] = 'static/ProfilePic/'
 geolocator = Nominatim(user_agent='app')
-
 
 
 @app.route('/')
@@ -395,20 +394,28 @@ def login():
         if customer.get_email() == login_form.email.data and customer.get_password() == login_form.password.data:
             session['Customer'] = customer.get_customer_id()
             session['name'] = customer.get_first_name()
-            return redirect(url_for('user_home'))
+            if customer.get_status() == 'Active':
+                return redirect(url_for('user_home'))
+            else:
+                flash('Account has been blocked.', 'error')
+                redirect('login')
         else:
+            flash('login failed', 'fail')
             redirect('/login')
-            flash('login failed')
 
     for email in staff_dict:
         staff = staff_dict.get(email)
         if staff.get_email() == login_form.email.data and staff.get_password() == login_form.password.data:
             session['Staff'] = staff.get_staff_id()
             session['name'] = staff.get_first_name()
-            return redirect(url_for('admin_home'))
+            if staff.get_status() == 'Active':
+                return redirect(url_for('admin_home'))
+            else:
+                flash('Account has been blocked.', 'error')
+                redirect('login')
         else:
-            redirect('/login')
-            flash('login failed')
+            flash('login failed', 'fail')
+            redirect('login')
     return render_template('login.html', form=login_form)
 
 @app.route('/logout')
@@ -442,7 +449,7 @@ def profile_page(id):
 
         db['Customers'] = customers_dict
         db.close()
-
+        flash('Profile has been updated!', 'profileSuccess')
         return redirect(url_for('user_home'))
     else:
         customers_dict = {}
@@ -464,6 +471,65 @@ def profile_page(id):
         update_customer_form.image.data = customer.get_image()
 
         return render_template('customerProfilePage.html', form=update_customer_form, customer=customer)
+
+@app.route('/changepassword/<int:id>/', methods=['GET', 'POST'])
+def customer_change_password(id):
+    customer_change_password_form = ChangePassword(request.form)
+    if request.method == 'POST' and customer_change_password_form.validate():
+        customers_dict = {}
+        db = shelve.open('customer.db', 'w')
+        customers_dict = db['Customers']
+
+        customer = customers_dict.get(id)
+        customer.set_password(customer_change_password_form.password.data)
+        customer.set_passwordcfm(customer_change_password_form.passwordcfm.data)
+
+        db['Customers'] = customers_dict
+        db.close()
+        flash('Password has been changed!', 'passwordSuccess')
+        return redirect(url_for('user_home'))
+
+    else:
+        customers_dict = {}
+        db = shelve.open('customer.db', 'r')
+        customers_dict = db['Customers']
+        db.close()
+
+        customer = customers_dict.get(id)
+        customer_change_password_form.password.data = customer.get_password()
+        customer_change_password_form.passwordcfm.data = customer.get_passwordcfm()
+
+    return render_template('customerChangePassword.html', form=customer_change_password_form)
+
+@app.route('/staffchangepassword/<int:id>/', methods=['GET', 'POST'])
+def staff_change_password(id):
+    staff_change_password_form = ChangePassword(request.form)
+    if request.method == 'POST' and staff_change_password_form.validate():
+        customers_dict = {}
+        db = shelve.open('customer.db', 'w')
+        customers_dict = db['Customers']
+
+        customer = customers_dict.get(id)
+        customer.set_password(staff_change_password_form.password.data)
+        customer.set_passwordcfm(staff_change_password_form.passwordcfm.data)
+
+        db['Customers'] = customers_dict
+        db.close()
+        flash('Password has been changed!', 'passwordSuccess')
+        return redirect(url_for('user_home'))
+
+    else:
+        customers_dict = {}
+        db = shelve.open('customer.db', 'r')
+        customers_dict = db['Customers']
+        db.close()
+
+        customer = customers_dict.get(id)
+        staff_change_password_form.password.data = customer.get_password()
+        staff_change_password_form.passwordcfm.data = customer.get_passwordcfm()
+
+    return render_template('customerChangePassword.html', form=staff_change_password_form)
+
 
 @app.route('/staffprofile/<int:id>/', methods=['GET', 'POST'])
 def staff_profile_page(id):
@@ -533,7 +599,7 @@ def create_staff():
         today = date.today()
         staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data,
                             create_staff_form.email.data, create_staff_form.address1.data,
-                            create_staff_form.address2.data, create_staff_form.gender.data,   create_staff_form.password.data,
+                            create_staff_form.address2.data, create_staff_form.gender.data, create_staff_form.password.data,
                             create_staff_form.passwordcfm.data, today, create_staff_form.phone_number.data,
                             create_staff_form.postal_code.data, create_staff_form.floor_number.data,
                             create_staff_form.unit_number.data, create_staff_form.image.data.filename)
@@ -680,14 +746,14 @@ def update_customer(id):
         customer.set_unit_number(update_customer_form.unit_number.data)
         customer.set_postal_code(update_customer_form.postal_code.data)
         customer.set_status(update_customer_form.status.data)
-        customer.set_image(update_customer_form.image.data.filename)
+        customer.set_image(update_customer_form.image.data)
 
         update_customer_form.image.data.save(app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_customer_form.image.data.filename)
 
         db['Customers'] = customers_dict
         db.close()
 
-        return redirect(url_for('retrieve_customers'))
+        return redirect(url_for('user_home'))
     else:
         customers_dict = {}
         db = shelve.open('customer.db', 'r')

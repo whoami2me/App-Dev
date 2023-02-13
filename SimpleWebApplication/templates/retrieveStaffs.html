@@ -68,14 +68,14 @@
                         {% endif %}
                         <td>
                             <a href="/updateStaff/{{staff.get_staff_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
-                            <a href="#" class="view" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myViewModal_{{staff.get_staff_id()}}" style="color: turquoise"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="#" class="view" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myViewModal_{{ staff.get_staff_id() }}" style="color: turquoise"><i class="material-icons">remove_red_eye</i></a>
                         </td>
             <!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{staff.get_first_name()}} {{staff.get_last_name()}}?');">-->
             <!-- Button to Open the Modal -->
-                <td><a href="#" class="delete" title="delete" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myDeleteModal_{{staff.get_staff_id()}}" style="color: Red"><i class="material-icons">remove_circle</i></a></td>
+                <td><a href="#" class="delete" title="delete" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myDeleteModal_{{ staff.get_staff_id() }}" style="color: Red"><i class="material-icons">remove_circle</i></a></td>
 
             <!-- The Delete Modal -->
-            <div class="modal" id="myDeleteModal_{{staff.get_staff_id()}}">
+            <div class="modal" id="myDeleteModal_{{ staff.get_staff_id() }}">
               <div class="modal-dialog">
                 <div class="modal-content">
 
