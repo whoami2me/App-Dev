@@ -4,7 +4,9 @@
 
 {% block head %}
 {{ super() }}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
 {% endblock %}
 {% block silly %}Dashboard{% endblock %}
 
@@ -106,20 +108,8 @@
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Registered Events Overview</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+                                    <input type="month" onchange="filterChart(this)"/>
+
                                 </div>
                                 <!-- users info -->
                                 <div class="card-body">
@@ -130,27 +120,54 @@
                     </div>
 
                         <script>
-                        var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-                        var yValues = [55, 49, 44, 24, 15];
-                        var barColors = ["red", "green","blue","orange","brown"];
+                            // setup
+                            let events = JSON.parse({{ events | tojson }})
+                            let reg_pax = JSON.parse( {{ reg_pax | tojson }})
+                            const data = {
+                              labels: events,
+                              datasets: [{
+                                label: 'Total Number Registered',
+                                data: reg_pax ,
+                                backgroundColor: [
+                                  'rgba(255, 26, 104, 0.2)',
+                                  'rgba(54, 162, 235, 0.2)',
+                                  'rgba(255, 206, 86, 0.2)',
+                                  'rgba(75, 192, 192, 0.2)',
+                                  'rgba(153, 102, 255, 0.2)',
+                                  'rgba(255, 159, 64, 0.2)',
+                                  'rgba(0, 0, 0, 0.2)'
+                                ],
+                                borderColor: [
+                                  'rgba(255, 26, 104, 1)',
+                                  'rgba(54, 162, 235, 1)',
+                                  'rgba(255, 206, 86, 1)',
+                                  'rgba(75, 192, 192, 1)',
+                                  'rgba(153, 102, 255, 1)',
+                                  'rgba(255, 159, 64, 1)',
+                                  'rgba(0, 0, 0, 1)'
+                                ],
+                                borderWidth: 1
+                              }]
+                            };
 
-                        new Chart("myChart", {
-                          type: "bar",
-                          data: {
-                            labels: xValues,
-                            datasets: [{
-                              backgroundColor: barColors,
-                              data: yValues
-                            }]
-                          },
-                          options: {
-                            legend: {display: false},
-                            title: {
-                              display: true,
-                              text: "Registered Users Per Event"
-                            }
-                          }
-                        });
+                            // config
+                            const config = {
+                              type: 'bar',
+                              data,
+                              options: {
+                                scales: {
+                                  y: {
+                                    beginAtZero: true
+                                  }
+                                }
+                              }
+                            };
+
+                            // render init block
+                            const myChart = new Chart(
+                              document.getElementById('myChart'),
+                              config
+                            );
+
                         </script>
 {% endblock %}
-
