@@ -7,6 +7,7 @@ from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, Cre
 import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers, registerEvent, pdfkit, Voucher, Products,purchaseProduct
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
+import re
 
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
 app.config['Product_Images_Dest'] = 'static/productimages/'
 geolocator = Nominatim(user_agent='app')
+
 
 
 @app.route('/')
@@ -1180,15 +1182,24 @@ def single_product(id):
             purchaseproducts_dict = db['purchaseProducts']
         except:
             print("Error in retrieving Product from database")
-        ####################################################################### Here to
-        custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),product_id.get_product_price(),session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc())
         
-        purchaseproducts_dict[session['Customer']] = custpurchase
-        ######################################################################## Here ^
+        if product_id.get_product_saleoption() == 'Active':
+            price = product_id.get_product_saleprice()
+            price2 = product_id.get_product_saleprice2() 
+        else:
+            price = "${:.2f}".format(product_id.get_product_price())
+            price2 = "${}".format(product_id.get_product_price())
+
+        numericprice = re.sub('[^0-9.]','',price2)
+        calctotalprice = float(numericprice)*float(purchase_product_form.qty.data)
+        totalprice = "${:.2f}".format(calctotalprice)
+        custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),price,session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc(),totalprice)
+        
+        purchaseproducts_dict[custpurchase.get_tempvar()] = custpurchase
+
         db['purchaseProducts'] = purchaseproducts_dict
         db.close()
-        return render_template('purchaseProduct.html',product = p, pqty = purchase_product_form.qty.data) #Return the object and loop in html [TO DO]
-
+        return render_template('purchaseProduct.html',product = p, pqty = purchase_product_form.qty.data) 
     return render_template('singleProduct.html', product=p, form=purchase_product_form)
 
 @app.route('/viewpurchaseProduct')
@@ -1204,21 +1215,12 @@ def viewpurchaseproduct():
     db = shelve.open('product.db','r')
     productdict = db['Products']
     db.close()
-    '''for key in productdict:
-        product = productdict.get(key) #Key is productid
-        for key2 in purchaseproductdict: 
-            purchaseproduct = purchaseproductdict.get(key2) #Key2 is userid
-            if product.get_product_id() == purchaseproduct.get_pProduct_id():
-                customer_list.append(purchaseproduct)'''
-    ###################################### Here to
-    for key in purchaseproductdict: #Key is userid
+
+    for key in purchaseproductdict: #Key is tempvar (uuid)
         purchaseproduct = purchaseproductdict.get(key)
-        if key == session['Customer']: #So if the key(userid) is the same as the ID of the logged in customer, it will append the product object. But because of line 1183 to 1187,
-                                       #I override my previous product object since i save with the customer ID. So now it will replace the old object with the new one since customer ID is same
-                                       # Hence in summary, when the customer purchases another product, it will override the old on in the database since I save with customer ID
+        if purchaseproduct.get_pProduct_userid() == session['Customer']: 
             customer_list.append(purchaseproduct)
-            #Works but only for 1 product
-    ###################################### here
+
     return render_template('viewpurchaseproduct.html',customer = customer_list)
 
 # end of rayden portion

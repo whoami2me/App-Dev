@@ -118,9 +118,9 @@
                             <button class="dropbtn btn btn-warning" type="button" data-toggle="dropdown">Update</button>
                             <div id="myDropdown" class="dropdown-menu">
                               <li><a href="/updateProduct/{{product.get_product_id()}}">Update general details</a></li>
-                              {% if product.get_product_saleoption() == "Active" %}
+              
                               <li><a href="/updateProductSale/{{product.get_product_id()}}">Update sale details</a></li>
-                              {% endif %}
+                             
                               <li><a href="/updateProductImg/{{product.get_product_id()}}">Update image</a></li>
                             </div>
                           </div> 

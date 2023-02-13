@@ -73,6 +73,9 @@ class Product:
         return ('${:.2f} (Discount: {}%)'.format(self.__saleprice2,salepercent))
     def get_product_saleprice1(self): #For init to return percentage in update forms
         return self.__saleprice
+    def get_product_saleprice2(self): 
+        self.__saleprice2 = float(self.__price)-(float(self.__price)*float(self.__saleprice/100))
+        return str(self.__saleprice2)
     def get_product_sold(self):
         return self.__sold
         
