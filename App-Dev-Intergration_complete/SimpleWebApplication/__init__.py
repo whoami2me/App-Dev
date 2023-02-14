@@ -54,22 +54,25 @@ def admin_home():
     products_dict = db['Products']
     productname_list = []
     productsales_list = []
+    producttotalsales = 0
     for key in products_dict:
         productobj = products_dict.get(key)
         productname = productobj.get_product_name()
         productsales = productobj.get_total_earned2()
+        
         productsalesnum = float(re.sub('[^0-9.]','',productsales))
+        producttotalsales += productsalesnum
         productname_list.append(productname)
         productsales_list.append(productsalesnum)
-
-
+    producttotalsales = "${:.2f}".format(producttotalsales)
+    print(producttotalsales)
     print(events)
     print(registered)
     print(productname_list)
     print(productsales_list)
     
 
-    return render_template('home.html', events= json.dumps(events), reg_pax = json.dumps(registered),productname = json.dumps(productname_list),productsales = json.dumps(productsales_list))
+    return render_template('home.html', events= json.dumps(events), reg_pax = json.dumps(registered),productname = json.dumps(productname_list),productsales = json.dumps(productsales_list),producttotalsales=json.dumps(producttotalsales))
 
     
 @app.route('/contactUs')
