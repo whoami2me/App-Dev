@@ -53,7 +53,40 @@ def admin_home():
         events.append(keys)
         registered.append(list_dict[keys])
 
-    return render_template('home.html', events= json.dumps(events), reg_pax = json.dumps(registered))
+
+    vouchers_dict = {}
+    db = shelve.open('voucher.db', 'r')
+    vouchers_dict = db['Vouchers']
+    db.close()
+
+    redvouch_dict = {}
+    db = shelve.open('save.db', 'r')
+    redvouch_dict = db['redeemed']
+    db.close()
+
+    used_dict = {}
+    db = shelve.open('used.db', 'r')
+    used_dict = db['used']
+    db.close()
+
+    count_dict = {}
+    for i in vouchers_dict:
+        count = 0
+        count1 = 0
+        print(i)
+
+        for key in used_dict:
+            if i == int(key):
+                print(f"They are equal, {len(used_dict[key])}")
+                usedcount = len(used_dict[key])
+                count += usedcount
+                count1 += usedcount
+        print(count)
+        count_dict.update({i:count1})
+    keysList = list(count_dict.keys())
+    countList = list(count_dict.values())
+
+    return render_template('home.html', events=json.dumps(events), reg_pax=json.dumps(registered), keysList=json.dumps(keysList), countList=json.dumps(countList))
 
 
 @app.route('/contactUs')

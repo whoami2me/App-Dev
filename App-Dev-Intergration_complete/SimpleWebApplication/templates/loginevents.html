@@ -42,6 +42,30 @@
 {% endblock %}
 
 {% block content%}
+{% with updated = get_flashed_messages(category_filter=["profileSuccess"]) %}
+        {% if updated %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in updated %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endwith %}
+{% with changed = get_flashed_messages(category_filter=["passwordSuccess"]) %}
+        {% if changed %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in changed %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endwith %}
 
         <section class="bg-light">
             <div class="container py-5">
@@ -86,25 +110,25 @@
                 <div class="row ">
                     <div class="col-sm-6 col-lg-4 mb-3">
                         <i class="fa fa-users" style="font-size:48px"></i>
-                        <h6>Tempor aute occaecat</h6>
-                        <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                        <h6>Events</h6>
+                        <p class="text-muted">Join Events for fun and excitment and bring up your football knowledge and be united as one!!!</p>
                     </div>
                     <div class="col-sm-6 col-lg-4 mb-3">
                         <i class="fa fa-calendar" style="font-size:48px"></i>
-                        <h6>Tempor aute occaecat</h6>
-                        <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                        <h6>Special Occasion</h6>
+                        <p class="text-muted">Save up to 40% in discounts for an exciting offer when there is a special Futbol Event</p>
                     </div>
                     <div class="col-sm-6 col-lg-4 mb-3">
                             <i class="fa fa-futbol" style="font-size:48px"></i>
-                            <h6>Tempor aute occaecat</h6>
-                            <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                            <h6>Products</h6>
+                            <p class="text-muted">Take a look at products all related to soccer! Shirts, shoes, gear! Find all you need at Western Corps!</p>
                     </div>
           </div>
           <div class="row">
                 <div class="col-sm-6 col-lg-4 mb-3">
                     <i class="fa fa-rupee" style="font-size:48px"></i>
-                    <h6>Tempor aute occaecat</h6>
-                    <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                    <h6>Redeem Vouchers</h6>
+                    <p class="text-muted">Save on your next purchase with our anticing vouchers that are given out on a regular basis!</p>
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-3">
                     <i class="fa fa-rupee" style="font-size:48px"></i>
@@ -134,24 +158,24 @@
                             <img src="{{url_for('static', filename='img/kits.jpg')}}" class="card-img-top" alt="Product Img">
                             <div class="card-body">
                               <h5 class="card-title">Products</h5>
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                              <a href="#" class="btn btn-primary">Take Me There</a>
+                              <p class="card-text">Take a look at products all related to soccer! Shirts, shoes, gear! Find all you need at Western Corps!</p>
+                              <a href="/homeProduct" class="btn btn-primary">Take Me There</a>
                             </div>
                           </div>
                           <div class="card">
                             <img src="{{url_for('static', filename='img/vouchers.jpg')}}" class="card-img-top" alt="Vouchers Img">
                             <div class="card-body">
                               <h5 class="card-title">Vouchers</h5>
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                              <a href="#" class="btn btn-primary">Take Me There</a>
+                              <p class="card-text">Save on your next purchase with our anticing vouchers that are given out on a regular basis!</p>
+                              <a href="/retrieveVouchersCustomer" class="btn btn-primary">Take Me There</a>
                             </div>
                           </div>
                           <div class="card">
                             <img src="{{url_for('static', filename='img/events.jpg')}}" class="card-img-top" alt="Events Img">
                             <div class="card-body">
                               <h5 class="card-title">Events</h5>
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                              <a href="#" class="btn btn-primary">Take Me There</a>
+                              <p class="card-text">Join Events for fun and excitment and bring up your football knowledge and be united as one!!!</p>
+                              <a href="/Events" class="btn btn-primary">Take Me There</a>
                             </div>
                           </div>
                         </div>
@@ -168,26 +192,16 @@
                     <div class="col-lg-4 mb-4 mb-lg-0">
                     <h5>Western Corp</h5>
                         <ul class="contact-info list-unstyled">
-                            <li><a href="#" class="text-dark">hs</a></li>
-                            <li><a href="#" class="text-dark">+00 000 00 000</a></li>
+                            <li><a href="#" class="text-dark">Trisven Seah</a></li>
+                            <li><a href="#" class="text-dark">+65 9385 0382 </a></li>
                         </ul>
                     </div>
                 <div class="col-lg-4 col-md-6">
                     <h5>Information</h5>
                         <ul class="links list-unstyled">
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                        </ul>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <h5>More Info</h5>
-                        <ul class="links list-unstyled">
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
+                            <li> <a href="/homeProduct" class="text-muted">Products</a></li>
+                            <li> <a href="/retrieveVouchersCustomer" class="text-muted">Vouchers</a></li>
+                            <li> <a href="/Events" class="text-muted"></a>Events</li>
                         </ul>
                 </div>
             </div>
