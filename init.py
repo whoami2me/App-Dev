@@ -129,9 +129,18 @@ def delete_Supplier(id):
 
     return redirect(url_for('retrieve_Supplier'))
 
-@app.route('/createInventory', methods=['GET', 'POST'])
-def create_Inventory():
+
+@app.route('/createInventory/<int:id>', methods=['GET', 'POST'])
+def create_Inventory(id):
     create_Inventory_form = CreateInventoryForm(request.form)
+    Suppliers_dict = {}
+    db = shelve.open('supplier.db', 'r')
+    Suppliers_dict = db['Supplier']
+    db.close()
+    Suppliers_list=[]
+    Supplier = Suppliers_dict.get(id)
+    Suppliers_list.append(Supplier)
+
     if request.method == 'POST' and create_Inventory_form.validate():
         Inventory_dict = {}
         db = shelve.open('inventory.db', 'c')
@@ -140,35 +149,50 @@ def create_Inventory():
         except:
             print("Error in retrieving supply from Inventory.db.")
         today = date.today()
-        inventory = Inventory.Inventory(create_Inventory_form.name.data,create_Inventory_form.type.data,create_Inventory_form.Product_name.data,create_Inventory_form.Qty.data,
-                                            create_Inventory_form.remarks.data,today)
-        print("Phase 1 complete")
-        Inventory_dict[inventory.get_Inventory_id()] = inventory
+        supply = Inventory.Inventory(create_Inventory_form.Qty.data,create_Inventory_form.remarks.data,today)
+
+        Inventory_dict[supply.get_Inventory_id()] = supply
         db['inventory'] = Inventory_dict
-        print("Phase 2 complete")
+
         db.close()
-        print("Closing successful")
 
         return redirect(url_for('retrieve_Inventory'))
-    return render_template('createInventory.html', form=create_Inventory_form)
+    return render_template('createInventory.html', form=create_Inventory_form,Suppliers_list=Suppliers_list)
 
+def Combine():
+    suppliers_dict = {}
+    db = shelve.open('supplier.db', 'r')
+    suppliers_dict = db['Supplier']
+    db.close()
 
+    inventory_dict = {}
+    db = shelve.open('inventory.db', 'r')
+    inventory_dict = db['inventory']
+    db.close()
 
+    combined_db = shelve.open('combined.db', 'c')
+    combined_db['suppliers'] = suppliers_dict
+    combined_db['inventory'] = inventory_dict
+    combined_db.close()
 
 @app.route('/retrieveInventory')
 def retrieve_Inventory():
-    Inventory_dict = {}
+    Combine()
 
-    db = shelve.open('inventory.db', 'r')
-    Inventory_dict = db['inventory']
+    combine_dict = {}
+    db = shelve.open('combined.db', 'r')
+    try:
+        combine_dict = db['combine']
+    except:
+        print("Error in retrieving supply from combined.db.")
     db.close()
 
-    Inventory_list = []
-    for key in Inventory_dict:
-        supply = Inventory_dict.get(key)
-        Inventory_list.append(supply)
+    combine_list = []
+    supply = combine_dict.get(id)
+    combine_list.append(supply)
+    print(combine_list)
 
-    return render_template('retrieveInventory.html',count=len(Inventory_list), Inventory_list=Inventory_list)
+    return render_template('retrieveInventory.html', count=len(combine_list), combine_list=combine_list)
 
 
 @app.route("/invoice/<int:id>")
@@ -177,13 +201,14 @@ def invoice(id):
 
     db = shelve.open('inventory.db', 'r')
     Inventory_dict = db['inventory']
+    Inventory_dict.get(id)
     db.close()
-    Inventory = Inventory_dict.get(id)
+
 
     Inventory_list = []
     for key in Inventory_dict:
-        supply = Inventory_dict.get(key)
-        Inventory_list.append(supply)
+        suply = Inventory_dict.get(key)
+        Inventory_list.append(suply)
 
     Suppliers_dict = {}
     db = shelve.open('supplier.db', 'r')
@@ -195,7 +220,7 @@ def invoice(id):
         supp = Suppliers_dict.get(key)
         Suppliers_list.append(supp)
 
-    return render_template("invoice.html", Inventory_list=Inventory_list,Suppliers_list=Suppliers_list )
+    return render_template("invoice.html", Inventory_list=Inventory_list, Suppliers_list=Suppliers_list)
 
 
 @app.errorhandler(404)

@@ -38,7 +38,8 @@
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>Product Name</th>
+                        <th>Product</th>
+                        <th>From</th>
                         <th>Categories</th>
                         <th>Order Quantity</th>
                         <th>Remarks</th>
@@ -49,18 +50,19 @@
 
                 </thead>
                 <tbody>
-                {% for order in Inventory_list %}
+                {% for order in Combine_list %}
                 <tr>
-                    <td>{{ order.get_Inventory_id() }}</td>
+                    <td>{{ order.get_Suppliers_id() }}</td>
                     <td>{{ order.get_Product_name() }}</td>
-                    <td>{{ order.get_type() }}</td>
+                    <td>{{ order.get_Company_name() }}</td>
+                    <td>{{ order.get_Categories_select() }}</td>
                     <td>{{ order.get_Qty() }}</td>
                     <td>{{ order.get_remarks() }}</td>
                     <td>{{ order.get_date() }}</td>
-                    <td>
+                    <!--<td>
                         <button type="button" class="btn btn-warning" onclick="location.href='/invoice/{{order.get_Inventory_id()}}'" data-bs-target="{{order.get_Inventory_id()}}">view</button>
                                           <form action="{{url_for('invoice', id=order.get_Inventory_id())}}" method="POST">
-                    </td>
+                    </td>-->
                 </tr>
                 </tbody>
                 {% endfor %}

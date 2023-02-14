@@ -1,9 +1,8 @@
-function multiplyBy()
-       {
-          num1 = document.getElementById(
-            "price").value;
-          num2 = document.getElementById(
-            "qty").value;
-          document.getElementByClass(
-            "result").innerHTML = num1 * num2;
-       }
+ $(document).ready(function() {
+
+      let price = parseFloat($(this).find('#price').text().replace('$', ''));
+      let qty = parseInt($(this).find('#qty').text());
+      let result = price * qty;
+      $(this).find('.result').text('$' + result.toFixed(2));
+
+  });
