@@ -176,15 +176,11 @@
       </td>
       <td>
 
-         <a href="#" id="order" class="delete" title="Order" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2_{{suppliers.get_Suppliers_id()}}"><i class="fa-brands fa-jedi-order"></i></a>
-<script>
-  var link = document.getElementById('order');
-  if (document.getElementsByClassName('Type2').length > 0) {
-    link.disabled = true;
-  } else {
-    link.disabled = false;
-  }
-</script>
+                                            {% if suppliers.get_status() == "Available" %}
+          <a href="#"class="delete" title="Order" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2_{{suppliers.get_Suppliers_id()}}"><i class="fa-brands fa-jedi-order"></i></a>
+                                            {% elif suppliers.get_status() == "Not Available" %}
+
+                                            {% endif %}
          <div class="modal fade" id="exampleModal2_{{suppliers.get_Suppliers_id()}}" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">

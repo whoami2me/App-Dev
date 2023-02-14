@@ -139,7 +139,7 @@ def create_Inventory(id):
     Suppliers_list=[]
     Supplier = Suppliers_dict.get(id)
     Suppliers_list.append(Supplier)
-    print(Suppliers_list)
+
 
     if request.method == 'POST' and create_Inventory_form.validate():
         Inventory_dict = {}
@@ -150,68 +150,59 @@ def create_Inventory(id):
         except:
             print("Error in retrieving supply from Inventory.db.")
         today = date.today()
-        supply = Inventory.Inventory(create_Inventory_form.Qty.data,create_Inventory_form.remarks.data,today,'Processing')
+        supply = Inventory.Inventory(create_Inventory_form.Order_Qty.data,create_Inventory_form.Order_remarks.data,today,'Processing')
 
         Inventory_dict[supply.get_Inventory_id()] = supply
         db['inventory'] = Inventory_dict
-
         db.close()
         Supply = Inventory_dict.get(id)
         Inventory_list.append(Supply)
-        print(Inventory_list)
+
 
         return redirect(url_for('retrieve_Inventory'))
     return render_template('createInventory.html', form=create_Inventory_form,Suppliers_list=Suppliers_list)
 
-def combine_dbs():
-    # Retrieve the suppliers dictionary
-    suppliers_dict = {}
-    db = shelve.open('supplier.db', 'r')
-    suppliers_dict = db['Supplier']
 
-    # Retrieve the inventory dictionary
+@app.route('/retrieveInventory')
+def retrieve_Inventory():
+    Suppliers_dict = {}
+    db = shelve.open('supplier.db', 'r')
+    Suppliers_dict = db['Supplier']
+    db.close()
+
+    Suppliers_list = []
+    for key in Suppliers_dict:
+        supp = Suppliers_dict.get(key)
+        Suppliers_list.append(supp)
+
     inventory_dict = {}
     db = shelve.open('inventory.db', 'r')
     inventory_dict = db['inventory']
-
-    # Open the combined database and copy the contents of the two original databases into it
-    db = shelve.open('combined.db', 'c')
-    db['suppliers'] = suppliers_dict
-    db['inventory'] = inventory_dict
     db.close()
-@app.route('/retrieveInventory')
-def retrieve_Inventory():
-    combine_dbs()
-    combine_list = []
 
-    db = shelve.open('combined.db', 'r')
-        # Retrieve the combined dictionary
-    combine_dict = db['suppliers']
-    combine_dict.update(db['inventory'])
+    Inventory_list = []
+    for key in inventory_dict:
+        Supply = inventory_dict.get(key)
+        Inventory_list.append(Supply)
 
-        # Get the item by id and add it to the list
-    supply = combine_dict.get(id)
-    combine_list.append(supply)
 
-    print(combine_list)
+    # Retrieve the inventory dictionary
 
-    return render_template('retrieveInventory.html', count=len(combine_list), combine_list=combine_list)
+    return render_template('retrieveInventory.html', count=len(Inventory_list),Suppliers_list=Suppliers_list,Inventory_list=Inventory_list)
 
 
 @app.route("/invoice/<int:id>")
 def invoice(id):
     Inventory_dict = {}
-
     db = shelve.open('inventory.db', 'r')
     Inventory_dict = db['inventory']
     Inventory_dict.get(id)
     db.close()
 
-
     Inventory_list = []
     for key in Inventory_dict:
-        suply = Inventory_dict.get(key)
-        Inventory_list.append(suply)
+        supply = Inventory_dict.get(key)
+        Inventory_list.append(supply)
 
     Suppliers_dict = {}
     db = shelve.open('supplier.db', 'r')
