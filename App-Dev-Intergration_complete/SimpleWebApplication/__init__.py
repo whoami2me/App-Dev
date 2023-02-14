@@ -22,7 +22,6 @@ geolocator = Nominatim(user_agent='app')
 
 @app.route('/')
 def user_home():
-
     if session.get('name') is not None:
         pass
     else:
