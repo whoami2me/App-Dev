@@ -6,13 +6,13 @@
 {{ super() }}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+
 {% endblock %}
 {% block silly %}Dashboard{% endblock %}
 
 
 {% block content %}
-
 {% with updated = get_flashed_messages(category_filter=["profileSuccess"]) %}
         {% if updated %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -47,8 +47,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Earnings (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                                Total Earnings </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalsales"></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -142,38 +142,8 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
-
-
-                       <div class="col-xl-8 col-md-12 col-lg-12">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Vouchers Overview</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- users info -->
-                                <div class="card-body">
-                                    <canvas id="myVoucherChart" style="width:100%"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="row">
 
                         <!-- Area Chart -->
@@ -182,7 +152,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Registered Events Overview</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Revenue per Item Overview</h6>
 
 
                                 </div>
@@ -194,6 +164,32 @@
                         </div>
 
                     </div>
+
+
+                    <div class="row">
+
+                        <!-- Area Chart -->
+                        <div class="col-xl-8 col-md-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Vouchers Overview</h6>
+
+
+                                </div>
+                                <!-- users info -->
+                                <div class="card-body">
+                                    <canvas id="myVoucherChart" style="width:100%"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
 
                         <script>
                             // setup
@@ -244,7 +240,46 @@
                               document.getElementById('myChart'),
                               config
                             );
+                            ////////////////////////////////////////////////////
 
+                            let productname = JSON.parse({{ productname | tojson }})
+                            let productsale = JSON.parse( {{ productsales | tojson }})
+                            let productotalsales = JSON.parse( {{ producttotalsales | tojson }})
+                            document.getElementById('totalsales').innerHTML = productotalsales
+                            var xValues = productname;
+                            var yValues = productsale;
+                            var barColors = ['rgba(255, 26, 104, 0.2)','rgba(54, 162, 235, 0.2)',"blue","orange","brown"];
+
+
+                            new Chart("productChart", {
+                            type: "bar",
+                            data: {
+                                labels: xValues,
+                                datasets: [{
+                                backgroundColor: [
+                                  'rgba(255, 26, 104, 0.2)',
+                                  'rgba(54, 162, 235, 0.2)',
+                                  'rgba(255, 206, 86, 0.2)',
+                                  'rgba(75, 192, 192, 0.2)',
+                                  'rgba(153, 102, 255, 0.2)',
+                                  'rgba(255, 159, 64, 0.2)',
+                                  'rgba(0, 0, 0, 0.2)'
+                                ],
+                                borderColor: [
+                                  'rgba(255, 26, 104, 1)',
+                                  'rgba(54, 162, 235, 1)',
+                                  'rgba(255, 206, 86, 1)',
+                                  'rgba(75, 192, 192, 1)',
+                                  'rgba(153, 102, 255, 1)',
+                                  'rgba(255, 159, 64, 1)',
+                                  'rgba(0, 0, 0, 1)'
+                                ],borderWidth: 1,
+                                data: yValues,
+                                label:'Sales earned ($)'
+                                }]
+                            },
+
+                            });
 
                             let Keyslist = JSON.parse({{ keysList | tojson }})
                             let countList = JSON.parse( {{ countList | tojson }})
@@ -283,43 +318,5 @@
 
                             });
 
-                            let productname = JSON.parse({{ productname | tojson }})
-                            let productsale = JSON.parse( {{ productsales | tojson }})
-                            var xValues = productname;
-                            var yValues = productsale;
-                            var barColors = ['rgba(255, 26, 104, 0.2)','rgba(54, 162, 235, 0.2)',"blue","orange","brown"];
-
-
-                            new Chart("productChart", {
-                            type: "bar",
-                            data: {
-                                labels: xValues,
-                                datasets: [{
-                                backgroundColor: [
-                                  'rgba(255, 26, 104, 0.2)',
-                                  'rgba(54, 162, 235, 0.2)',
-                                  'rgba(255, 206, 86, 0.2)',
-                                  'rgba(75, 192, 192, 0.2)',
-                                  'rgba(153, 102, 255, 0.2)',
-                                  'rgba(255, 159, 64, 0.2)',
-                                  'rgba(0, 0, 0, 0.2)'
-                                ],
-                                borderColor: [
-                                  'rgba(255, 26, 104, 1)',
-                                  'rgba(54, 162, 235, 1)',
-                                  'rgba(255, 206, 86, 1)',
-                                  'rgba(75, 192, 192, 1)',
-                                  'rgba(153, 102, 255, 1)',
-                                  'rgba(255, 159, 64, 1)',
-                                  'rgba(0, 0, 0, 1)'
-                                ],borderWidth: 1,
-                                data: yValues,
-                                label:'Sales earned ($)'
-                                }]
-                            },
-
-                            });
-
                         </script>
-
 {% endblock %}

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,15 +63,6 @@
                   </div>
                 </div>
                 <hr>
-                <div class="sidenav-dropdown">
-                <button class="dropdown-btn" ><i class="fas fa-project-diagram me-2"></i>Projects<i class="fa fa-caret-down"></i>
-                </button>
-                  <div class="dropdown-container">
-                    <a href="#">Create Project</a>
-                    <a href="#">View Projects</a>
-                  </div>
-                </div>
-                <hr>
                 {% if session['membership'] == "Admin" %}
                 <div class="sidenav-dropdown">
                   <button class="dropdown-btn" ><i class="fas fa-users me-2"></i>Account Management<i class="fa fa-caret-down"></i>
@@ -106,11 +96,19 @@
                   </div>
                 </div>
               <hr>
-              <div class="sidenav-dropdown">
+                <div class="sidenav-dropdown">
                   <button class="dropdown-btn"><i class="fas fa-gift me-2"></i>Product Management<i class="fa fa-caret-down"></i>
                   </button>
                   <div class="dropdown-container">
-                    <a href="#">Products</a>
+                    <a href="/createProduct">Create Products</a>
+                    <a href="/retrieveProduct">View Products</a>
+                  </div>
+                </div>
+              <hr>
+              <div class="sidenav-dropdown">
+                  <button class="dropdown-btn"><i class="fas fa-gift me-2"></i>Inventory Management<i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-container">
                       <a href="/createInventory">Create Inventory</a>
                     <a href="/retrieveInventory">Inventory</a>
                   </div>
