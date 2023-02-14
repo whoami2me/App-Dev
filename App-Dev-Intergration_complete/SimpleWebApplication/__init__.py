@@ -167,18 +167,49 @@ def events():
 
         offline_list = []
         for key in offline_dict:
-            print(key)
             offline = offline_dict.get(key)
-            if offline.get_name() in list_dict:
-                offline.set_reg_pax(list_dict[offline.get_name()])
-            else:
-                offline.set_reg_pax(0)
-            offline_list.append(offline)
+            if (offline.get_date() <= date.today() <= offline.get_end_date()) and (
+                    offline.get_reg_pax() < offline.get_pax()) and (
+                    offline.get_reg_status() == 'Active' or offline.get_reg_status() == 'A'):
+                    if offline.get_name() in list_dict:
+                        offline.set_reg_pax(list_dict[offline.get_name()])
+                        offline_list.append(offline)
+                    else:
+                        offline.set_reg_pax(0)
+                        offline_list.append(offline)
 
         db['Offline'] = offline_dict
         db.close()
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list, regeve_list=regeve_list, user=session['name'])
+
+
+@app.route('/viewDetails/<evename>')
+def vev_details(evename):
+
+    online_dict = {}
+    db = shelve.open('online.db', 'r')
+    online_dict = db['Online']
+    db.close()
+
+    online_list = []
+    for key in online_dict:
+        online = online_dict.get(key)
+        if online.get_name() == evename:
+            online_list.append(online)
+
+    offline_dict = {}
+    db = shelve.open('offline.db', 'r')
+    offline_dict = db['Offline']
+    db.close()
+
+    offline_list = []
+    for key in offline_dict:
+        offline = offline_dict.get(key)
+        if offline.get_name() == evename:
+            offline_list.append(offline)
+
+    return render_template('viewdetailseve.html', offline_list=offline_list, online_list=online_list)
 
 @app.route('/viewRegisteredEvents')
 def view_regeve():
@@ -379,10 +410,10 @@ def retrieve_events():
 
     offline_list = []
     for key in offline_dict:
-        print(key)
         offline = offline_dict.get(key)
         if offline.get_name() in list_dict:
             offline.set_reg_pax(list_dict[offline.get_name()])
+
         else:
             offline.set_reg_pax(0)
         offline_list.append(offline)

@@ -39,7 +39,7 @@
                                       <div class="card-text">
                                         <p>{{ online.get_description() }}</p>
                                       </div>
-                                      <a href="" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
+                                      <a href="/viewDetails/{{ online.get_name()}}" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
 
                                         {% if online.get_name() in regeve_list %}
                                         <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
@@ -98,7 +98,7 @@
               <div class="card-text">
                 <p>{{ online.get_description() }}</p>
               </div>
-              <a href="" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
+              <a href="/viewDetails/{{ online.get_name()}}" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
 
 
                 {% if online.get_name() in regeve_list %}
@@ -131,7 +131,7 @@
               <div class="card-text">
                 <p>{{ offline.get_description() }}</p>
               </div>
-              <a href="#" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
+              <a href="/viewDetails/{{ offline.get_name()}}" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
 
                 {% if offline.get_name() in regeve_list %}
                 <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>

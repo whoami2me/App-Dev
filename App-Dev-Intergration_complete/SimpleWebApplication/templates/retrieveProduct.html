@@ -4,25 +4,17 @@
 
 {% block silly %}Product Management{% endblock %}
 
-{% block head%}
-{{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <!--Data Tables-->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-    <script src="/retrieveProduct.js"></script>
-{% endblock %}
-{% block content %}
 
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 {% if 'product_created' in session %}
 <div class="alert alert-success alert-dismissible">
@@ -40,7 +32,7 @@
 {{ session.pop('product_deleted', None) }} was deleted.
 </div>
 {% endif %}
-<div class="container" style="max-width: 1365px;">
+<div class="container" style="max-width: fit-content;">
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
@@ -85,10 +77,10 @@
                         <td><img class="myImages" id="myImg" src="/static/productimages/{{product.get_product_image() }}" alt= "{{ product.get_product_name() }}&nbspImage" width="100" height="50">
                         <!-- The Modal -->
                         <div id="myModal" class="modal">
-                                
+
                         <!-- Modal Content (The Image) -->
                         <img class="modal-content" id="img01">
-                      
+
                         <!-- Modal Caption (Image Text) -->
                         <div id="caption"></div>
                         </div></td>
@@ -101,7 +93,7 @@
                           <td>Nil</td>
                         {% endif %}
                         <td>{{ product.get_product_desc() }}</td>
-                        <td>{{ product.get_product_qty() }}</td>    
+                        <td>{{ product.get_product_qty() }}</td>
                         <td>{{ product.get_product_sold() }}</td>
                         <td>{{ product.get_total_earned2() }}</td>
                         <td>{{ product.get_product_group() }}</td>
@@ -116,19 +108,19 @@
                         {% elif product.get_product_saleoption() == "Inactive" %}
                           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="status text-danger">&bull;</span></td>
                         {% endif %}
-                        
-                        <td> <div class="dropdown">
-                            <button class="dropbtn btn btn-warning" type="button" data-toggle="dropdown">Update</button>
-                            <div id="myDropdown" class="dropdown-menu">
-                              <li><a href="/updateProduct/{{product.get_product_id()}}">Update general details</a></li>
-              
-                              <li><a href="/updateProductSale/{{product.get_product_id()}}">Update sale details</a></li>
-                             
-                              <li><a href="/updateProductImg/{{product.get_product_id()}}">Update image</a></li>
-                            </div>
-                          </div> 
-                        </td>
+
                         <td>
+                          <div class="dropdown">
+                            <button class="dropbtn btn btn-warning" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 10px;">
+                              Update
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="/updateProduct/{{product.get_product_id()}}">Update general details</a>
+                              <a class="dropdown-item" href="/updateProductSale/{{product.get_product_id()}}">Update sale details</a>
+                              <a class="dropdown-item" href="/updateProductImg/{{product.get_product_id()}}">Update image</a>
+                            </div>
+                          </div>
+
                           <form action="/deleteProduct/{{product.get_product_id()}}" method="POST">
                           <!-- Button to Open the Modal -->
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{ product.get_product_id() }}">
