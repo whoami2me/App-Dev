@@ -4,6 +4,8 @@
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
+
 
 
 <section id="create-Inventory">
@@ -50,4 +52,7 @@
 </section>
 
 
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 {% endblock %}

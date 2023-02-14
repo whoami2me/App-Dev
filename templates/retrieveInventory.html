@@ -15,6 +15,7 @@
 {% endblock %}
 
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 <div class="container">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -43,9 +44,11 @@
                         <th>Categories</th>
                         <th>Order Quantity</th>
                         <th>Remarks</th>
+                        <th>Status</th>
                         <th>Date Created</th>
                         <th></th>
-                        <th>Status</th>
+                        <th></th>
+
 
                     </tr>
 
@@ -72,18 +75,24 @@
                     {% for supply in Inventory_list %}
                     <td>{{ supply.get_Order_Qty() }}</td>
                     <td>{{ supply.get_Order_remarks() }}</td>
+
+                        {% if supply.get_status() == "Processing" %}
+                        <td><span class="status text-alert">&bull;</span>Processing</td>
+                            {% elif supply.get_status() == "Delivered" %}
+                        <td><span class="status text-success">&bull;</span>Delivered</td>
+                        {% endif %}
                     <td>{{ supply.get_date() }}</td>
                      <td>
                      <button type="button" class="btn btn-warning" onclick="location.href='/invoice/{{supply.get_Inventory_id()}}'" data-bs-target="{{supply.get_Inventory_id()}}">view</button>
                                           <form action="{{url_for('invoice', id=supply.get_Inventory_id())}}" method="POST">
                      </td>
-                    <td>
-                        {% if supply.get_status() == "" %}
-                        <td><span class="status text-success">&bull;</span>Available</td>
-                            {% elif supply.get_status() == "Not Available" %}
-                        <td><span class="status text-danger">&bull;</span>Not Available</td>
-                        {% endif %}
-                    </td>
+                     <td>
+                         <button type="button" id="check" class="btn btn-success" data-bs-target="{{supply.get_Inventory_id()}}">Delivered?</button>
+                         <script>
+
+                         </script>
+
+                     </td>
                     {% endfor %}
                 </tr>
 
@@ -94,4 +103,7 @@
             </div>
     </div>
 </div>
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 {% endblock %}

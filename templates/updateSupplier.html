@@ -3,7 +3,7 @@
 {% block silly %}Update Supplier{% endblock %}
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
-
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 <h1 class="display-4">Update Supplier</h1>
 
 <form method="POST" action="">
@@ -45,4 +45,7 @@
     <br>
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 {% endblock %}
