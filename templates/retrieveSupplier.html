@@ -16,6 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='js/retrieveSupplier.js') }}"></script>
 
 {% endblock %}
 
@@ -119,9 +120,9 @@
                                           <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
                                             {% if suppliers.get_status() == "Available" %}
-                                            <div class="Type"><p>Status: <span>Available</span></p></div>
+                                            <div class="Type1"><p>Status: <span>Available</span></p></div>
                                             {% elif suppliers.get_status() == "Not Available" %}
-                                            <div class="Type"><p>Status: <span>Not Available</span></p></div>
+                                            <div class="Type2"><p>Status: <span>Not Available</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Date created: <span>{{ suppliers.get_date() }}</span></p></div>
                                       </div>
@@ -175,7 +176,15 @@
       </td>
       <td>
 
-          <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2_{{suppliers.get_Suppliers_id()}}"><i class="fa-brands fa-jedi-order"></i></a>
+         <a href="#" id="order" class="delete" title="Order" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2_{{suppliers.get_Suppliers_id()}}"><i class="fa-brands fa-jedi-order"></i></a>
+<script>
+  var link = document.getElementById('order');
+  if (document.getElementsByClassName('Type2').length > 0) {
+    link.disabled = true;
+  } else {
+    link.disabled = false;
+  }
+</script>
          <div class="modal fade" id="exampleModal2_{{suppliers.get_Suppliers_id()}}" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -204,9 +213,10 @@
 
 
 
-                                          <button type="button" class="btn btn-warning" onclick="location.href='/createInventory/{{suppliers.get_Suppliers_id()}}'" data-bs-target="{{suppliers.get_Suppliers_id()}}">Order</button>
+                                          <button type="button"  class="btn btn-warning" onclick="location.href='/createInventory/{{suppliers.get_Suppliers_id()}}'" data-bs-target="{{suppliers.get_Suppliers_id()}}">Order</button>
                                           <form action="{{url_for('create_Inventory', id=suppliers.get_Suppliers_id())}}" method="POST">
-                                      </div>
+                                  </div>
+
                                   </div>
                               </div>
                             </div>

@@ -1,11 +1,12 @@
 class Inventory:
     count_id = 0
-    def __init__(self,Qty,remarks,date):
+    def __init__(self,Qty,remarks,date,status):
         Inventory.count_id +=1
         self.__Inventory_id = Inventory.count_id
         self.__Qty = Qty
         self.__remarks = remarks
         self.__date = date
+        self.__status =status
 
     def get_Inventory_id(self):
         return self.__Inventory_id
@@ -17,7 +18,8 @@ class Inventory:
         return self.__remarks
     def get_date(self):
         return self.__date
-
+    def get_status(self):
+        return self.__status
     def set_Inventory_id(self, Inventory_id):
         self.__Inventory_id = Inventory_id
     def set_Qty(self,Qty):
@@ -28,5 +30,6 @@ class Inventory:
         self.__remarks = remarks
     def set_date(self,date):
         self.__date = date
-
+    def set_status(self,status):
+        self.__status = status
 

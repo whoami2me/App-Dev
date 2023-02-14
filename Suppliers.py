@@ -1,6 +1,6 @@
 class Suppliers:
     count_id = 0
-    def __init__(self,Company_name,telephone,website,email,Address1,floor_number, unit_number,postal,Payment,Categories_select,Product_name,price,Qty,remarks,date,status,):
+    def __init__(self,Company_name,telephone,website,email,Address1,floor_number, unit_number,postal,Payment,Categories_select,Product_name,price,Qty,remarks,date,status):
         Suppliers.count_id +=1
         self.__Suppliers_id = Suppliers.count_id
         self.__Company_name = Company_name
