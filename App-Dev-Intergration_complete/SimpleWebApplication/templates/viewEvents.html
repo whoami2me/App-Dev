@@ -91,8 +91,7 @@
                     {% elif online.get_location() == "C" %}
                     <p><i class="bi bi-geo-alt p-1"></i>Cisco Webex</p>
 				    {% endif %}
-                    <p><i class="bi bi-calendar-fill p-1"></i>{{ online.get_date() }}</p>
-
+                    <p><i class="bi bi-calendar-fill p-1"></i>{{ online.get_date() }} to {{ online.get_end_date() }}</p>
               </div>
 
               <div class="card-text">
@@ -124,7 +123,7 @@
                 <h2>{{ offline.get_name() }}</h2>
               </div>
                 <div class="card-text">
-                <p><i class="bi bi-geo-alt p-1"></i>{{ offline.get_location() }}</p><p><i class="bi bi-calendar-fill p-1"></i>{{ offline.get_date() }}</p>
+                <p><i class="bi bi-geo-alt p-1"></i>{{ offline.get_location() }}</p><p><i class="bi bi-calendar-fill p-1"></i>{{ offline.get_date() }} to {{ offline.get_end_date() }}</p>
                     <p><i class="bi bi-bag-plus-fill p-1"></i>{{ offline.get_slots_left_pax() }} slots left!!!</p>
               </div>
 
