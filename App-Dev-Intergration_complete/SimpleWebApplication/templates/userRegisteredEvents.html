@@ -45,7 +45,17 @@
                 <h3 class="card-title">{{ regeve.get_event_name() }}</h3>
                 <p>Date: {{ regeve.get_eve().get_date() }}</p>
                 <p>Description: {{ regeve.get_eve().get_description()}}</p>
+
+
+				{% if online.get_location() == "Z" %}
+                <p>Zoom</p>
+                {% elif online.get_location() == "G" %}
+                <p>Google Meets</p>
+                {% elif online.get_location() == "C" %}
+                <p>Cisco Webex</p>
+                {% else %}
                 <p>Location: {{ regeve.get_eve().get_location() }}</p>
+                {% endif %}
 
                 <form action="{{url_for('cancelEvent', id=regeve.get_reg_user_id()) }}" method="POST">
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{regeve.get_reg_user_id()}}">Cancel Event</button>

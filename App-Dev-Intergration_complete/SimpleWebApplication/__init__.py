@@ -300,7 +300,6 @@ def create_offline():
 def register_event(evename):
 
     create_regeve_form = RegisterEventForm(request.form)
-
     if request.method == 'POST' and create_regeve_form.validate():
 
         online_dict = {}
@@ -343,8 +342,6 @@ def register_event(evename):
             if key.get_name() == evename:
                 reg_eve.set_eve(key)
 
-        print(reg_eve.get_eve())
-
         regeve_dict[reg_eve.get_reg_user_id()] = reg_eve
         db['Register_Events'] = regeve_dict
         db.close()
@@ -363,15 +360,19 @@ def register_event(evename):
         customers_dict = db['Customers']
         db.close()
 
+        customers_list = []
         for key in customers_dict:
             customer = customers_dict.get(key)
-            if customer.get_first_name() == session['name']:
-                create_regeve_form.first_name.data = customer.get_first_name()
-                create_regeve_form.last_name.data = customer.get_last_name()
-                create_regeve_form.email.data = customer.get_email()
-                create_regeve_form.phone_number.data = customer.get_phone_number()
+            customers_list.append(customer)
 
-            return render_template('registerEvent.html', form=create_regeve_form)
+        for keys in customers_list:
+            if keys.get_first_name() == session['name']:
+                create_regeve_form.first_name.data = keys.get_first_name()
+                create_regeve_form.last_name.data = keys.get_last_name()
+                create_regeve_form.email.data = keys.get_email()
+                create_regeve_form.phone_number.data = keys.get_phone_number()
+
+        return render_template('registerEvent.html', form=create_regeve_form, customer=customer)
 
 
 @app.route('/retrieveEvents')
@@ -394,19 +395,26 @@ def retrieve_events():
             list_dict[regeve_dict.get(key).get_event_name()] += 1
 
     online_dict = {}
-    db = shelve.open('online.db', 'r')
+    db = shelve.open('online.db', 'w')
     online_dict = db['Online']
     db.close()
 
     online_list = []
     for key in online_dict:
         online = online_dict.get(key)
+
+        if date.today() > online.get_end_date():
+            online.set_reg_status('C')
+            online.set_event_status('C')
+        else:
+            online.set_reg_status('Active')
+            online.set_event_status('Active')
+
         online_list.append(online)
 
     offline_dict = {}
     db = shelve.open('offline.db', 'w')
     offline_dict = db['Offline']
-
 
     offline_list = []
     for key in offline_dict:
@@ -420,7 +428,6 @@ def retrieve_events():
 
     db['Offline'] = offline_dict
     db.close()
-
 
     return render_template('retrieveEvents.html', count=len(online_list), count1=len(offline_list), online_list=online_list, offline_list=offline_list)
 
