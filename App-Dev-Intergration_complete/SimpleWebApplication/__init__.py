@@ -557,6 +557,7 @@ def login():
             session['Customer'] = customer.get_customer_id()
             session['name'] = customer.get_first_name()
             session['image'] = customer.get_image()
+            session['membership'] = customer.get_membership()
             if customer.get_status() == 'Active':
                 return redirect(url_for('user_home'))
             else:
@@ -588,6 +589,8 @@ def logout():
     session.pop('Customer', None)
     session.pop('Staff', None)
     session.pop('name', None)
+    session.pop('image', None)
+    session.pop('membership', None)
 
     return redirect(url_for('user_home'))
 
