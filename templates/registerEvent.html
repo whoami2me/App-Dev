@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Register Event{% endblock %}
+
+{% block head %}
+{{ super() }}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+
+
+
+<style>
+.btn-md {
+    padding: 5px 15px;
+    font-size: 15px;
+    width:103%;
+}
+</style>
+
+
+<div class="container-xl">
+
+<div class="card bg-light">
+<article class="card-body mx-auto" style="max-width: 2000px;">
+	<h4 class="card-title mt-3 text-center">Register Event</h4>
+	<p class="text-center">Register exciting Events</p>
+
+	<form method="POST" action="">
+	<div class="form-group">
+		    <div class="form-group"><i class="fas fa-user me-2"></i>{{ render_field(form.first_name, class="form-control",onkeydown="return false;" ) }}</div>
+    </div>
+		<div class="form-group "><div class="form-group"><i class="fas fa-user me-2"></i>{{ render_field(form.last_name, class="form-control", onkeydown="return false;" ) }}</div></div>
+    <div class="form-group ">
+		    <div class="form-group"><i class="fas fa-envelope me-2"></i>{{ render_field(form.email, class="form-control", onkeydown="return false;" ) }}</div>
+    </div> <!-- form-group// -->
+
+    <div class="form-group ">
+		<div class="form-group"><i class="fas fa-phone me-2"></i>{{ render_field(form.phone_number, class="form-control", onkeydown="return false;" ) }}</div>
+    </div>
+		<div class="form-group text-center m-4">
+ 		<input type="submit" value="Submit" class="btn btn-primary btn-md"/>
+    </div> <!-- form-group// -->
+</form>
+</article>
+</div>
+
+</div>
+
+{% endblock %}

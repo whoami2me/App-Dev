@@ -1,0 +1,116 @@
+{% extends "baseStaff.html" %}
+{% block title %}Staff Accounts{% endblock %}
+{% block silly %}Account Management{% endblock %}
+
+{% block head %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+{% if session['membership'] == "Admin" %}
+    <a href="/createStaff" class="btn btn-warning" style="float: right;">Add Staff</a>
+    <div class="container">
+        <div class="table-responsive-xxl">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <h2><b>Staff Accounts</b></h2>
+                            <div>
+                              {% if count == 0 %}
+                              <p>There are no staffs.</p>
+                              {% elif count == 1 %}
+                              <p>There is 1 staff.</p>
+                              {% else %}
+                              <p>There are {{ count }} staffs.</p>
+                              {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                         <th>Staff ID</th>
+                         <th>Image</th>
+                         <th>Name</th>
+                         <th>Email</th>
+                         <th>Gender</th>
+                         <th>Membership</th>
+                         <th>Date Joined</th>
+                         <th>Status</th>
+                         <th>View/Update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for staff in staffs_list %}
+                        <tr>
+                            <td>{{ staff.get_staff_id() }}</td>
+                            <td><img src="static/ProfilePic/{{staff.get_image() }}" width="50" height="50"class="rounded-circle" ></td>
+                            <td>{{ staff.get_first_name() }} {{ staff.get_last_name() }}</td>
+                            <td>{{ staff.get_email() }}</td>
+                            <td>{{ staff.get_gender() }}</td>
+                            {% if staff.get_membership() == "Employee" %}
+                            <td>Employee</td>
+                            {% elif staff.get_membership() == "Admin" %}
+                            <td>Admin</td>
+                            {% endif %}
+                            <td>{{ staff.get_date_created() }}</td>
+                            {% if staff.get_status() == "Active" %}
+                            <td><span class="status text-success">&bull;</span>Active</td>
+                            {% elif staff.get_status() == "Inactive" %}
+                            <td><span class="status text-danger">&bull;</span>Inactive</td>
+                            {% endif %}
+                            <td>
+                                <a href="/updateStaff/{{staff.get_staff_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
+                                <a href="#" class="view" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myViewModal_{{ staff.get_staff_id() }}" style="color: turquoise"><i class="material-icons">remove_red_eye</i></a>
+                            </td>
+
+                 <div class="modal" id="myViewModal_{{staff.get_staff_id()}}">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Staff's Detail</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        Name: {{ staff.get_first_name() }} {{ staff.get_last_name() }}<br>
+                        Email: {{ staff.get_email() }}<br>
+                        Phone Number: {{ staff.get_phone_number() }}<br>
+                        Gender: {{ staff.get_gender() }}<br>
+                        Membership: {{ staff.get_membership() }}<br>
+                        Address: {{ staff.get_address1() }} {{ staff.get_address2() }}<br>
+                        Unit Number: #{{ staff.get_floor_number() }} - {{ staff.get_unit_number() }}<br>
+                        Postal Code: {{ staff.get_postal_code() }}<br>
+                        Date Joined: {{ staff.get_date_created() }}<br>
+                        Status: {{ staff.get_status() }}
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="float: center">Okay</button>
+                      </div>
+
+                    </div>
+                  </div>
+                 </div>
+                     </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
+{% endblock %}

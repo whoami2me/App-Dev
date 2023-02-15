@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title%}Western Corp - Products{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<!-- Bootstrap core CSS -->
+<link href="/static/css/vendorproduct/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- Additional CSS Files -->
+<link rel="stylesheet" href="/static/css/assetsproduct/css/fontawesome.css">
+<link rel="stylesheet" href="/static/css/assetsproduct/css/tooplate-main.css">
+<link rel="stylesheet" href="/static/css/assetsproduct/css/owl.css">
+<link rel="stylesheet" href="/static/css/assetsproduct/css/flex-slider.css">
+
+<!-- Single Starts Here -->
+<div class="single-product">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <div class="line-dec"></div>
+          <h1>{{ product.get_product_group() }}:{{ product.get_product_name() }}</h1>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="product-slider">
+          <div id="slider" class="flexslider"  >
+            <ul class="slides">
+              <li style="display: block;">
+                <img src="/static/productimages/{{product.get_product_image() }}" />
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="right-content">
+          <h4>{{ product.get_product_name() }}</h4>
+          {% if product.get_product_saleoption() == "Inactive" %}
+            <h6>{{ product.get_product_priceformat() }}</h6>
+          {% elif product.get_product_saleoption() == "Active" %}
+            <h6 style="text-decoration: line-through;">{{ product.get_product_priceformat() }}</h6>
+            <h6>{{product.get_product_saleprice()}}</h6>
+          {% endif %}
+          <p>Description: <br> {{ product.get_product_desc() }}</p>
+          <span style="font-weight: bold;">{{ product.get_product_qty() }} left on stock</span>
+          {% if logincheck == 'True' %}
+          
+          <form method="POST" action="" enctype="multipart/form-data">
+            <div class="form-group" >
+                {{ render_field(form.qty, class="quantity-text") }}
+                {% for subfield in form.option %}
+                <br><tr>
+                    <td>{{ subfield }}</td>
+                    <td>{{ subfield.label }}</td>
+                </tr>
+                {% endfor %}
+                <input type="submit" value="Proceed" class="button"/>
+            </div>
+          </form>
+          {% elif logincheck == 'False' %}
+          <form action="/login">
+            
+              <input type="submit" value="Login to purchase" class="button"/>
+       
+          </form>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Single Page Ends Here -->
+
+
+
+{% endblock %}

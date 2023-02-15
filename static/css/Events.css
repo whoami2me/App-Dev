@@ -1,0 +1,27 @@
+/* preview image css */
+.preview-img{
+  margin: 20px 160px;
+  width: 400px;
+  height: 175px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+
+
+/* preview map image css */
+#map{
+  margin: 25px 75px;
+  width: 600px;
+  height: 175px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+
+
+.preview-imgPP{
+  margin: 20px 160px;
+  width: 177px;
+  height: 177px;
+}

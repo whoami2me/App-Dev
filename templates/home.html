@@ -1,0 +1,337 @@
+{% extends "base2.html" %}
+{% block title %}Western Corp - Home{% endblock %}
+
+
+{% block head %}
+{{ super() }}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+
+{% endblock %}
+{% block silly %}Dashboard{% endblock %}
+
+
+{% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
+{% with updated = get_flashed_messages(category_filter=["profileSuccess"]) %}
+        {% if updated %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in updated %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endwith %}
+{% with changed = get_flashed_messages(category_filter=["passwordSuccess"]) %}
+        {% if changed %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in changed %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endwith %}
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Total Earnings </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalsales"></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Earnings (Annual)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-info" role="progressbar"
+                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Pending Requests</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <!-- Area Chart -->
+                        <div class="col-xl-8 col-md-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Registered Events Overview</h6>
+                                    <input type="month" onchange="filterChart(this)"/>
+
+                                </div>
+                                <!-- users info -->
+                                <div class="card-body">
+                                    <canvas id="myChart" style="width:100%"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <!-- Area Chart -->
+                        <div class="col-xl-8 col-md-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Revenue per Item Overview</h6>
+
+
+                                </div>
+                                <!-- users info -->
+                                <div class="card-body">
+                                    <canvas id="productChart" style="width:100%"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <!-- Area Chart -->
+                        <div class="col-xl-8 col-md-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Vouchers Overview</h6>
+
+
+                                </div>
+                                <!-- users info -->
+                                <div class="card-body">
+                                    <canvas id="myVoucherChart" style="width:100%"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+
+                        <script>
+                            // setup
+                            let events = JSON.parse({{ events | tojson }})
+                            let reg_pax = JSON.parse( {{ reg_pax | tojson }})
+                            const data = {
+                              labels: events,
+                              datasets: [{
+                                label: 'Total Number Registered',
+                                data: reg_pax ,
+                                backgroundColor: [
+                                  'rgba(255, 26, 104, 0.2)',
+                                  'rgba(54, 162, 235, 0.2)',
+                                  'rgba(255, 206, 86, 0.2)',
+                                  'rgba(75, 192, 192, 0.2)',
+                                  'rgba(153, 102, 255, 0.2)',
+                                  'rgba(255, 159, 64, 0.2)',
+                                  'rgba(0, 0, 0, 0.2)'
+                                ],
+                                borderColor: [
+                                  'rgba(255, 26, 104, 1)',
+                                  'rgba(54, 162, 235, 1)',
+                                  'rgba(255, 206, 86, 1)',
+                                  'rgba(75, 192, 192, 1)',
+                                  'rgba(153, 102, 255, 1)',
+                                  'rgba(255, 159, 64, 1)',
+                                  'rgba(0, 0, 0, 1)'
+                                ],
+                                borderWidth: 1
+                              }]
+                            };
+
+                            // config
+                            const config = {
+                              type: 'bar',
+                              data,
+                              options: {
+                                scales: {
+                                  y: {
+                                    beginAtZero: true
+                                  }
+                                }
+                              }
+                            };
+
+                            // render init block
+                            const myChart = new Chart(
+                              document.getElementById('myChart'),
+                              config
+                            );
+                            ////////////////////////////////////////////////////
+
+                            let productname = JSON.parse({{ productname | tojson }})
+                            let productsale = JSON.parse( {{ productsales | tojson }})
+                            let productotalsales = JSON.parse( {{ producttotalsales | tojson }})
+                            let productotalsold = JSON.parse( {{ producttotalsold | tojson }})
+                            document.getElementById('totalsales').innerHTML = productotalsales
+                            var xValues = productname;
+                            var yValues = productsale;
+                            
+                            new Chart("productChart", {
+                            type: "bar",
+                            data: {
+                                labels: xValues,
+                                datasets: [{
+                                backgroundColor: [
+                                  'rgba(255, 26, 104, 0.2)',
+                                  'rgba(54, 162, 235, 0.2)',
+                                  'rgba(255, 206, 86, 0.2)',
+                                  'rgba(75, 192, 192, 0.2)',
+                                  'rgba(153, 102, 255, 0.2)',
+                                  'rgba(255, 159, 64, 0.2)',
+                                  'rgba(0, 0, 0, 0.2)'
+                                ],
+                                borderColor: [
+                                  'rgba(255, 26, 104, 1)',
+                                  'rgba(54, 162, 235, 1)',
+                                  'rgba(255, 206, 86, 1)',
+                                  'rgba(75, 192, 192, 1)',
+                                  'rgba(153, 102, 255, 1)',
+                                  'rgba(255, 159, 64, 1)',
+                                  'rgba(0, 0, 0, 1)'
+                                ],borderWidth: 1,
+                                data: yValues,
+                                label:'Sales earned ($)'
+                                }]
+                            },
+                            options:{
+                                plugins:{
+                                    tooltip: {
+                                        callbacks:{
+                                            afterTitle: function(context){
+                                                return `Num of product sold: ${productotalsold[context[0].dataIndex]}`;
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+
+                            });
+
+                            let Keyslist = JSON.parse({{ keysList | tojson }})
+                            let countList = JSON.parse( {{ countList | tojson }})
+                            var xValues = Keyslist;
+                            var yValues = countList;
+                            var barColors = ['rgba(255, 26, 104, 0.2)','rgba(54, 162, 235, 0.2)',"blue","orange","brown"];
+
+
+                            new Chart("myVoucherChart", {
+                            type: "bar",
+                            data: {
+                                labels: xValues,
+                                datasets: [{
+                                backgroundColor: [
+                                  'rgba(255, 26, 104, 0.2)',
+                                  'rgba(54, 162, 235, 0.2)',
+                                  'rgba(255, 206, 86, 0.2)',
+                                  'rgba(75, 192, 192, 0.2)',
+                                  'rgba(153, 102, 255, 0.2)',
+                                  'rgba(255, 159, 64, 0.2)',
+                                  'rgba(0, 0, 0, 0.2)'
+                                ],
+                                borderColor: [
+                                  'rgba(255, 26, 104, 1)',
+                                  'rgba(54, 162, 235, 1)',
+                                  'rgba(255, 206, 86, 1)',
+                                  'rgba(75, 192, 192, 1)',
+                                  'rgba(153, 102, 255, 1)',
+                                  'rgba(255, 159, 64, 1)',
+                                  'rgba(0, 0, 0, 1)'
+                                ],borderWidth: 1,
+                                data: yValues,
+                                label:'Number of People Used'
+                                }]
+                            },
+
+                            });
+
+                        </script>
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
+{% endblock %}

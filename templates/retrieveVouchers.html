@@ -1,0 +1,110 @@
+{% extends "base2.html" %}
+{% block title %}Library Loan System - Retrieve Vouchers{% endblock %}
+
+{% block head %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+
+<h1 class="display-4">View Voucher</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no vouchers.</p>
+  {% elif count == 1 %}
+  <p>There is 1 voucher.</p>
+  {% else %}
+  <p>There are {{ count }} vouchers.</p>
+  {% endif %}
+    <form action="/clearDb" method="post">
+        <input type="submit" value="Clear all databases" class="btn btn-primary center" name=""/>
+    </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+<table class="table table-striped table-hover" style="table-layout: 50px">
+    <thead>
+      <tr>
+        <th>Voucher ID</th>
+        <th style="table-width: 10px">Name</th>
+        <th>Type</th>
+          <th>Amount</th>
+        <th>Min.spend</th>
+          <th>Category</th>
+          <th>Status</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for voucher in vouchers_list %}
+     <tr>
+        <td>{{ voucher.get_voucher_id() }}</td>
+        <td><img src="static/uploads/{{voucher.get_picture() }}" width="70" height="50"> {{ voucher.get_name() }}</td>
+         <td>{{ voucher.get_type() }}</td>
+        <td>{{ voucher.get_amount() }}</td>
+         <td>{{ voucher.get_min_spend() }}</td>
+        <td>{{ voucher.get_category() }}</td>
+         <td>{{ voucher.get_status() }}</td>
+        <td>
+                            <a href="/updateVoucher/{{voucher.get_voucher_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
+                            <a href="#" class="delete" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myOutput{{ voucher.get_voucher_id() }}"><i class="material-icons">remove_red_eye</i></a>
+                        </td>
+
+<!-- The Modal -->
+<div class="modal fade" id="myOutput{{ voucher.get_voucher_id() }}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="exampleModalLabel1">Voucher Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="row">
+
+                    <div class="col-md-5">
+                        <img src="static/uploads/{{voucher.get_picture() }}" alt="teste" class="img-thumbnail" height="100">
+
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="name"><p>Name: <span>{{ voucher.get_name() }}</span></p></div>
+                        <div class="voucherid"><p>Voucher ID: <span>{{voucher.get_voucher_id()}}</span></p></div>
+                        <div class="type"><p>Type: <span>{{voucher.get_type()}}</span></p></div>
+                        <div class="amount"><p>Amount: <span>{{voucher.get_amount()}}</span></p></div>
+                        <div class="minspend"><p>Min. spend: <span>{{voucher.get_min_spend()}}</span></p></div>
+                        <div class="category"><p>Category: <span>{{voucher.get_category()}}</span></p></div>
+                        <div class="start"><p>Start date: <span>{{voucher.get_start()}}</span></p></div>
+                        <div class="expiry"><p>Expiry date: <span>{{voucher.get_expiry()}}</span></p></div>
+                        <div class="description"><p>Description: <span>{{voucher.get_description()}}</span></p></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

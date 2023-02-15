@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title%}Western Corp - Events{% endblock %}
+
+{% block head %}
+{{ super() }}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+{% endblock%}
+{% block content %}
+
+<div class="container">
+
+      <div class="row">
+              <div class="my-5 text-center">
+                  <h1>Events</h1>
+                  <hr/>
+                <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                      {% for online in online_list %}
+                            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                                  <div class="row justify-content-center shadow-sm">
+                                    <div class="col-6"><img src="static/uploads/{{online.get_image() }}" class="img-fluid" /></div>
+
+                                    <div class="col-4">
+                                      <div class="card-title">
+                                        <h2>{{ online.get_name() }}</h2>
+                                      </div>
+                                        <div class="card-text">
+                                            {% if online.get_location() == "Z" %}
+                                            <p><i class="bi bi-geo-alt px-2"></i>Zoom</p>
+                                            {% elif online.get_location() == "G" %}
+                                            <p><i class="bi bi-geo-alt px-2"></i>Google Meets</p>
+                                            {% elif online.get_location() == "C" %}
+                                            <p><i class="bi bi-geo-alt px-2"></i>Cisco Webex</p>
+                                            {% endif %}
+                                            <p><i class="bi bi-calendar-fill px-2"></i>{{ online.get_date() }}</p>
+
+                                      </div>
+
+                                      <div class="card-text">
+                                        <p>{{ online.get_description() }}</p>
+                                      </div>
+                                      <a href="/viewDetails/{{ online.get_name()}}" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
+
+                                        {% if online.get_name() in regeve_list %}
+                                        <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
+                                        {% elif user == 'client' %}
+                                        <a href="/login" class="btn btn-outline-primary rounded-0 float-end">Login First</a>
+                                        {% else %}
+                                        <a href="/registerEvents/{{ online.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register</a>
+                                        {% endif %}
+                                    </div>
+                                  </div>
+                            </div>
+                      {% endfor %}
+                  </div>
+
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    <i class="visually-hidden">Next</i>
+                  </button>
+                </div>
+            </div>
+      </div>
+
+      <div class="text-center my-5">
+        <h2>Events You May Like</h2>
+         <lead>Join or participate in our Events to feel great and united</lead>
+        <hr/>
+      </div>
+
+      <div class="row">
+
+        {% for online in online_list %}
+          <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="card mb-5 shadow-sm">
+            <img src="static/uploads/{{online.get_image() }}" class="img-fluid" />
+
+            <div class="card-body">
+              <div class="card-title">
+                <h2>{{ online.get_name() }}</h2>
+              </div>
+                <div class="card-text">
+                    {% if online.get_location() == "Z" %}
+                    <p><i class="bi bi-geo-alt p-1"></i>Zoom</p>
+                    {% elif online.get_location() == "G" %}
+                    <p><i class="bi bi-geo-alt p-1"></i>Google Meets</p>
+                    {% elif online.get_location() == "C" %}
+                    <p><i class="bi bi-geo-alt p-1"></i>Cisco Webex</p>
+				    {% endif %}
+                    <p><i class="bi bi-calendar-fill p-1"></i>{{ online.get_date() }}</p>
+
+              </div>
+
+              <div class="card-text">
+                <p>{{ online.get_description() }}</p>
+              </div>
+              <a href="/viewDetails/{{ online.get_name()}}" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
+
+
+                {% if online.get_name() in regeve_list %}
+                <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
+                {% elif user == 'client' %}
+                <a href="/login" class="btn btn-outline-primary rounded-0 float-end">Login First</a>
+                {% else %}
+                <a href="/registerEvents/{{ online.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register</a>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+
+          {% for offline in offline_list %}
+          <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="card mb-5 shadow-sm">
+            <img src="static/uploads/{{offline.get_image() }}" class="img-fluid" />
+
+            <div class="card-body">
+              <div class="card-title">
+                <h2>{{ offline.get_name() }}</h2>
+              </div>
+                <div class="card-text">
+                <p><i class="bi bi-geo-alt p-1"></i>{{ offline.get_location() }}</p><p><i class="bi bi-calendar-fill p-1"></i>{{ offline.get_date() }}</p>
+                    <p><i class="bi bi-bag-plus-fill p-1"></i>{{ offline.get_slots_left_pax() }} slots left!!!</p>
+              </div>
+
+              <div class="card-text">
+                <p>{{ offline.get_description() }}</p>
+              </div>
+              <a href="/viewDetails/{{ offline.get_name()}}" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
+
+                {% if offline.get_name() in regeve_list %}
+                <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
+                {% elif user == 'client' %}
+                <a href="/login" class="btn btn-outline-primary rounded-0 float-end">Login First</a>
+                {% else %}
+                <a href="/registerEvents/{{ offline.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register</a>
+                {% endif %}
+
+
+            </div>
+          </div>
+        </div>
+
+      {% endfor %}
+      </div>
+
+</div>
+
+{% endblock %}
