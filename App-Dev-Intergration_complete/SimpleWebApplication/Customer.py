@@ -20,7 +20,7 @@ class Customer:
         self.__floor_number = floor_number
         self.__unit_number = unit_number
         self.__image = image
-        self.membership = membership
+        self.__membership = membership
 
     # accessor methods
     def get_customer_id(self):
@@ -71,6 +71,9 @@ class Customer:
     def get_image(self):
         return self.__image
 
+    def get_membership(self):
+        return self.__membership
+
     # mutator methods
     def set_customer_id(self, customer_id):
         self.__customer_id = customer_id
@@ -119,5 +122,8 @@ class Customer:
 
     def set_image(self, image):
         self.__image = image
+
+    def set_membership(self, membership):
+        self.__membership = membership
 
 #get and set membership
