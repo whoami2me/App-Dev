@@ -92,7 +92,7 @@ class Staff:
         self.__address1 = address1
 
     def set_address2(self, address2):
-        self.__address1 = address2
+        self.__address2 = address2
 
     def set_gender(self, gender):
         self.__gender = gender

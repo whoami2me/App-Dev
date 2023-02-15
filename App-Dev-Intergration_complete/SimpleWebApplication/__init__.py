@@ -595,6 +595,7 @@ def logout():
 def profile_page(id):
     update_customer_form = UpdateCustomerForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and update_customer_form.validate():
+
         customers_dict = {}
         db = shelve.open('customer.db', 'w')
         customers_dict = db['Customers']
@@ -604,6 +605,7 @@ def profile_page(id):
         customer.set_last_name(update_customer_form.last_name.data)
         customer.set_email(update_customer_form.email.data)
         customer.set_address1(update_customer_form.address1.data)
+        print(customer.get_address1())
         customer.set_address2(update_customer_form.address2.data)
         customer.set_gender(update_customer_form.gender.data)
         customer.set_phone_number(update_customer_form.phone_number.data)
