@@ -1,19 +1,22 @@
 {% extends "base2.html" %}
 {% block title %}Western Corp - Retrieve Suppliers{% endblock %}
-
-
 {% block silly %}Retrieve Suppliers{% endblock %}
+{% from "includes/_formHelper.html" import render_field %}
 
 
 {% block head %}
 {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}" >
+    <link xmlns:style="http://www.w3.org/1999/xhtml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
+    <script src="https://kit.fontawesome.com/48c37b3e43.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/retrieveSupplier.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='js/retrieveSupplier.js') }}"></script>
 
 {% endblock %}
 
@@ -46,14 +49,19 @@
         <th>Supplier Name</th>
         <th>Categories</th>
         <th>Products</th>
+        <th>Stock in store (Qty)</th>
         <th>Remarks</th>
+        <th>Status</th>
         <th></th>
         <th></th>
+        <th></th>
+        <th>Order</th>
       </tr>
     </thead>
+
     <tbody>
     {% for suppliers in Suppliers_list %}
-     <tr>
+     <tr id="check">
          <td>{{ suppliers.get_Suppliers_id() }}</td>
          <td>{{ suppliers.get_Company_name() }}</td>
           {% if suppliers.get_Categories_select() == "Ball" %}
@@ -68,11 +76,16 @@
             <td>Accessories</td>
           {% endif %}
           <td>{{ suppliers.get_Product_name() }}</td>
+          <td>{{ suppliers.get_Qty() }}</td>
           <td>{{ suppliers.get_remarks() }}</td>
+          {% if suppliers.get_status() == "Available" %}
+            <td><span class="status text-success">&bull;</span>Available</td>
+          {% elif suppliers.get_status() == "Not Available" %}
+            <td><span class="status text-danger">&bull;</span>Not Available</td>
+            {% endif %}
+         <td id="function">
 
-         <td><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal1_{{suppliers.get_Suppliers_id()}}">
-                View
-                </button>
+             <a href="#" class="delete" title="view" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal1_{{suppliers.get_Suppliers_id()}}"><i class="material-icons">remove_red_eye</i></a>
          <div class="modal fade" id="exampleModal1_{{suppliers.get_Suppliers_id()}}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -103,7 +116,14 @@
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
+                                          <div class="desc"><p>Price (per unit): $<span>{{suppliers.get_price()}}</span></p></div>
+                                          <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
+                                            {% if suppliers.get_status() == "Available" %}
+                                            <div class="Type1"><p>Status: <span>Available</span></p></div>
+                                            {% elif suppliers.get_status() == "Not Available" %}
+                                            <div class="Type2"><p>Status: <span>Not Available</span></p></div>
+                                            {% endif %}
                                           <div class="desc"><p>Date created: <span>{{ suppliers.get_date() }}</span></p></div>
                                       </div>
 
@@ -118,15 +138,15 @@
                         </div>
          </td>
 
-         <td><a href="/updateSupplier/{{suppliers.get_Suppliers_id()}}" class="btn btn-warning">Update</a></td>
-          <td>
+         <td>
+             <a href="/updateSupplier/{{suppliers.get_Suppliers_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="fa-solid fa-pen-to-square"></i></a>
+         </td>
+         <td>
             <form action="{{url_for('delete_Supplier', id=suppliers.get_Suppliers_id())}}" method="POST">
 <!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{suppliers.get_Company_name()}}?');"-->
         <!-- Button to Open the Modal -->
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{suppliers.get_Suppliers_id()}}">
-                Delete
-                </button>
 
+ <a href="#" class="text-danger" title="delete" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myModal_{{suppliers.get_Suppliers_id()}}"><i class="fas fa-trash-can"></i></a>
 <!-- The Modal -->
 <div class="modal" id="myModal_{{suppliers.get_Suppliers_id()}}">
   <div class="modal-dialog">
@@ -152,12 +172,64 @@
     </div>
   </div>
 </div>
-          </form>
-        </td>
+         </form>
+      </td>
+      <td>
+
+                                            {% if suppliers.get_status() == "Available" %}
+          <a href="#"class="delete" title="Order" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2_{{suppliers.get_Suppliers_id()}}"><i class="fa-brands fa-jedi-order"></i></a>
+                                            {% elif suppliers.get_status() == "Not Available" %}
+
+                                            {% endif %}
+         <div class="modal fade" id="exampleModal2_{{suppliers.get_Suppliers_id()}}" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header bg-primary">
+                                <h5 class="modal-title text-white" id="exampleModalLabel2">{{ suppliers.get_Product_name() }}</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+
+                                  <div class="row">
+                                      <div class="col-md-12">
+                                          <div class="desc"><p>From: <span>{{ suppliers.get_Company_name() }}</span></p></div>
+                                            {% if suppliers.get_Categories_select() == "Ball" %}
+                                            <div class="Type"><p>Type: <span>Ball</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "Footwear" %}
+                                            <div class="Type"><p>Type: <span>Footwear</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "Shirts" %}
+                                            <div class="Type"><p>Type: <span>Shirts</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "Pants" %}
+                                            <div class="Type"><p>Type: <span>Pants</span></p></div>
+                                            {% elif suppliers.get_Categories_select() == "Accessories" %}
+                                            <div class="Type"><p>Type: <span>Accessories</span></p></div>
+                                            {% endif %}
+                                          <div class="desc"><p>Price /unit: $<span>{{suppliers.get_price()}}</span></p></div>
+                                          <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
+
+
+
+                                          <button type="button"  class="btn btn-warning" onclick="location.href='/createInventory/{{suppliers.get_Suppliers_id()}}'" data-bs-target="{{suppliers.get_Suppliers_id()}}">Order</button>
+                                          <form action="{{url_for('create_Inventory', id=suppliers.get_Suppliers_id())}}" method="POST">
+                                  </div>
+
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+
+         </div>
+
+
+
+
+         </td>
+
      </tr>
 
                     {% endfor %}
                 </tbody>
+
             </table>
         </div>
     </div>

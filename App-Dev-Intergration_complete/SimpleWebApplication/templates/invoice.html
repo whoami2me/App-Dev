@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <!-- Font Awesome -->
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+      <!-- Google Fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+      <!-- MDB -->
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" rel="stylesheet"/>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+         <script src="{{ url_for('static', filename='js/invoice.js') }}"></script>
+    </head>
+    <body>
+            {% for order in Inventory_list %}
+                {% for supply in Suppliers_list %}
+                <div class="card">
+                    <div class="card-header bg-black"></div>
+                    <div class="card-body">
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <i class="far fa-building text-danger fa-6x float-start"></i>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <ul class="list-unstyled float-end">
+                                        <li style="font-size: 30px; color: red;">To: {{supply.get_Company_name()}}</li>
+                                        <li>{{supply.get_Address1()}}</li>
+                                        <li>#{{supply.get_floor_number()}}-{{supply.get_unit_number()}}</li>
+                                        <li>Singapore {{supply.get_postal()}}</li>
+                                        <li>{{supply.get_telephone()}}</li>
+                                        <li>{{supply.get_email()}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="row text-center">
+                                <h3 class="text-uppercase text-center mt-3" style="font-size: 40px;">Invoice</h3>
+                                <p>Invoice Id: {{order.get_Inventory_id()}}</p>
+                            </div>
+
+                            <div class="row mx-3">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">price per unit</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{supply.get_Product_name()}}</td>
+                                            <td id="price"><i class="fas fa-dollar-sign"></i>{{supply.get_price()}} </td>
+              <td id="qty">{{order.get_Order_Qty()}}</td>
+              <td class="result">result</td>
+              <script>
+  $(document).ready(function() {
+      let price = parseFloat($(this).find('#price').text().replace('$', ''));
+      let qty = parseInt($(this).find('#qty').text());
+      let result = price * qty;
+      $(this).find('.result').text('$' + result.toFixed(2));
+  });
+</script>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-xl-8" style="margin-left:60px">
+          <p class="float-end"
+            style="font-size: 30px; color: red; font-weight: 400;font-family: Arial, Helvetica, sans-serif;">
+            Total:
+          <span class="result">result</span></p>
+
+        </div>
+
+      </div>
+
+      <div class="row mt-2 mb-5">
+        <p class="fw-bold">Date: <span class="text-muted">{{ order.get_date() }}</span></p>
+      </div>
+
+    </div>
+  </div>
+        </div>
+        {% endfor %}
+        {% endfor %}
+
+
+    </body>
+</html>

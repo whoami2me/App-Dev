@@ -5,7 +5,9 @@ from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, Cre
     UpdateStaffForm, CreateCustomerForm, CreateStaffForm, RegisterEventForm, \
     Login, UpdateProduct, CreateProduct, UpdateProductSale, UpdateProductImg, PurchaseProduct, ChangePassword, \
     CreateVoucherForm
-import shelve, OnlineEvents, OfflineEvents, folium,  registerEvent, pdfkit, Products, purchaseProduct, json, Staff, Customer, Voucher
+from SuppliersForms import CreateSuppliersForm
+from InventoryForms import CreateInventoryForm
+import shelve, OnlineEvents, OfflineEvents, folium,  registerEvent, pdfkit, Products, purchaseProduct, json, Staff, Customer, Voucher, Inventory, Suppliers
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
 import re
@@ -1602,8 +1604,208 @@ def removecartproduct(id):
 
 
 #start of izwan portion
-# end of izwan portion
 
+@app.route('/createSuppliers', methods=['GET', 'POST'])
+def create_Suppliers():
+    create_Supplier_form = CreateSuppliersForm(request.form)
+    if request.method == 'POST' and create_Supplier_form.validate():
+        Suppliers_dict = {}
+        db = shelve.open('supplier.db', 'c')
+
+        try:
+            Suppliers_dict = db['Supplier']
+        except:
+            print("Error in retrieving info from supplier.db.")
+        today = date.today()
+        supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,
+                                       create_Supplier_form.Address1.data, create_Supplier_form.floor_number.data,create_Supplier_form.unit_number.data,create_Supplier_form.postal.data,
+                                       create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.price.data,create_Supplier_form.Qty.data,create_Supplier_form.remarks.data,
+                                       today, 'Available')
+        Suppliers_dict[supplier.get_Suppliers_id()] = supplier
+        db['Supplier'] = Suppliers_dict
+        db.close()
+
+        return redirect(url_for('retrieve_Supplier'))
+    return render_template('createSuppliers.html', form=create_Supplier_form)
+
+@app.route('/retrieveSupplier')
+def retrieve_Supplier():
+    Suppliers_dict = {}
+    db = shelve.open('supplier.db', 'r')
+    Suppliers_dict = db['Supplier']
+    db.close()
+
+    Suppliers_list = []
+    for key in Suppliers_dict:
+        supp = Suppliers_dict.get(key)
+        Suppliers_list.append(supp)
+
+    return render_template('retrieveSupplier.html', count=len(Suppliers_list), Suppliers_list=Suppliers_list)
+
+@app.route('/updateSupplier/<int:id>/', methods=['GET', 'POST'])
+def update_Supplier(id):
+    update_Supplier_form = CreateSuppliersForm(request.form)
+    if request.method == 'POST' and update_Supplier_form.validate():
+        Suppliers_dict = {}
+        db = shelve.open('supplier.db', 'w')
+        try:
+            Suppliers_dict = db['Supplier']
+        except:
+            print("Error in retrieving Users from supplier.db for updating")
+
+        Supplier = Suppliers_dict.get(id)
+        Supplier.set_Company_name(update_Supplier_form.Company_name.data)
+        Supplier.set_telephone(update_Supplier_form.telephone.data)
+        Supplier.set_website(update_Supplier_form.website.data)
+        Supplier.set_email(update_Supplier_form.email.data)
+        Supplier.set_Address1(update_Supplier_form.Address1.data)
+        Supplier.set_floor_number(update_Supplier_form.floor_number.data)
+        Supplier.set_unit_number(update_Supplier_form.unit_number.data)
+        Supplier.set_postal(update_Supplier_form.postal.data)
+        Supplier.set_Payment(update_Supplier_form.Payment.data)
+        Supplier.set_Categories_select(update_Supplier_form.Categories_select.data)
+        Supplier.set_Product_name(update_Supplier_form.Product_name.data)
+        Supplier.set_price(update_Supplier_form.price.data)
+        Supplier.set_Qty(update_Supplier_form.Qty.data)
+        Supplier.set_remarks(update_Supplier_form.remarks.data)
+        Supplier.set_status(update_Supplier_form.status.data)
+
+
+        db['Supplier'] = Suppliers_dict
+        db.close()
+
+        return redirect(url_for('retrieve_Supplier'))
+    else:
+        Suppliers_dict = {}
+        db = shelve.open('supplier.db', 'r')
+        try:
+            Suppliers_dict = db['Supplier']
+        except:
+            print("Error in retrieving Users from supplier.db for closing")
+
+        db.close()
+
+        Supplier = Suppliers_dict.get(id)
+        update_Supplier_form.Company_name.data = Supplier.get_Company_name()
+        update_Supplier_form.telephone.data = Supplier.get_telephone()
+        update_Supplier_form.website.data = Supplier.get_website()
+        update_Supplier_form.email.data = Supplier.get_email()
+        update_Supplier_form.Address1.data = Supplier.get_Address1()
+        update_Supplier_form.floor_number.data = Supplier.get_floor_number()
+        update_Supplier_form.unit_number.data = Supplier.get_unit_number()
+        update_Supplier_form.postal.data = Supplier.get_postal()
+        update_Supplier_form.Payment.data = Supplier.get_Payment()
+        update_Supplier_form.Categories_select.data = Supplier.get_Categories_select()
+        update_Supplier_form.Product_name.data = Supplier.get_Product_name()
+        update_Supplier_form.price.data = Supplier.get_price()
+        update_Supplier_form.Qty.data = Supplier.get_Qty()
+        update_Supplier_form.remarks.data = Supplier.get_remarks()
+        update_Supplier_form.status.data = Supplier.get_status()
+
+        return render_template('updateSupplier.html', form=update_Supplier_form)
+
+@app.route('/deleteSupplier/<int:id>', methods=['POST'])
+def delete_Supplier(id):
+    Suppliers_dict = {}
+    db = shelve.open('supplier.db', 'w')
+    Suppliers_dict = db['Supplier']
+
+    Suppliers_dict.pop(id)
+
+    db['Supplier'] = Suppliers_dict
+    db.close()
+
+    return redirect(url_for('retrieve_Supplier'))
+
+
+@app.route('/createInventory/<int:id>', methods=['GET', 'POST'])
+def create_Inventory(id):
+    create_Inventory_form = CreateInventoryForm(request.form)
+    Suppliers_dict = {}
+    db = shelve.open('supplier.db', 'r')
+    Suppliers_dict = db['Supplier']
+    db.close()
+    Suppliers_list=[]
+    Supplier = Suppliers_dict.get(id)
+    Suppliers_list.append(Supplier)
+
+
+    if request.method == 'POST' and create_Inventory_form.validate():
+        Inventory_dict = {}
+        Inventory_list=[]
+        db = shelve.open('inventory.db', 'c')
+        try:
+            Inventory_dict = db['inventory']
+        except:
+            print("Error in retrieving supply from Inventory.db.")
+        today = date.today()
+        supply = Inventory.Inventory(create_Inventory_form.Order_Qty.data,create_Inventory_form.Order_remarks.data,today,'Processing')
+
+        Inventory_dict[supply.get_Inventory_id()] = supply
+        db['inventory'] = Inventory_dict
+        db.close()
+        Supply = Inventory_dict.get(id)
+        Inventory_list.append(Supply)
+
+
+        return redirect(url_for('retrieve_Inventory'))
+    return render_template('createInventory.html', form=create_Inventory_form,Suppliers_list=Suppliers_list)
+
+
+@app.route('/retrieveInventory')
+def retrieve_Inventory():
+    Suppliers_dict = {}
+    db = shelve.open('supplier.db', 'r')
+    Suppliers_dict = db['Supplier']
+    db.close()
+
+    Suppliers_list = []
+    for key in Suppliers_dict:
+        supp = Suppliers_dict.get(key)
+        Suppliers_list.append(supp)
+
+    inventory_dict = {}
+    db = shelve.open('inventory.db', 'r')
+    inventory_dict = db['inventory']
+    db.close()
+
+    Inventory_list = []
+    for key in inventory_dict:
+        Supply = inventory_dict.get(key)
+        Inventory_list.append(Supply)
+
+
+    # Retrieve the inventory dictionary
+
+    return render_template('retrieveInventory.html', count=len(Inventory_list),Suppliers_list=Suppliers_list,Inventory_list=Inventory_list)
+
+
+@app.route("/invoice/<int:id>")
+def invoice(id):
+    Inventory_dict = {}
+    db = shelve.open('inventory.db', 'r')
+    Inventory_dict = db['inventory']
+    Inventory_dict.get(id)
+    db.close()
+
+    Inventory_list = []
+    for key in Inventory_dict:
+        supply = Inventory_dict.get(key)
+        Inventory_list.append(supply)
+
+    Suppliers_dict = {}
+    db = shelve.open('supplier.db', 'r')
+    Suppliers_dict = db['Supplier']
+    db.close()
+
+    Suppliers_list = []
+    for key in Suppliers_dict:
+        supp = Suppliers_dict.get(key)
+        Suppliers_list.append(supp)
+
+    return render_template("invoice.html", Inventory_list=Inventory_list, Suppliers_list=Suppliers_list)
+
+# end of izwan portion
 
 @app.route('/get_map')
 def get_map():

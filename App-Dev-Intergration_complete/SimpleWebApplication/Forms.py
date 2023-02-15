@@ -167,9 +167,6 @@ class Login(Form):
     password = PasswordField('', [validators.Length(min=1), validators.DataRequired()])
 
 
-#izwan
-
-
 #azami
 
 categories = ["All", "Ball", "Shoe", "Shin guards", "Shirt", "Shorts", "Socks"]
