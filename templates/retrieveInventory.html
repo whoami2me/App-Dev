@@ -84,7 +84,7 @@
                         {% endif %}
                     <td>{{ supply.get_date() }}</td>
                      <td>
-                          <a href="#" class="download" title="Download" data-toggle="tooltip" onclick="location.href='invoice/{{supply.get_Inventory_id()}}'" data-bs-target="{{supply.get_Inventory_id()}}" ><i class="fa-solid fa-download"></i></a>
+                          <a href="#" class="download" title="view" data-toggle="tooltip" onclick="location.href='invoice/{{supply.get_Inventory_id()}}'" data-bs-target="{{supply.get_Inventory_id()}}" ><i class="material-icons">remove_red_eye</i></a>
                                           <form action="{{url_for('invoice', id=supply.get_Inventory_id())}}" method="POST" >
                       </td>
                      <td>
