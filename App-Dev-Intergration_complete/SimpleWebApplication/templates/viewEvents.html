@@ -32,7 +32,7 @@
                                             {% elif online.get_location() == "C" %}
                                             <p><i class="bi bi-geo-alt px-2"></i>Cisco Webex</p>
                                             {% endif %}
-                                            <p><i class="bi bi-calendar-fill px-2"></i>{{ online.get_date() }}</p>
+                                            <p><i class="bi bi-calendar-fill px-2"></i>{{ online.get_date() }} to {{ online.get_end_date() }}</p>
 
                                       </div>
 

@@ -419,11 +419,18 @@ def retrieve_events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
-
-        if offline.get_name() in list_dict:
-            offline.set_reg_pax(list_dict[offline.get_name()])
+        if date.today() > offline.get_end_date():
+            offline.set_reg_status('C')
+            offline.set_event_status('C')
         else:
-            offline.set_reg_pax(0)
+            offline.set_reg_status('Active')
+            offline.set_event_status('Active')
+
+            if offline.get_name() in list_dict:
+                offline.set_reg_pax(list_dict[offline.get_name()])
+            else:
+                offline.set_reg_pax(0)
+
         offline_list.append(offline)
 
     db['Offline'] = offline_dict
