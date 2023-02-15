@@ -136,9 +136,7 @@ def events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
-        if (offline.get_date() <= date.today() <= offline.get_end_date()) and (
-                offline.get_reg_pax() < offline.get_pax()) and (
-                offline.get_reg_status() == 'Active' or offline.get_reg_status() == 'A'):
+        if (offline.get_date() <= date.today() <= offline.get_end_date()) and (offline.get_reg_pax() < offline.get_pax()):
             offline_list.append(offline)
 
     regeve_list = []
@@ -413,9 +411,9 @@ def retrieve_events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
+
         if offline.get_name() in list_dict:
             offline.set_reg_pax(list_dict[offline.get_name()])
-
         else:
             offline.set_reg_pax(0)
         offline_list.append(offline)
@@ -557,7 +555,7 @@ def login():
             else:
                 flash('Account has been blocked.', 'error')
                 redirect('login')
-        else:
+        if customer.get_email() != login_form.email.data or customer.get_password() != login_form.password.data:
             flash('login failed', 'fail')
             redirect('login')
 
@@ -573,7 +571,7 @@ def login():
             else:
                 flash('Account has been blocked.', 'error')
                 redirect('login')
-        else:
+        if staff.get_email() != login_form.email.data or staff.get_password() != login_form.password.data:
             flash('login failed', 'fail')
             redirect('login')
     return render_template('login.html', form=login_form)
@@ -1009,6 +1007,7 @@ def use_voucher(vouid):
         list = used_dict[vouid]
         print(list)
         list.append(session["name"])
+        print(session['name'])
         used_dict[vouid] = list
     else:
         used_dict.update({vouid: [session["name"]]})
@@ -1052,7 +1051,7 @@ def redeem_voucher(vouid):
         print(redeemed_dict)
         a["redeemed"] = redeemed_dict
 
-        return redirect(url_for('retrieve_vouchers_customer'))
+        return redirect(url_for('retrieve_vouchers_account'))
 
 
 @app.route('/createVoucher', methods=['GET', 'POST'])

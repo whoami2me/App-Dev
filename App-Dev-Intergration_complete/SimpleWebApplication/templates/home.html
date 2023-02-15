@@ -13,6 +13,7 @@
 
 
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 {% with updated = get_flashed_messages(category_filter=["profileSuccess"]) %}
         {% if updated %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -319,4 +320,7 @@
                             });
 
                         </script>
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 {% endblock %}

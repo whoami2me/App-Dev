@@ -22,7 +22,7 @@
           <a class="nav-link mx-2 text-white text-uppercase fw-bold" href="/homeProduct">Products</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link mx-2 text-white text-uppercase fw-bold" href="/retrieveVouchersCustomer">Pricing</a>
+          <a class="nav-link mx-2 text-white text-uppercase fw-bold" href="/retrieveVouchersCustomer">Vouchers</a>
         </li>
           <li class="nav-item">
           <a class="nav-link mx-2 text-white text-uppercase fw-bold" href="/Events">Events</a>
@@ -38,9 +38,9 @@
               <li><a class="dropdown-item" href="/profile/{{ session['Customer'] }}">Account Settings</a></li>
             <li><a class="dropdown-item" href="/changepassword/{{ session['Customer'] }}">Change Password</a></li>
             <li><a class="dropdown-item" href="/retrieveVouchersAccount">Vouchers</a></li>
-            <li><a class="dropdown-item" href="/viewcartProduct/{{ session['Customer'] }}">Shopping Cart</a></li>
+            <li><a class="dropdown-item" href="/viewcartProduct">Shopping Cart</a></li>
             <li><a class="dropdown-item" href="/viewRegisteredEvents">Registered Events</a></li>
-            <li><a class="dropdown-item" href="/viewpurchaseProduct/{{ session['Customer'] }}">Purchase History</a></li>
+            <li><a class="dropdown-item" href="/viewpurchaseProduct">Purchase History</a></li>
             <li><a class="dropdown-item" href="/logout">Logout</a></li>
           </ul>
         </li>
