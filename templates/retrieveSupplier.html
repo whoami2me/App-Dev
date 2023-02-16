@@ -78,12 +78,17 @@
             <td>Accessories</td>
           {% endif %}
           <td>{{ suppliers.get_Product_name() }}</td>
+         {% if suppliers.get_Qty() > 10 %}
           <td>{{ suppliers.get_Qty() }}</td>
+         {% else %}
+         <td class="text-danger"> Low stock <br>{{ suppliers.get_Qty() }} left</td>
+         {% endif %}
           <td>{{ suppliers.get_remarks() }}</td>
           {% if suppliers.get_status() == "Available" %}
             <td><span class="status text-success">&bull;</span>Available</td>
           {% elif suppliers.get_status() == "Not Available" %}
             <td><span class="status text-danger">&bull;</span>Not Available</td>
+
             {% endif %}
          <td id="function">
 
@@ -119,7 +124,11 @@
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
                                           <div class="desc"><p>Price (per unit): $<span>{{suppliers.get_price()}}</span></p></div>
+                                          {% if suppliers.get_Qty() > 10 %}
                                           <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
+                                          {% else %}
+                                          <div class="desc"><p>Stock in store (Qty): <span>Low stock only {{suppliers.get_Qty()}} are left</span></p></div>
+                                          {% endif %}
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
                                             {% if suppliers.get_status() == "Available" %}
                                             <div class="Type1"><p>Status: <span>Available</span></p></div>
@@ -207,8 +216,11 @@
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Price /unit: $<span>{{suppliers.get_price()}}</span></p></div>
+                                            {% if suppliers.get_Qty() > 10 %}
                                           <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
-
+                                          {% else %}
+                                          <div class="desc"><p>Stock in store (Qty): <span class="text-danger">{{suppliers.get_Qty()}}</span></p></div>
+                                          {% endif %}
 
 
                                           <button type="button"  class="btn btn-warning" onclick="location.href='/createInventory/{{suppliers.get_Suppliers_id()}}'" data-bs-target="{{suppliers.get_Suppliers_id()}}">Order</button>
