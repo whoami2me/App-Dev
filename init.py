@@ -186,7 +186,6 @@ def retrieve_Inventory():
         Supply = inventory_dict.get(key)
         Inventory_list.append(Supply)
 
-
     # Retrieve the inventory dictionary
 
     return render_template('retrieveInventory.html', count=len(Inventory_list),Supplier_list=Supplier_list,Inventory_list=Inventory_list)
@@ -194,6 +193,7 @@ def retrieve_Inventory():
 
 @app.route("/invoice/<int:id>")
 def invoice(id):
+
     Suppliers_dict = {}
     db = shelve.open('supplier.db', 'r')
     Suppliers_dict = db['Supplier']
@@ -217,7 +217,11 @@ def invoice(id):
 
 
 
-    return render_template("invoice.html", Suppliers_list=Suppliers_list,Inventory_list=Inventory_list,)
+
+
+
+
+    return render_template("invoice.html", Suppliers_list=Suppliers_list,Inventory_list=Inventory_list)
 
 
 @app.errorhandler(404)

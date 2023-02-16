@@ -86,7 +86,7 @@
                      <td>
                           <a href="#" class="download" title="view" data-toggle="tooltip" onclick="location.href='invoice/{{supply.get_Inventory_id()}}'" data-bs-target="{{supply.get_Inventory_id()}}" ><i class="material-icons">remove_red_eye</i></a>
                                           <form action="{{url_for('invoice', id=supply.get_Inventory_id())}}" method="POST" >
-                      </td>
+                     </td>
                      <td>
 
                          <button type="button" id="check" class="btn btn-success" data-bs-target="{{supply.get_Inventory_id()}}" onclick="changeText(this)">Delivered?</button>
@@ -96,7 +96,7 @@
                                                                                                      }
                          </script>
 
-                     </td>
+                      </td>
                     {% endfor %}
                 </tr>
 
