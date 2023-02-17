@@ -1,7 +1,9 @@
+
 {% extends "base2.html" %}
 {% block title %}Library Loan System - Update Supplier{% endblock %}
 {% block silly %}Update Supplier{% endblock %}
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 {% from "includes/_formHelper.html" import render_field %}
 
 <h1 class="display-4">Update Supplier</h1>
@@ -45,4 +47,9 @@
     <br>
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
+
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
+
 {% endblock %}

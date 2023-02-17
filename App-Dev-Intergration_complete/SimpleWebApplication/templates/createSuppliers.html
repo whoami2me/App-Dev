@@ -2,9 +2,8 @@
 {% block title %}Western Corp - Create Supplier{% endblock %}
 {% block silly %}Create Supplier{% endblock %}
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 {% from "includes/_formHelper.html" import render_field %}
-
-
 
 <section id="create-Suppliers">
     <div class="container-lg">
@@ -63,5 +62,8 @@
     </div>
 </section>
 
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 
 {% endblock %}

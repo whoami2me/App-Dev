@@ -20,7 +20,11 @@
 
 {% endblock %}
 
+
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
+
+
 <div class="container">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -76,12 +80,17 @@
             <td>Accessories</td>
           {% endif %}
           <td>{{ suppliers.get_Product_name() }}</td>
+         {% if suppliers.get_Qty() > 10 %}
           <td>{{ suppliers.get_Qty() }}</td>
+         {% else %}
+         <td class="text-danger"> Low stock <br>{{ suppliers.get_Qty() }} left</td>
+         {% endif %}
           <td>{{ suppliers.get_remarks() }}</td>
           {% if suppliers.get_status() == "Available" %}
             <td><span class="status text-success">&bull;</span>Available</td>
           {% elif suppliers.get_status() == "Not Available" %}
             <td><span class="status text-danger">&bull;</span>Not Available</td>
+
             {% endif %}
          <td id="function">
 
@@ -117,7 +126,11 @@
                                             {% endif %}
                                           <div class="desc"><p>Product Name: <span>{{suppliers.get_Product_name()}}</span></p></div>
                                           <div class="desc"><p>Price (per unit): $<span>{{suppliers.get_price()}}</span></p></div>
+                                          {% if suppliers.get_Qty() > 10 %}
                                           <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
+                                          {% else %}
+                                          <div class="desc"><p>Stock in store (Qty): <span>Low stock only {{suppliers.get_Qty()}} are left</span></p></div>
+                                          {% endif %}
                                           <div class="desc"><p>Remark: <span>{{suppliers.get_remarks()}}</span></p></div>
                                             {% if suppliers.get_status() == "Available" %}
                                             <div class="Type1"><p>Status: <span>Available</span></p></div>
@@ -155,7 +168,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Delete Confirmation</h4>
-        <button type="button" class="fa fa-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="fa fa-close" data-bs-dismiss="modal"></button>
       </div>
 
       <!-- Modal body -->
@@ -177,7 +190,7 @@
       <td>
 
                                             {% if suppliers.get_status() == "Available" %}
-          <a href="#"class="delete" title="Order" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2_{{suppliers.get_Suppliers_id()}}"><i class="fa-brands fa-jedi-order"></i></a>
+          <a href="#" class="delete" title="Order" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#exampleModal2_{{suppliers.get_Suppliers_id()}}"><i class="fa-solid fa-truck-moving"></i></a>
                                             {% elif suppliers.get_status() == "Not Available" %}
 
                                             {% endif %}
@@ -205,14 +218,16 @@
                                             <div class="Type"><p>Type: <span>Accessories</span></p></div>
                                             {% endif %}
                                           <div class="desc"><p>Price /unit: $<span>{{suppliers.get_price()}}</span></p></div>
+                                            {% if suppliers.get_Qty() > 10 %}
                                           <div class="desc"><p>Stock in store (Qty): <span>{{suppliers.get_Qty()}}</span></p></div>
-
+                                          {% else %}
+                                          <div class="desc"><p>Stock in store (Qty): <span class="text-danger">{{suppliers.get_Qty()}}</span></p></div>
+                                          {% endif %}
 
 
                                           <button type="button"  class="btn btn-warning" onclick="location.href='/createInventory/{{suppliers.get_Suppliers_id()}}'" data-bs-target="{{suppliers.get_Suppliers_id()}}">Order</button>
                                           <form action="{{url_for('create_Inventory', id=suppliers.get_Suppliers_id())}}" method="POST">
                                   </div>
-
                                   </div>
                               </div>
                             </div>
@@ -234,4 +249,9 @@
         </div>
     </div>
 </div>
+
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
+
 {% endblock %}

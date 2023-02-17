@@ -2,8 +2,8 @@
 {% block title %}Western Corp - Create Inventory{% endblock %}
 {% block silly %}Create Inventory{% endblock %}
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 {% from "includes/_formHelper.html" import render_field %}
-
 
 
 <section id="create-Inventory">
@@ -28,7 +28,11 @@
                 <div class="Type"><p>Type: <span>Accessories</span></p></div>
                 {% endif %}
                 <div class="desc"><p>Price (per unit): $<span>{{supply.get_price()}}</span></p></div>
+                {% if supply.get_Qty() > 10 %}
                 <div class="desc"><p>Stock in store (Qty): <span>{{supply.get_Qty()}}</span></p></div>
+                {% else %}
+                <div class="desc"><p>Stock in store (Qty): <span class="text-danger">Low stock only {{supply.get_Qty()}} are left</span></p></div>
+                {% endif %}
                 {% endfor %}
                 <form method="POST" action="" enctype="multipart/form-data">
    <div class="form-group">
@@ -49,5 +53,8 @@
     </div>
 </section>
 
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 
 {% endblock %}

@@ -12,9 +12,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/48c37b3e43.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
+
 <div class="container">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -43,16 +46,18 @@
                         <th>Categories</th>
                         <th>Order Quantity</th>
                         <th>Remarks</th>
+                        <th>Status</th>
                         <th>Date Created</th>
                         <th></th>
-                        <th>Status</th>
+                        <th></th>
+
 
                     </tr>
 
                 </thead>
                 <tbody>
-
-                {% for order in Suppliers_list %}
+                {% for supply in Inventory_list %}
+                {% for order in Supplier_list %}
                 <tr>
                     <td>{{ order.get_Suppliers_id() }}</td>
                     <td>{{ order.get_Product_name() }}</td>
@@ -69,21 +74,30 @@
                             <td>Accessories</td>
                         {% endif %}
                         {% endfor %}
-                    {% for supply in Inventory_list %}
+
                     <td>{{ supply.get_Order_Qty() }}</td>
                     <td>{{ supply.get_Order_remarks() }}</td>
+
+                        {% if supply.get_status() == "Processing" %}
+                        <td><span class="status text-alert">&bull;</span>Processing</td>
+                            {% elif supply.get_status() == "Delivered" %}
+                        <td><span class="status text-success">&bull;</span>Delivered</td>
+                        {% endif %}
                     <td>{{ supply.get_date() }}</td>
                      <td>
-                     <button type="button" class="btn btn-warning" onclick="location.href='/invoice/{{supply.get_Inventory_id()}}'" data-bs-target="{{supply.get_Inventory_id()}}">view</button>
-                                          <form action="{{url_for('invoice', id=supply.get_Inventory_id())}}" method="POST">
+                          <a href="#" class="download" title="view" data-toggle="tooltip" onclick="location.href='invoice/{{supply.get_Inventory_id()}}'" data-bs-target="{{supply.get_Inventory_id()}}" ><i class="material-icons">remove_red_eye</i></a>
+                                          <form action="{{url_for('invoice', id=supply.get_Inventory_id())}}" method="POST" >
                      </td>
-                    <td>
-                        {% if supply.get_status() == "" %}
-                        <td><span class="status text-success">&bull;</span>Available</td>
-                            {% elif supply.get_status() == "Not Available" %}
-                        <td><span class="status text-danger">&bull;</span>Not Available</td>
-                        {% endif %}
-                    </td>
+                     <td>
+
+                         <button type="button" id="check" class="btn btn-success" data-bs-target="{{supply.get_Inventory_id()}}" onclick="changeText(this)">Delivered?</button>
+                         <script>
+                                function changeText(button) {
+                                        button.innerHTML = "Completed";
+                                                                                                     }
+                         </script>
+
+                      </td>
                     {% endfor %}
                 </tr>
 
@@ -94,4 +108,9 @@
             </div>
     </div>
 </div>
+
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
+
 {% endblock %}
