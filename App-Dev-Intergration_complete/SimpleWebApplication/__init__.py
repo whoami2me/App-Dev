@@ -605,7 +605,6 @@ def logout():
 def profile_page(id):
     update_customer_form = UpdateCustomerForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and update_customer_form.validate():
-
         customers_dict = {}
         db = shelve.open('customer.db', 'w')
         customers_dict = db['Customers']
@@ -629,8 +628,9 @@ def profile_page(id):
         db['Customers'] = customers_dict
         db.close()
         session['image'] = customer.get_image()
+        session['name'] = customer.get_first_name()
         flash('Profile has been updated!', 'profileSuccess')
-        return redirect(url_for('user_home'))
+        return redirect(url_for("user_home"))
     else:
         customers_dict = {}
         db = shelve.open('customer.db', 'r')
@@ -650,6 +650,7 @@ def profile_page(id):
         update_customer_form.unit_number.data = customer.get_unit_number()
         update_customer_form.image.data = customer.get_image()
         session['image'] = customer.get_image()
+        session['name'] = customer.get_first_name()
 
         return render_template('customerProfilePage.html', form=update_customer_form, customer=customer)
 
@@ -713,6 +714,7 @@ def staff_change_password(id):
     return render_template('staffChangePassword.html', form=staff_change_password_form)
 
 
+
 @app.route('/staffprofile/<int:id>/', methods=['GET', 'POST'])
 def staff_profile_page(id):
     update_staff_form = UpdateStaffForm(CombinedMultiDict((request.files, request.form)))
@@ -743,6 +745,7 @@ def staff_profile_page(id):
 
         flash('Profile has been updated!', 'profileSuccess')
         session['image'] = staff.get_image()
+        session['name'] = staff.get_first_name()
         return redirect(url_for('admin_home'))
     else:
         staffs_dict = {}
@@ -764,8 +767,10 @@ def staff_profile_page(id):
         update_staff_form.unit_number.data = staff.get_unit_number()
         update_staff_form.image.data = staff.get_image()
         session['image'] = staff.get_image()
+        session['name'] = staff.get_first_name()
 
         return render_template('staffProfilePage.html', form=update_staff_form, staff=staff)
+
 
 @app.route('/createStaff', methods=['GET', 'POST'])
 def create_staff():
