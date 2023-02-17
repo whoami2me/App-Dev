@@ -6,6 +6,7 @@
 
 
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 {% from "includes/_formHelper.html" import render_field %}
 
 <section id="update-event">
@@ -47,9 +48,11 @@
   </div>
     <div class="mb-4 text-center"><input type="submit" value="Submit" class="btn btn-primary center"/></div>
 
-</form>
-
-
+</form></div>
 </section>
+
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 
 {% endblock %}

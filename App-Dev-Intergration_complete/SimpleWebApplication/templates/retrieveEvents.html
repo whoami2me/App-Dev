@@ -15,6 +15,8 @@
 {% endblock %}
 
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
+
 
 <div class="container">
     <div class="table-responsive">
@@ -248,4 +250,10 @@
     </div>
 </div>
 {% endfor %}
+
+
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
+
 {% endblock %}

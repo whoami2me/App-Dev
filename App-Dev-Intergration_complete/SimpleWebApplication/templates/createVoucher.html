@@ -2,6 +2,7 @@
 {% block title %}Library Loan System - Create Voucher{% endblock %}
 
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 {% from "includes/_formHelper.html" import render_field %}
 
 <h1 class="display-4">Create Voucher</h1>
@@ -41,4 +42,10 @@
   </div>
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
+
+
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
+
 {% endblock %}

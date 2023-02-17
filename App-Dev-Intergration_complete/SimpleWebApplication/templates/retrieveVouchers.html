@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
+
 
 <div class="container">
     <div class="table-responsive">
@@ -107,4 +109,9 @@
         </div>
     </div>
 </div>
+
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
+
 {% endblock %}

@@ -2,6 +2,7 @@
 {% block title %}Western Corp - Update Products{% endblock %}
 {% block silly %}Product Management{% endblock %}
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 {% from "includes/_formHelper.html" import render_field %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
 <section id="update-product">
@@ -26,5 +27,9 @@
         </div>
     </div>
 </section>
+
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 
 {% endblock %}
