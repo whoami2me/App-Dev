@@ -33,7 +33,6 @@ def user_home():
 
 @app.route('/AdminDashboard')
 def admin_home():
-
     regeve_dict = {}
     db = shelve.open('regeve.db', 'r')
     regeve_dict = db['Register_Events']
@@ -54,7 +53,6 @@ def admin_home():
     for keys in list_dict:
         events.append(keys)
         registered.append(list_dict[keys])
-
 
     vouchers_dict = {}
     db = shelve.open('voucher.db', 'r')
@@ -88,27 +86,28 @@ def admin_home():
     keysList = list(count_dict.keys())
     countList = list(count_dict.values())
 
-    #rayden's latest branch admin dashboard edit (to be added)
-
     products_dict = {}
     db = shelve.open('product.db', 'r')
     products_dict = db['Products']
     productname_list = []
     productsales_list = []
+    totalsold_list = []
     producttotalsales = 0
     for key in products_dict:
         productobj = products_dict.get(key)
         productname = productobj.get_product_name()
         productsales = productobj.get_total_earned2()
+        totalsold = productobj.get_product_sold()
 
         productsalesnum = float(re.sub('[^0-9.]', '', productsales))
         producttotalsales += productsalesnum
         productname_list.append(productname)
         productsales_list.append(productsalesnum)
+        totalsold_list.append(totalsold)
     producttotalsales = "${:.2f}".format(producttotalsales)
     print(producttotalsales)
 
-    return render_template('home.html', events=json.dumps(events), reg_pax=json.dumps(registered), keysList=json.dumps(keysList), countList=json.dumps(countList), productname=json.dumps(productname_list), productsales=json.dumps(productsales_list), producttotalsales=json.dumps(producttotalsales))
+    return render_template('home.html', events=json.dumps(events), reg_pax=json.dumps(registered), keysList=json.dumps(keysList), countList=json.dumps(countList), productname=json.dumps(productname_list), productsales=json.dumps(productsales_list), producttotalsales=json.dumps(producttotalsales),producttotalsold=json.dumps(totalsold_list))
 
 
 @app.route('/contactUs')

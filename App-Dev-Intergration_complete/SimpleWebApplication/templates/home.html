@@ -246,11 +246,10 @@
                             let productname = JSON.parse({{ productname | tojson }})
                             let productsale = JSON.parse( {{ productsales | tojson }})
                             let productotalsales = JSON.parse( {{ producttotalsales | tojson }})
+                            let productotalsold = JSON.parse( {{ producttotalsold | tojson }})
                             document.getElementById('totalsales').innerHTML = productotalsales
                             var xValues = productname;
                             var yValues = productsale;
-                            var barColors = ['rgba(255, 26, 104, 0.2)','rgba(54, 162, 235, 0.2)',"blue","orange","brown"];
-
 
                             new Chart("productChart", {
                             type: "bar",
@@ -279,6 +278,18 @@
                                 label:'Sales earned ($)'
                                 }]
                             },
+                            options:{
+                                plugins:{
+                                    tooltip: {
+                                        callbacks:{
+                                            afterTitle: function(context){
+                                                return `Num of product sold: ${productotalsold[context[0].dataIndex]}`;
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
 
                             });
 
