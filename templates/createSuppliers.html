@@ -3,7 +3,7 @@
 {% block silly %}Create Supplier{% endblock %}
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
-{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
+
 
 
 <section id="create-Suppliers">
@@ -63,8 +63,4 @@
     </div>
 </section>
 
-
-{% else %}
-<h1>Invalid Access!</h1>
-{% endif %}
 {% endblock %}
