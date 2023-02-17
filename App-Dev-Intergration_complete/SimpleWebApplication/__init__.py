@@ -1783,10 +1783,11 @@ def retrieve_Inventory():
     Suppliers_dict = db['Supplier']
     db.close()
 
-    Suppliers_list = []
+    Supplier_list = []
     for key in Suppliers_dict:
         supp = Suppliers_dict.get(key)
-        Suppliers_list.append(supp)
+        Supplier_list.append(supp)
+
 
     inventory_dict = {}
     db = shelve.open('inventory.db', 'r')
@@ -1798,28 +1799,18 @@ def retrieve_Inventory():
         Supply = inventory_dict.get(key)
         Inventory_list.append(Supply)
 
-
     # Retrieve the inventory dictionary
 
-    return render_template('retrieveInventory.html', count=len(Inventory_list),Suppliers_list=Suppliers_list,Inventory_list=Inventory_list)
+    return render_template('retrieveInventory.html', count=len(Inventory_list),Supplier_list=Supplier_list,Inventory_list=Inventory_list)
 
 
 @app.route("/invoice/<int:id>")
 def invoice(id):
-    Inventory_dict = {}
-    db = shelve.open('inventory.db', 'r')
-    Inventory_dict = db['inventory']
-    Inventory_dict.get(id)
-    db.close()
-
-    Inventory_list = []
-    for key in Inventory_dict:
-        supply = Inventory_dict.get(key)
-        Inventory_list.append(supply)
 
     Suppliers_dict = {}
     db = shelve.open('supplier.db', 'r')
     Suppliers_dict = db['Supplier']
+    Suppliers_dict.get(id)
     db.close()
 
     Suppliers_list = []
@@ -1827,7 +1818,17 @@ def invoice(id):
         supp = Suppliers_dict.get(key)
         Suppliers_list.append(supp)
 
-    return render_template("invoice.html", Inventory_list=Inventory_list, Suppliers_list=Suppliers_list)
+    Inventory_dict = {}
+    db = shelve.open('inventory.db', 'r')
+    Inventory_dict = db['inventory']
+    Inventory_dict.get(id)
+    db.close()
+
+    Inventory_list=[]
+    Supply = Inventory_dict.get(id)
+    Inventory_list.append(Supply)
+
+    return render_template("invoice.html", Suppliers_list=Suppliers_list,Inventory_list=Inventory_list)
 
 # end of izwan portion
 
