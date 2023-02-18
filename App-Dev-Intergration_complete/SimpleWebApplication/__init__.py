@@ -1457,6 +1457,13 @@ def single_product(id):
     db.close()
     p = products_dict.get(id)
 
+    if isinstance(session.get('Customer'), int):
+        logincheck = 'True'
+    else:
+        logincheck = 'False'
+
+    print(logincheck)
+
     if request.method == 'POST' and purchase_product_form.validate():
         products_dict = {}
         db = shelve.open('product.db', 'w')
@@ -1464,7 +1471,7 @@ def single_product(id):
         product_id = products_dict.get(id)
         if purchase_product_form.qty.data > product_id.get_product_qty():  # Validate user input if more than stock
             purchase_product_form.qty.errors.append('Quantity selected was more than stock')
-            return render_template('singleProduct.html', product=p, form=purchase_product_form)
+            return render_template('singleProduct.html', product=p, form=purchase_product_form, logincheck=logincheck)
 
         if purchase_product_form.option.data == 'Purchase':
             purchaseproducts_dict = {}
@@ -1537,7 +1544,7 @@ def single_product(id):
             return render_template('addcartProduct.html', product=p, pqty=purchase_product_form.qty.data)
         else:
             print('Error')
-    return render_template('singleProduct.html', product=p, form=purchase_product_form)
+    return render_template('singleProduct.html', product=p, form=purchase_product_form, logincheck=logincheck)
 
 
 @app.route('/viewpurchaseProduct')
