@@ -3,7 +3,7 @@
 {% block silly %}Account Management{% endblock %}
 
 {% block content %}
-{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
+{% if session ['membership'] == 'Admin'%}
 {% from "includes/_formHelper.html" import render_field %}
 <h5 class="display-5">Update Staff Detail</h5>
 <hr>
