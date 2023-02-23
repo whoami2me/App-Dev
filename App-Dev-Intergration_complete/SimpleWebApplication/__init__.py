@@ -318,6 +318,8 @@ def register_event(evename):
         db['Register_Events'] = regeve_dict
         db.close()
 
+        session['registered_Event'] = session['name'] + "have registered" + evename
+
         session['user_registered'] = reg_eve.get_first_name()
         session['event_registered'] = reg_eve.get_event_name()
 
@@ -492,7 +494,7 @@ def cancelEvent(id):
     db['Register_Events'] = regeve_dict
     db.close()
 
-    session['event_cancelled'] = user.get_first_name(), 'cancelled', user.get_event_name()
+    session['event_cancelled'] = user.get_first_name() + 'cancelled' + user.get_event_name()
 
     return redirect(url_for('view_regeve'))
 
