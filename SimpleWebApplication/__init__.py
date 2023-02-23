@@ -1,5 +1,4 @@
-from collections import defaultdict, Counter
-from datetime import date
+from datetime import date, datetime
 from idlelib import tooltip
 from flask import Flask, render_template, request, redirect, url_for, session
 from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, \
@@ -39,7 +38,9 @@ def events():
     online_list = []
     for key in online_dict:
         online = online_dict.get(key)
-        online_list.append(online)
+        if online.get_date() < date.today():
+            print('yes')
+            online_list.append(online)
 
     offline_dict = {}
     db = shelve.open('offline.db', 'r')
@@ -49,7 +50,11 @@ def events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
-        offline_list.append(offline)
+        if offline.get_date() < date.today():
+            print('yes')
+            offline_list.append(offline)
+
+
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list)
 
@@ -92,7 +97,7 @@ def view_regev():
 
     print(count)
 
-    return render_template('test.html', regeve_list=regeve_list, count=len(regeve_list))
+    return render_template('test.html', regeve_list=regeve_list, count_regeve=len(regeve_list))
 '''
 
 
