@@ -49,8 +49,10 @@ def events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
-        if (offline.get_date() <= date.today() <= offline.get_end_date()):
-            offline_list.append(offline)
+        if offline.get_date() <= date.today() <= offline.get_end_date():
+            print(offline.get_reg_pax(), offline.get_pax())
+            if offline.get_reg_pax() < offline.get_pax():
+                offline_list.append(offline)
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list)
 
@@ -246,18 +248,23 @@ def retrieve_events():
         online_list.append(online)
 
     offline_dict = {}
-    db = shelve.open('offline.db', 'r')
+    db = shelve.open('offline.db', 'w')
     offline_dict = db['Offline']
-    db.close()
+
 
     offline_list = []
     for key in offline_dict:
+        print(key)
         offline = offline_dict.get(key)
         if offline.get_name() in list_dict:
             offline.set_reg_pax(list_dict[offline.get_name()])
         else:
             offline.set_reg_pax(0)
         offline_list.append(offline)
+
+    db['Offline'] = offline_dict
+    db.close()
+
 
     return render_template('retrieveEvents.html', count=len(online_list), count1=len(offline_list), online_list=online_list, offline_list=offline_list)
 
