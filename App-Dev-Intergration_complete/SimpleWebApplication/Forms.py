@@ -242,4 +242,6 @@ class UpdateProductImg(Form):
 
 class PurchaseProduct(Form):
     qty = IntegerField('Quantity: ', [validators.InputRequired()])
+    option = RadioField('Choose Checkout:', validators=[validators.DataRequired()], choices=[('Purchase','Purchase'),('Add to cart','Add to cart')],default='No')
+
 

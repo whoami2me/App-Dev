@@ -18,7 +18,7 @@
       <div class="col-md-12">
         <div class="section-heading">
           <div class="line-dec"></div>
-          <h1>{{ product.get_product_group() }}:{{ product.get_product_name() }}</h1>
+          <h1 style="text-align: center;">Successfully added product to cart!</h1>
         </div>
       </div>
       <div class="col-md-6">
@@ -35,28 +35,12 @@
       <div class="col-md-6">
         <div class="right-content">
           <h4>{{ product.get_product_name() }}</h4>
-          {% if product.get_product_saleoption() == "Inactive" %}
-            <h6>{{ product.get_product_priceformat() }}</h6>
-          {% elif product.get_product_saleoption() == "Active" %}
-            <h6 style="text-decoration: line-through;">{{ product.get_product_priceformat() }}</h6>
-            <h6>{{product.get_product_saleprice()}}</h6>
-          {% endif %}
-          <p>Description: <br> {{ product.get_product_desc() }}</p>
-          <span style="font-weight: bold;">{{ product.get_product_qty() }} left on stock</span>
-          <!--Change this form later-->
-          <form method="POST" action="" enctype="multipart/form-data">
-            <div class="form-group" >
-                {{ render_field(form.qty, class="quantity-text") }}
-                {% for subfield in form.option %}
-                <br><tr>
-                    <td>{{ subfield }}</td>
-                    <td>{{ subfield.label }}</td>
-                </tr>
-                {% endfor %}
-                <input type="submit" value="Proceed" class="button"/>
-            </div>
-          </form>
-          <!---->
+          <h6>Quantity Added: {{ pqty }}</h6>
+          <br>
+          <br>
+          <a href="http://127.0.0.1:5000/homeProduct">
+          <button class="button" >Back to home</button> <!--Maybe change or add to view cart button-->
+          </a>
         </div>
       </div>
     </div>

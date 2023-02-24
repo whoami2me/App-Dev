@@ -22,8 +22,9 @@ geolocator = Nominatim(user_agent='app')
 
 @app.route('/')
 def user_home():
+
     if session.get('name') is not None:
-        pass
+        print(session['name'])
     else:
         session['name'] = 'client'
     return render_template('loginevents.html')
@@ -85,7 +86,21 @@ def admin_home():
     keysList = list(count_dict.keys())
     countList = list(count_dict.values())
 
-    return render_template('home.html', events=json.dumps(events), reg_pax=json.dumps(registered), keysList=json.dumps(keysList), countList=json.dumps(countList))
+
+    products_dict = {}
+    db=shelve.open('product.db','r')
+    products_dict = db['Products']
+    productname_list = []
+    productsales_list = []
+    for key in products_dict:
+        productobj = products_dict.get(key)
+        productname = productobj.get_product_name()
+        productsales = productobj.get_total_earned2()
+        productsalesnum = float(re.sub('[^0-9.]','',productsales))
+        productname_list.append(productname)
+        productsales_list.append(productsalesnum)
+
+    return render_template('home.html', events=json.dumps(events), reg_pax=json.dumps(registered), keysList=json.dumps(keysList), countList=json.dumps(countList), productname=json.dumps(productname_list), productsales=json.dumps(productsales_list))
 
 
 @app.route('/contactUs')
@@ -158,12 +173,6 @@ def events():
 
         db['Offline'] = offline_dict
         db.close()
-
-
-
-
-
-
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list, regeve_list=regeve_list, user=session['name'])
 
@@ -1186,6 +1195,7 @@ def delete_voucher(id):
 
 
 # start of rayden portion
+
 @app.route('/createProduct', methods=['GET', 'POST'])
 def create_product():
     create_product_form = CreateProduct(CombinedMultiDict((request.files, request.form)))
@@ -1375,6 +1385,7 @@ def home_product():
 
     return render_template('homeProduct.html', products=products_list2, products2=products_list3)
 
+
 @app.route("/singleProduct/<uuid:id>/", methods=['GET', 'POST'])
 def single_product(id):
     purchase_product_form = PurchaseProduct(CombinedMultiDict((request.files, request.form)))
@@ -1392,66 +1403,168 @@ def single_product(id):
         if purchase_product_form.qty.data > product_id.get_product_qty():  # Validate user input if more than stock
             purchase_product_form.qty.errors.append('Quantity selected was more than stock')
             return render_template('singleProduct.html', product=p, form=purchase_product_form)
-        else:
+
+        if purchase_product_form.option.data == 'Purchase':
+            purchaseproducts_dict = {}
             totalsold = product_id.get_product_sold() + purchase_product_form.qty.data
             product_id.set_product_sold(totalsold)
             qtyremaning = product_id.get_product_qty() - purchase_product_form.qty.data
             product_id.set_product_qty(qtyremaning)
-        db['Products'] = products_dict
-        db.close()
-        purchaseproducts_dict = {}
-        db = shelve.open('purchaseproduct.db', 'c')
-        try:
-            purchaseproducts_dict = db['purchaseProducts']
-        except:
-            print("Error in retrieving Product from database")
+            db['Products'] = products_dict
+            db.close()
+            db = shelve.open('purchaseproduct.db', 'c')
+            try:
+                purchaseproducts_dict = db['purchaseProducts']
+            except:
+                print("Error in retrieving Product from database")
+            if product_id.get_product_saleoption() == 'Active':
+                price = product_id.get_product_saleprice()
+                price2 = product_id.get_product_saleprice2()
+            else:
+                price = "${:.2f}".format(product_id.get_product_price())
+                price2 = "${}".format(product_id.get_product_price())
 
-        if product_id.get_product_saleoption() == 'Active':
-            price = product_id.get_product_saleprice()
-            price2 = product_id.get_product_saleprice2()
+            numericprice = re.sub('[^0-9.]', '', price2)
+            calctotalprice = float(numericprice) * float(purchase_product_form.qty.data)
+            totalprice = "${:.2f}".format(calctotalprice)
+            custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(), product_id.get_product_id(),
+                                                           price, session['Customer'], purchase_product_form.qty.data,
+                                                           product_id.get_product_image(),
+                                                           product_id.get_product_desc(), totalprice)
+
+            purchaseproducts_dict[custpurchase.get_tempvar()] = custpurchase
+
+            db['purchaseProducts'] = purchaseproducts_dict
+            db.close()
+            products_dict = {}
+            db = shelve.open('product.db', 'w')
+            products_dict = db['Products']
+            product_id = products_dict.get(id)
+            totalearned = product_id.get_total_earned() + calctotalprice
+            product_id.set_total_earned(totalearned)
+            db['Products'] = products_dict
+            db.close()
+
+            return render_template('purchaseProduct.html', product=p, pqty=purchase_product_form.qty.data)
+        elif purchase_product_form.option.data == 'Add to cart':
+            addproduct_dict = {}
+            db = shelve.open('addproduct.db', 'c')
+            try:
+                addproduct_dict = db['addProducts']
+            except:
+                print("Error in retrieving product from database")
+            if product_id.get_product_saleoption() == 'Active':
+                price = product_id.get_product_saleprice()
+                price2 = product_id.get_product_saleprice2()
+            else:
+                price = "${:.2f}".format(product_id.get_product_price())
+                price2 = "${}".format(product_id.get_product_price())
+
+            numericprice = re.sub('[^0-9.]', '', price2)
+            calctotalprice = float(numericprice) * float(purchase_product_form.qty.data)
+            totalprice = "${:.2f}".format(calctotalprice)
+            custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(), product_id.get_product_id(),
+                                                           price, session['Customer'], purchase_product_form.qty.data,
+                                                           product_id.get_product_image(),
+                                                           product_id.get_product_desc(), totalprice)
+
+            addproduct_dict[custpurchase.get_tempvar()] = custpurchase
+            print(custpurchase.get_tempvar())
+            db['addProducts'] = addproduct_dict
+            db.close()
+            return render_template('addcartProduct.html', product=p, pqty=purchase_product_form.qty.data)
         else:
-            price = "${:.2f}".format(product_id.get_product_price())
-            price2 = "${}".format(product_id.get_product_price())
-
-        numericprice = re.sub('[^0-9.]','',price2)
-        calctotalprice = float(numericprice)*float(purchase_product_form.qty.data)
-        totalprice = "${:.2f}".format(calctotalprice)
-        custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),price,session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc(),totalprice)
-
-        purchaseproducts_dict[custpurchase.get_tempvar()] = custpurchase
-
-        db['purchaseProducts'] = purchaseproducts_dict
-        db.close()
-        return render_template('purchaseProduct.html',product = p, pqty = purchase_product_form.qty.data)
+            print('Error')
     return render_template('singleProduct.html', product=p, form=purchase_product_form)
+
 
 @app.route('/viewpurchaseProduct')
 def viewpurchaseproduct():
     purchaseproductdict = {}
-    db = shelve.open('purchaseproduct.db','r')
+    db = shelve.open('purchaseproduct.db', 'r')
     purchaseproductdict = db['purchaseProducts']
     db.close()
     customer_list = []
 
-
-    productdict = {}
-    db = shelve.open('product.db','r')
-    productdict = db['Products']
-    db.close()
-
-    for key in purchaseproductdict: #Key is tempvar (uuid)
+    for key in purchaseproductdict:  # Key is tempvar (uuid)
         purchaseproduct = purchaseproductdict.get(key)
         if purchaseproduct.get_pProduct_userid() == session['Customer']:
             customer_list.append(purchaseproduct)
 
-    return render_template('viewpurchaseproduct.html',customer = customer_list)
+    return render_template('viewpurchaseproduct.html', customer=customer_list)
+
+
+@app.route('/viewcartProduct')
+def viewcartproduct():
+    addproductdict = {}
+    db = shelve.open('addproduct.db', 'r')
+    addproductdict = db['addProducts']
+    db.close()
+    customer_list = []
+    for key in addproductdict:  # Key is tempvar (uuid)
+        purchaseproduct = addproductdict.get(key)
+        print(key)
+        if purchaseproduct.get_pProduct_userid() == session['Customer']:
+            customer_list.append(purchaseproduct)
+    return render_template('viewcartProduct.html', customer=customer_list)
+
+
+@app.route('/purchasecartProduct/<uuid:id>/')
+def purchasecartproduct(id):
+    db = shelve.open('addproduct.db', 'r')
+    addproductdict = db['addProducts']
+    db.close()
+
+    purchaseproductdict = {}
+    db = shelve.open('purchaseproduct.db', 'w')
+    purchaseproductdict = db['purchaseProducts']
+
+    productcartobj = addproductdict.get(id)
+    print(productcartobj)
+    purchaseproductdict[id] = productcartobj
+    db['purchaseProducts'] = purchaseproductdict
+    db.close()
+
+    products_dict = {}
+    db = shelve.open('product.db', 'w')
+    products_dict = db['Products']
+    product_id = productcartobj.get_pProduct_id()
+    productobj = products_dict.get(product_id)
+    totalsold = productobj.get_product_sold() + productcartobj.get_pProduct_qty()
+    productobj.set_product_sold(totalsold)
+    qtyremaining = productobj.get_product_qty() - productcartobj.get_pProduct_qty()
+    productobj.set_product_qty(qtyremaining)
+    calctotalpricestr = productcartobj.get_pProduct_totalprice()
+    calctotalpricenum = re.sub('[^0-9.]', '', calctotalpricestr)
+    totalearned = productobj.get_total_earned() + float(calctotalpricenum)
+    productobj.set_total_earned(totalearned)
+    db['Products'] = products_dict
+    db.close()
+
+    db = shelve.open('addproduct.db', 'w')
+    addproductdict = db['addProducts']
+    addproductdict.pop(id)
+    db['addProducts'] = addproductdict
+    db.close()
+    return redirect(url_for('home_product'))
+
+
+@app.route('/removecartProduct/<uuid:id>/', methods=['POST'])
+def removecartproduct(id):
+    db = shelve.open('addproduct.db', 'w')
+    addproductdict = db['addProducts']
+    p = addproductdict.get(id)
+    addproductdict.pop(id)
+    db['addProducts'] = addproductdict
+    db.close()
+    return redirect(url_for('viewcartproduct'))
+
 
 # end of rayden portion
 
 
+
 #start of izwan portion
-
-
 # end of izwan portion
 
 
