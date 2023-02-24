@@ -80,7 +80,21 @@ def events():
         if (offline.get_date() <= date.today() <= offline.get_end_date()) and (offline.get_reg_pax() < offline.get_pax()) and (offline.get_reg_status() == 'Active' or offline.get_reg_status() == 'A'):
             offline_list.append(offline)
 
-    return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list)
+    regeve_dict = {}
+    db = shelve.open('regeve.db', 'r')
+    regeve_dict = db['Register_Events']
+    db.close()
+
+    regeve_list = []
+
+    for key in regeve_dict:
+            regeve = regeve_dict.get(key)
+            if regeve.get_first_name() == session['name']:
+                regeve_list.append(regeve.get_event_name())
+
+    print(regeve_list)
+
+    return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list, regeve_list=regeve_list)
 
 @app.route('/viewRegisteredEvents')
 def view_regeve():
