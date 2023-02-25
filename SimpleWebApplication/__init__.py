@@ -75,7 +75,6 @@ def view_regeve():
     return render_template('userRegisteredEvents.html', regeve_list=regeve_list, count=len(regeve_list))
 
 
-
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
 def create_online():
 

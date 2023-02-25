@@ -58,3 +58,6 @@ class OfflineEvents(Events.Events):
 
     def get_reg_pax(self):
         return self.__registered_pax
+
+    def get_slots_left_pax(self):
+        return self.__pax - self.__registered_pax
