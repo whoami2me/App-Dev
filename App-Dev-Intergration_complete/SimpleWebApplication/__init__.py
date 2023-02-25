@@ -24,7 +24,7 @@ geolocator = Nominatim(user_agent='app')
 def user_home():
 
     if session.get('name') is not None:
-        print(session['name'])
+        pass
     else:
         session['name'] = 'client'
     return render_template('loginevents.html')
@@ -122,6 +122,7 @@ def events():
             offline_list.append(offline)
 
     regeve_list = []
+    list_dict = {}
 
     if session['name'] != 'client':
 
@@ -136,7 +137,34 @@ def events():
                 if regeve.get_first_name() == session['name']:
                     regeve_list.append(regeve.get_event_name())
 
-        print(regeve_list)
+        for key in regeve_dict:
+            list_dict.update({regeve_dict.get(key).get_event_name(): 0})
+
+        for key in regeve_dict:
+            if regeve_dict.get(key).get_event_name() in list_dict:
+                list_dict[regeve_dict.get(key).get_event_name()] += 1
+
+        db = shelve.open('offline.db', 'w')
+        offline_dict = db['Offline']
+
+        offline_list = []
+        for key in offline_dict:
+            print(key)
+            offline = offline_dict.get(key)
+            if offline.get_name() in list_dict:
+                offline.set_reg_pax(list_dict[offline.get_name()])
+            else:
+                offline.set_reg_pax(0)
+            offline_list.append(offline)
+
+        db['Offline'] = offline_dict
+        db.close()
+
+
+
+
+
+
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list, regeve_list=regeve_list, user=session['name'])
 
