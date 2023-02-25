@@ -3,7 +3,7 @@ class Staff:
     count_id = 0
 
     # initializer method
-    def __init__(self, first_name, last_name, email, address1, address2, gender, password, passwordcfm, date_created, phone_number, postal_code, floor_number, unit_number, membership='Employee', status='Active'):
+    def __init__(self, first_name, last_name, email, address1, address2, gender, password, passwordcfm, date_created, phone_number, postal_code, floor_number, unit_number, image, membership='Employee', status='Active'):
         Staff.count_id += 1
         self.__staff_id = Staff.count_id
         self.__first_name = first_name
@@ -21,6 +21,7 @@ class Staff:
         self.__postal_code = postal_code
         self.__floor_number = floor_number
         self.__unit_number = unit_number
+        self.__image = image
 
     # accessor methods
     def get_staff_id(self):
@@ -71,6 +72,9 @@ class Staff:
     def get_unit_number(self):
         return self.__unit_number
 
+    def get_image(self):
+        return self.__image
+
     # mutator methods
     def set_staff_id(self, staff_id):
         self.__staff_id = staff_id
@@ -119,3 +123,6 @@ class Staff:
 
     def set_unit_number(self, unit_number):
         self.__unit_number = unit_number
+
+    def set_image(self, image):
+        self.__image = image

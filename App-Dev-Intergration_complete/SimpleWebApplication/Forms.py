@@ -64,7 +64,8 @@ class CreateOffEventForm(Form):
             raise ValidationError("The date cannot be in the past!")
 
 
-#trisven membership portion
+#trisven portion
+
 def check_phone_number(form, field):
     if not re.match(r'^[89][0-9]{7}$', str(field.data)):
         raise validators.ValidationError('Invalid phone number,it must start with either 8 or 9 and be 8 digit long')
@@ -95,6 +96,7 @@ class CreateStaffForm(Form):
     postal_code = IntegerField('Postal Code', [validators.input_required(), check_postal_code])
     floor_number = IntegerField('#', [validators.input_required(), check_floor_number])
     unit_number = IntegerField('-', [validators.input_required(), check_unit_number])
+    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
 
 class CreateCustomerForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
@@ -111,6 +113,7 @@ class CreateCustomerForm(Form):
     postal_code = IntegerField('Postal Code', [validators.input_required(), check_postal_code])
     floor_number = IntegerField('#', [validators.input_required(), check_floor_number])
     unit_number = IntegerField('-', [validators.input_required(), check_unit_number])
+    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
 
 class UpdateStaffForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired(message='First Name is empty')])
@@ -125,19 +128,22 @@ class UpdateStaffForm(Form):
     floor_number = IntegerField('#', [validators.input_required(), check_floor_number])
     unit_number = IntegerField('-', [validators.input_required(), check_unit_number])
     status = RadioField('Status', choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
+    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
 
 class UpdateCustomerForm(Form):
-    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()])
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired(message='First Name is empty')])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired(message='Last Name is empty')])
     gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     address1 = StringField('Address Line 1', [validators.length(max=100), validators.DataRequired()])
     address2 = StringField('Address Line 2 (Optional)', [validators.length(max=100)])
+    membership = SelectField('Membership', choices=[('Employee', 'Employee'), ('Admin', 'Admin')], default='Employee')
     phone_number = IntegerField('Phone Number', [validators.InputRequired(), check_phone_number])
     postal_code = IntegerField('Postal Code', [validators.input_required(), check_postal_code])
     floor_number = IntegerField('#', [validators.input_required(), check_floor_number])
     unit_number = IntegerField('-', [validators.input_required(), check_unit_number])
     status = RadioField('Status', choices=[('Active', 'Active'), ('Inactive', 'Inactive')], default='Active')
+    image = FileField('Image', validators=[validators.DataRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
 
 class RegisterEventForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
@@ -151,60 +157,36 @@ class RegisterEventForm(Form):
                 'Invalid phone number,it must start with either 8 or 9 and be 8 digit long')
 
 class ChangePassword(Form):
-    password = PasswordField('Password', [validators.Length(min=1), validators.DataRequired()])
-    newpassword = PasswordField(validators=[validators.Length(min=8, message='Too short'), validators.DataRequired(), validators.Regexp(
+    password = PasswordField(validators=[validators.Length(min=8, message='Too short'), validators.DataRequired(), validators.Regexp(
             r'^(?=(.*[a-z]){3,})(?=(.*[A-Z]){2,})(?=(.*[0-9]){2,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$',
             message="Invalid password. It must contain at least one uppercase letter, one lowercase letter, one digit, one special character and be at least 8 characters long.")])
-    passwordcfm = PasswordField('Confirm Password', validators=[validators.EqualTo('password', 'Password mismatch')])
+    passwordcfm = PasswordField('', validators=[validators.EqualTo('password', 'Password mismatch')])
 
 class Login(Form):
     email = EmailField('', [validators.Email(), validators.DataRequired()])
     password = PasswordField('', [validators.Length(min=1), validators.DataRequired()])
 
+
 #izwan
-def check_payment(form, field):
-    if not re.match(r'[0-9]{16}$', str(field.data)):
-        raise validators.ValidationError('Invalid card details. It must be 16 digit long')
 
 
-class CreateSuppliersForm(Form):
-    Company_name = StringField('Company Name', [validators.Length(min=1, max=150), validators.DataRequired()])
-    telephone = IntegerField('Phone Number', [validators.InputRequired(), check_phone_number])
-    website = StringField('Supplier website', [validators.Length(min=1, max=150), validators.DataRequired(), validators.regexp("^https://[0-9A-z.]+.[0-9A-z.]+.[a-z]+$",message= "Please enter a valid website")])
-    email = StringField('Company e-mail:', [validators.Email(message="Please enter a valid email")])
-    Address1 = StringField('Address line', [validators.Length(min=1, max=150), validators.DataRequired()])
-    floor_number = IntegerField('#', [validators.optional(), check_floor_number])
-    unit_number = IntegerField('-', [validators.optional(), check_unit_number])
-    postal = IntegerField('Postal code', [validators.InputRequired(), check_postal_code])
-    Payment = IntegerField("Payment Details", [validators.InputRequired(), check_payment])
-    Categories_select = SelectField('Categories', [validators.DataRequired()], choices=[('', 'Select'), ('Ball', 'Ball'), ('Footwear', 'Footwear'),('Shirts','Shirts',),('Pants','Pants'),('Accessories','Accessories')],default='')
-    Product_name = StringField('Name of product', [validators.Length(min=1, max=150), validators.DataRequired()])
-    remarks = TextAreaField('Remarks', [validators.Optional()])
-
-
-class CreateInventoryForm(Form):
-    Categories_select = SelectField('Categories', [validators.DataRequired()], choices=[('', 'Select'), ('B', 'Ball'), ('F', 'Footwear')],default='')
-    Product_name = StringField('Name of product', [validators.Length(min=1, max=150), validators.DataRequired()])
-    Qty = IntegerField('Quantity: ',[validators.NumberRange(min=1,max=100),validators.DataRequired()])
-    remarks = TextAreaField('Remarks', [validators.Optional()])
-
-
+#azami
 
 categories = ["All", "Ball", "Shoe", "Shin guards", "Shirt", "Shorts", "Socks"]
+
 
 class CreateVoucherForm(Form):
     def validate_date(form, field):
         if field.data < datetime.date(datetime.now()):
             raise ValidationError("Date cannot be earlier than today's date")
 
-    picture = SelectField("Image:", [validators.InputRequired()], choices=[("test.jpg", "test.jpg"), ("test1.jpeg", "test1.jpeg")])
+    picture = SelectField("Image:", [validators.InputRequired()], choices=[("Logo.jpg", "Logo"), ("FreeShipping.jpg", "Free Shipping")])
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired(), validators.Regexp('^\w+', message="Voucher name must contain only letters numbers or underscore")])
     type = SelectField("Type of voucher", [validators.DataRequired()], choices=[("$", "$"), ("%", "%"), ("Gift", "Free")])
     amount = IntegerField('Amount off', [validators.NumberRange(min=0), validators.InputRequired()], render_kw={'style': 'width: 8ch'})
     min_spend = IntegerField('Min. spend ($)', [validators.InputRequired(), validators.NumberRange(min=0)], render_kw={'style': 'width: 8ch'})
-    cap = IntegerField('Capped at ($)', [validators.InputRequired(), validators.NumberRange(min=0)], render_kw={'style': 'width: 8ch'})
     category = StringField('Category', [validators.Length(min=1, max=150), validators.DataRequired(), validators.AnyOf(categories)])
-    start = DateField('Start date', [validators.DataRequired(), validate_date], format='%Y-%m-%d', default=datetime.now, render_kw={'style': 'width: 20ch'})
+    start = DateField('Start date', [validators.DataRequired()], format='%Y-%m-%d', default=datetime.now, render_kw={'style': 'width: 20ch'})
     expiry = DateField('Expiry date', [validators.DataRequired(), validate_date], format='%Y-%m-%d', default=datetime.now, render_kw={'style': 'width: 20ch'})
     description = TextAreaField('Description', [validators.Optional(), validators.Length(min=1, max=150), validators.Regexp('^\w+', message="Voucher name must contain only letters numbers or underscore")])
     status = SelectField("Type of voucher", [validators.DataRequired()], choices=[("Active", "Active"), ("Inactive", "Inactive")])
@@ -222,6 +204,8 @@ class CreateVoucherForm(Form):
             return True
 
         return False
+
+#rayden
 
 class CreateProduct(Form):
     name = StringField('Name: ', [validators.DataRequired()])

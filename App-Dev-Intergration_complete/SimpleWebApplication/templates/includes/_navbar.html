@@ -32,19 +32,23 @@
       <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
           <li class="nav-item dropdown">
           <a class="nav-link mx-4 dropdown-toggle text-white " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle"> Welcome, {{ session['name'] }}
+              <img src="/profimg/{{ session['image'] }}" width="40" height="40" class="rounded-circle"> Welcome, {{ session['name'] }}
           </a>
           <ul class="dropdown-menu pr-3" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/profile/">Account Settings</a></li>
+              <li><a class="dropdown-item" href="/profile/{{ session['Customer'] }}">Account Settings</a></li>
+            <li><a class="dropdown-item" href="/changepassword/{{ session['Customer'] }}">Change Password</a></li>
+            <li><a class="dropdown-item" href="#">Vouchers</a></li>
+            <li><a class="dropdown-item" href="/viewcartProduct/{{ session['Customer'] }}">Shopping Cart</a></li>
             <li><a class="dropdown-item" href="/viewRegisteredEvents">Registered Events</a></li>
+            <li><a class="dropdown-item" href="/viewpurchaseProduct/{{ session['Customer'] }}">Purchase History</a></li>
             <li><a class="dropdown-item" href="/logout">Logout</a></li>
           </ul>
         </li>
       </ul>
         {% else %}
-      <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
-          <a href="/login" class="btn btn-warning" style="float: right; background-color: turquoise; border: 0px;">Login</a>
-        <a href="/createCustomer" class="btn btn-warning" style="float: right; background-color: turquoise; border: 0px;">Create Customer</a>
+      <ul class="navbar-nav ms-auto d-none d-lg-inline-flex w-40">
+          <a href="/login" class="btn btn-warning" style="float: right; color: #17a2b8; background-color: #FFFFFF ; border: 0px; margin: 4px; font-weight: 600; max-width: 100%; ">Login</a>
+            <a href="/createCustomer" class="btn btn-warning" style="float: right; color: #17a2b8; background-color: #FFFFFF ; border: 0px; margin: 4px; font-weight: 600; max-width:100%;">Sign Up</a>
       </ul>
         {% endif %}
     </div>

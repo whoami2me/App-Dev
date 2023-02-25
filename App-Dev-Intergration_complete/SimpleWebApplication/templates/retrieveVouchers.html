@@ -9,7 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
-{% block silly %}Retrieve Vouchers{% endblock %}
 {% block content %}
 
 <div class="container">
@@ -28,6 +27,9 @@
   {% else %}
   <p>There are {{ count }} vouchers.</p>
   {% endif %}
+    <form action="/clearDb" method="post">
+        <input type="submit" value="Clear all databases" class="btn btn-primary center" name=""/>
+    </form>
                     </div>
                     </div>
                 </div>
@@ -40,12 +42,8 @@
         <th>Type</th>
           <th>Amount</th>
         <th>Min.spend</th>
-          <th>Cap</th>
           <th>Category</th>
-          <th>Start date</th>
-        <th>Expiry date</th>
-        <th>Description</th>
-          <th>status</th>
+          <th>Status</th>
         <th></th>
         <th></th>
       </tr>
@@ -58,49 +56,52 @@
          <td>{{ voucher.get_type() }}</td>
         <td>{{ voucher.get_amount() }}</td>
          <td>{{ voucher.get_min_spend() }}</td>
-         <td>{{ voucher.get_cap() }}</td>
         <td>{{ voucher.get_category() }}</td>
-         <td>{{ voucher.get_start() }}</td>
-         <td>{{  voucher.get_expiry() }}</td>
-        <td>{{ voucher.get_description() }}</td>
          <td>{{ voucher.get_status() }}</td>
-        <td><a href="/updateVoucher/{{voucher.get_voucher_id()}}" class="btn btn-warning">Update</a></td>
         <td>
-          <form action="{{url_for('delete_voucher', id=voucher.get_voucher_id())}}" method="POST">
-<!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{voucher.get_name()}}?');">-->
-<!-- Button to Open the Modal -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{voucher.get_voucher_id()}}">
-  Delete
-</button>
+                            <a href="/updateVoucher/{{voucher.get_voucher_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
+                            <a href="#" class="delete" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myOutput{{ voucher.get_voucher_id() }}"><i class="material-icons">remove_red_eye</i></a>
+                        </td>
 
 <!-- The Modal -->
-<div class="modal" id="myModal_{{voucher.get_voucher_id()}}">
-  <div class="modal-dialog">
-    <div class="modal-content">
+<div class="modal fade" id="myOutput{{ voucher.get_voucher_id() }}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="exampleModalLabel1">Voucher Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Delete Confirmation</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
 
-      <!-- Modal body -->
-      <div class="modal-body">
-        Are you sure you want to delete {{voucher.get_name()}}?
-      </div>
+                <div class="row">
 
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <input type="submit" value="Delete" class="btn btn-danger">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-      </div>
+                    <div class="col-md-5">
+                        <img src="static/uploads/{{voucher.get_picture() }}" alt="teste" class="img-thumbnail" height="100">
+
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="name"><p>Name: <span>{{ voucher.get_name() }}</span></p></div>
+                        <div class="voucherid"><p>Voucher ID: <span>{{voucher.get_voucher_id()}}</span></p></div>
+                        <div class="type"><p>Type: <span>{{voucher.get_type()}}</span></p></div>
+                        <div class="amount"><p>Amount: <span>{{voucher.get_amount()}}</span></p></div>
+                        <div class="minspend"><p>Min. spend: <span>{{voucher.get_min_spend()}}</span></p></div>
+                        <div class="category"><p>Category: <span>{{voucher.get_category()}}</span></p></div>
+                        <div class="start"><p>Start date: <span>{{voucher.get_start()}}</span></p></div>
+                        <div class="expiry"><p>Expiry date: <span>{{voucher.get_expiry()}}</span></p></div>
+                        <div class="description"><p>Description: <span>{{voucher.get_description()}}</span></p></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-          </form>
-        </td>
-     </tr>
-    {% endfor %}
+{% endfor %}
     </tbody>
             </table>
         </div>

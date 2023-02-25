@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {% block title %}Library Loan System - Update Voucher{% endblock %}
 
 {% block content %}
@@ -23,9 +23,6 @@
     {{ render_field(form.min_spend, class="form-control") }}
   </div>
   <div class="form-group">
-    {{ render_field(form.cap, class="form-control") }}
-  </div>
-  <div class="form-group">
     {{ render_field(form.category, class="form-control") }}
   </div>
   <div class="form-group">
@@ -42,6 +39,6 @@
     {{ render_field(form.status, class="form-check") }}
   </div>
   </div>
-  <input type="submit" value="Submit" class="bt   n btn-primary"/>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
 {% endblock %}

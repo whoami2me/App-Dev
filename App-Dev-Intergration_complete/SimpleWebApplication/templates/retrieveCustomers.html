@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
 <div class="container">
     <div class="table-responsive-xxl">
         <div class="table-wrapper">
@@ -35,61 +36,33 @@
                 <thead>
                     <tr>
                       <th>Customer ID</th>
+                      <th>Image</th>
                       <th>Name</th>
                       <th>Email</th>
                       <th>Gender</th>
                       <th>Date Joined</th>
                       <th>Status</th>
                       <th>View/Update</th>
-                      <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for customer in customers_list %}
                     <tr>
                       <td>{{ customer.get_customer_id() }}</td>
+                      <td><img src="static/ProfilePic/{{ customer.get_image() }}" width="50" height="50"class="rounded-circle" ></td>
                       <td>{{ customer.get_first_name() }} {{ customer.get_last_name() }}</td>
                       <td>{{ customer.get_email() }}</td>
                       <td>{{ customer.get_gender() }}</td>
                       <td>{{ customer.get_date_created() }}</td>
                       {% if customer.get_status() == "Active" %}
-                      <td>Active</td>
+                      <td><span class="status text-success">&bull;</span>Active</td>
                       {% elif customer.get_status() == "Inactive" %}
-                      <td>Inactive</td>
+                      <td><span class="status text-danger">&bull;</span>Inactive</td>
                       {% endif %}
                       <td>
                             <a href="/updateCustomer/{{customer.get_customer_id()}}" class="settings" title="Update" data-toggle="tooltip"><i class="material-icons">update</i></a>
                             <a href="#" class="view" title="View" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myViewModal_{{customer.get_customer_id()}}" style="color: turquoise"><i class="material-icons">remove_red_eye</i></a>
                       </td>
-
-            <!-- Button to Open the Modal -->
-                <td><a href="#" class="delete" title="delete" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#myDeleteModal_{{customer.get_customer_id()}}" style="color: Red"><i class="material-icons">remove_circle</i></a></td>
-
-            <!-- The Delete Modal -->
-            <div class="modal" id="myDeleteModal_{{customer.get_customer_id()}}">
-              <div class="modal-dialog">
-                <div class="modal-content">
-
-                  <!-- Modal Header -->
-                  <div class="modal-header">
-                    <h4 class="modal-title">Delete Confirmation</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                  </div>
-
-                  <!-- Modal body -->
-                  <div class="modal-body">
-                    Are you sure you want to delete {{customer.get_first_name()}} {{customer.get_last_name()}}?
-                  </div>
-
-                  <!-- Modal footer -->
-                  <div class="modal-footer">
-                    <input type="submit" value="Delete" class="btn btn-danger">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  </div>
-
-                </div>
-              </div>
-            </div>
 
              <div class="modal" id="myViewModal_{{customer.get_customer_id()}}">
               <div class="modal-dialog">
@@ -122,14 +95,14 @@
                 </div>
               </div>
             </div>
-                      </form>
-                    </td>
                  </tr>
                 {% endfor %}
                 </tbody>
               </table>
-            </div>
         </div>
     </div>
 </div>
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
 {% endblock %}

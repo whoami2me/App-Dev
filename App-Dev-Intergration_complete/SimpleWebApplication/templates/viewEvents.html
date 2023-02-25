@@ -37,7 +37,12 @@
                                         <p>{{ online.get_description() }}</p>
                                       </div>
                                       <a href="" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
-                                        <a href="/registerEvents/{{ online.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register Event</a>
+
+                                            {% if online.get_name() in regeve_list %}
+                                            <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
+                                            {% else %}
+                                            <a href="/registerEvents/{{ online.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register</a>
+                                            {% endif %}
                                     </div>
                                   </div>
                             </div>
@@ -89,7 +94,12 @@
                 <p>{{ online.get_description() }}</p>
               </div>
               <a href="" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
-                <a href="/registerEvents/{{ online.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register Event</a>
+
+                {% if online.get_name() in regeve_list %}
+                <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
+                {% else %}
+                <a href="/registerEvents/{{ online.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register</a>
+                {% endif %}
             </div>
           </div>
         </div>

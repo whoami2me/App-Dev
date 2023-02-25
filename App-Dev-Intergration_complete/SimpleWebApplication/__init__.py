@@ -2,13 +2,13 @@ from datetime import date, datetime
 from idlelib import tooltip
 from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 from Forms import CreateEventForm, CreateOfflineEventForm, CreateOEventForm, CreateOffEventForm, UpdateCustomerForm, \
-    UpdateStaffForm, CreateCustomerForm, CreateStaffForm, CreateSuppliersForm, CreateInventoryForm, RegisterEventForm, \
-    Login, CreateVoucherForm, UpdateProduct, CreateProduct, UpdateProductSale, UpdateProductImg, PurchaseProduct
-import shelve, OnlineEvents, OfflineEvents, folium, Staff, Customer, Inventory, Suppliers, registerEvent, pdfkit, Voucher, Products,purchaseProduct, json
+    UpdateStaffForm, CreateCustomerForm, CreateStaffForm, RegisterEventForm, \
+    Login, UpdateProduct, CreateProduct, UpdateProductSale, UpdateProductImg, PurchaseProduct, ChangePassword, \
+    CreateVoucherForm
+import shelve, OnlineEvents, OfflineEvents, folium,  registerEvent, pdfkit, Products, purchaseProduct, json, Staff, Customer, Voucher
 from geopy.geocoders import Nominatim
 from werkzeug.datastructures import CombinedMultiDict
 import re
-
 
 app = Flask(__name__)
 path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
@@ -16,8 +16,9 @@ config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 app.config['SECRET_KEY'] = 'thisisasecret'
 app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/'
 app.config['Product_Images_Dest'] = 'static/productimages/'
-geolocator = Nominatim(user_agent='app')
+app.config['UPLOADED_PROFILE_IMAGES_DEST'] = 'static/ProfilePic/'
 
+geolocator = Nominatim(user_agent='app')
 
 @app.route('/')
 def user_home():
@@ -38,7 +39,6 @@ def admin_home():
 
     for key in regeve_dict:
         if regeve_dict.get(key).get_event_name() in list_dict:
-            print(regeve_dict.get(key).get_date_created())
             list_dict[regeve_dict.get(key).get_event_name()] += 1
 
     events = []
@@ -413,7 +413,8 @@ def cancelEvent(id):
     return redirect(url_for('view_regeve'))
 
 
-#trisven portion
+#start of trisven portion
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -431,20 +432,31 @@ def login():
         if customer.get_email() == login_form.email.data and customer.get_password() == login_form.password.data:
             session['Customer'] = customer.get_customer_id()
             session['name'] = customer.get_first_name()
-            return redirect(url_for('user_home'))
+            session['image'] = customer.get_image()
+            if customer.get_status() == 'Active':
+                return redirect(url_for('user_home'))
+            else:
+                flash('Account has been blocked.', 'error')
+                redirect('login')
         else:
-            redirect('/login')
-            flash('login failed')
+            flash('login failed', 'fail')
+            redirect('login')
 
     for email in staff_dict:
         staff = staff_dict.get(email)
         if staff.get_email() == login_form.email.data and staff.get_password() == login_form.password.data:
             session['Staff'] = staff.get_staff_id()
             session['name'] = staff.get_first_name()
-            return redirect(url_for('admin_home'))
+            session['image'] = staff.get_image()
+            session['membership'] = staff.get_membership()
+            if staff.get_status() == 'Active':
+                return redirect(url_for('admin_home'))
+            else:
+                flash('Account has been blocked.', 'error')
+                redirect('login')
         else:
-            redirect('/login')
-            flash('login failed')
+            flash('login failed', 'fail')
+            redirect('login')
     return render_template('login.html', form=login_form)
 
 @app.route('/logout')
@@ -455,7 +467,7 @@ def logout():
 
 @app.route('/profile/<int:id>/', methods=['GET', 'POST'])
 def profile_page(id):
-    update_customer_form = UpdateCustomerForm(request.form)
+    update_customer_form = UpdateCustomerForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and update_customer_form.validate():
         customers_dict = {}
         db = shelve.open('customer.db', 'w')
@@ -464,19 +476,23 @@ def profile_page(id):
         customer = customers_dict.get(id)
         customer.set_first_name(update_customer_form.first_name.data)
         customer.set_last_name(update_customer_form.last_name.data)
-        customer.set_gender(update_customer_form.gender.data)
         customer.set_email(update_customer_form.email.data)
         customer.set_address1(update_customer_form.address1.data)
         customer.set_address2(update_customer_form.address2.data)
+        customer.set_gender(update_customer_form.gender.data)
         customer.set_phone_number(update_customer_form.phone_number.data)
+        customer.set_postal_code(update_customer_form.postal_code.data)
         customer.set_floor_number(update_customer_form.floor_number.data)
         customer.set_unit_number(update_customer_form.unit_number.data)
-        customer.set_postal_code(update_customer_form.postal_code.data)
-        customer.set_status(update_customer_form.status.data)
+        customer.set_image(update_customer_form.image.data.filename)
+
+        update_customer_form.image.data.save(
+            app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_customer_form.image.data.filename)
 
         db['Customers'] = customers_dict
         db.close()
-
+        session['image'] = customer.get_image()
+        flash('Profile has been updated!', 'profileSuccess')
         return redirect(url_for('user_home'))
     else:
         customers_dict = {}
@@ -487,21 +503,136 @@ def profile_page(id):
         customer = customers_dict.get(id)
         update_customer_form.first_name.data = customer.get_first_name()
         update_customer_form.last_name.data = customer.get_last_name()
-        update_customer_form.gender.data = customer.get_gender()
         update_customer_form.email.data = customer.get_email()
         update_customer_form.address1.data = customer.get_address1()
         update_customer_form.address2.data = customer.get_address2()
+        update_customer_form.gender.data = customer.get_gender()
         update_customer_form.phone_number.data = customer.get_phone_number()
+        update_customer_form.postal_code.data = customer.get_postal_code()
         update_customer_form.floor_number.data = customer.get_floor_number()
         update_customer_form.unit_number.data = customer.get_unit_number()
-        update_customer_form.postal_code.data = customer.get_postal_code()
-        update_customer_form.status.data = customer.get_status()
+        update_customer_form.image.data = customer.get_image()
+        session['image'] = customer.get_image()
 
-        return render_template('customerProfilePage.html', form=update_customer_form)
+        return render_template('customerProfilePage.html', form=update_customer_form, customer=customer)
+
+
+@app.route('/changepassword/<int:id>/', methods=['GET', 'POST'])
+def customer_change_password(id):
+    customer_change_password_form = ChangePassword(request.form)
+    if request.method == 'POST' and customer_change_password_form.validate():
+        customers_dict = {}
+        db = shelve.open('customer.db', 'w')
+        customers_dict = db['Customers']
+
+        customer = customers_dict.get(id)
+        customer.set_password(customer_change_password_form.password.data)
+        customer.set_passwordcfm(customer_change_password_form.passwordcfm.data)
+
+        db['Customers'] = customers_dict
+        db.close()
+        flash('Password has been changed!', 'passwordSuccess')
+        return redirect(url_for('user_home'))
+
+    else:
+        customers_dict = {}
+        db = shelve.open('customer.db', 'r')
+        customers_dict = db['Customers']
+        db.close()
+
+        customer = customers_dict.get(id)
+        customer_change_password_form.password.data = customer.get_password()
+        customer_change_password_form.passwordcfm.data = customer.get_passwordcfm()
+
+    return render_template('customerChangePassword.html', form=customer_change_password_form)
+
+@app.route('/staffchangepassword/<int:id>/', methods=['GET', 'POST'])
+def staff_change_password(id):
+    staff_change_password_form = ChangePassword(request.form)
+    if request.method == 'POST' and staff_change_password_form.validate():
+        staffs_dict = {}
+        db = shelve.open('staff.db', 'w')
+        staffs_dict = db['Staffs']
+
+        staff = staffs_dict.get(id)
+        staff.set_password(staff_change_password_form.password.data)
+        staff.set_passwordcfm(staff_change_password_form.passwordcfm.data)
+
+        db['Staffs'] = staffs_dict
+        db.close()
+        flash('Password has been changed!', 'passwordSuccess')
+        return redirect(url_for('admin_home'))
+
+    else:
+        staffs_dict = {}
+        db = shelve.open('staff.db', 'r')
+        staffs_dict = db['Staffs']
+        db.close()
+
+        staff = staffs_dict.get(id)
+        staff_change_password_form.password.data = staff.get_password()
+        staff_change_password_form.passwordcfm.data = staff.get_passwordcfm()
+
+    return render_template('staffChangePassword.html', form=staff_change_password_form)
+
+
+@app.route('/staffprofile/<int:id>/', methods=['GET', 'POST'])
+def staff_profile_page(id):
+    update_staff_form = UpdateStaffForm(CombinedMultiDict((request.files, request.form)))
+    if request.method == 'POST' and update_staff_form.validate():
+        staffs_dict = {}
+        db = shelve.open('staff.db', 'w')
+        staffs_dict = db['Staffs']
+
+        staff = staffs_dict.get(id)
+        staff.set_first_name(update_staff_form.first_name.data)
+        staff.set_last_name(update_staff_form.last_name.data)
+        staff.set_email(update_staff_form.email.data)
+        staff.set_address1(update_staff_form.address1.data)
+        staff.set_address2(update_staff_form.address2.data)
+        staff.set_gender(update_staff_form.gender.data)
+        staff.set_membership(update_staff_form.membership.data)
+        staff.set_phone_number(update_staff_form.phone_number.data)
+        staff.set_postal_code(update_staff_form.postal_code.data)
+        staff.set_floor_number(update_staff_form.floor_number.data)
+        staff.set_unit_number(update_staff_form.unit_number.data)
+        staff.set_image(update_staff_form.image.data.filename)
+
+        update_staff_form.image.data.save(
+            app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_staff_form.image.data.filename)
+
+        db['Staffs'] = staffs_dict
+        db.close()
+
+        flash('Profile has been updated!', 'profileSuccess')
+        session['image'] = staff.get_image()
+        return redirect(url_for('admin_home'))
+    else:
+        staffs_dict = {}
+        db = shelve.open('staff.db', 'r')
+        staffs_dict = db['Staffs']
+        db.close()
+
+        staff = staffs_dict.get(id)
+        update_staff_form.first_name.data = staff.get_first_name()
+        update_staff_form.last_name.data = staff.get_last_name()
+        update_staff_form.email.data = staff.get_email()
+        update_staff_form.address1.data = staff.get_address1()
+        update_staff_form.address2.data = staff.get_address2()
+        update_staff_form.gender.data = staff.get_gender()
+        update_staff_form.membership.data = staff.get_membership()
+        update_staff_form.phone_number.data = staff.get_phone_number()
+        update_staff_form.postal_code.data = staff.get_postal_code()
+        update_staff_form.floor_number.data = staff.get_floor_number()
+        update_staff_form.unit_number.data = staff.get_unit_number()
+        update_staff_form.image.data = staff.get_image()
+        session['image'] = staff.get_image()
+
+        return render_template('staffProfilePage.html', form=update_staff_form, staff=staff)
 
 @app.route('/createStaff', methods=['GET', 'POST'])
 def create_staff():
-    create_staff_form = CreateStaffForm(request.form)
+    create_staff_form = CreateStaffForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and create_staff_form.validate():
         staffs_dict = {}
         db = shelve.open('staff.db', 'c')
@@ -511,13 +642,15 @@ def create_staff():
         except:
             print("Error in retrieving Staffs from staff.db.")
 
+        create_staff_form.image.data.save(app.config['UPLOADED_PROFILE_IMAGES_DEST'] + create_staff_form.image.data.filename)
+
         today = date.today()
         staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data,
                             create_staff_form.email.data, create_staff_form.address1.data,
-                            create_staff_form.address2.data, create_staff_form.gender.data,   create_staff_form.password.data,
+                            create_staff_form.address2.data, create_staff_form.gender.data, create_staff_form.password.data,
                             create_staff_form.passwordcfm.data, today, create_staff_form.phone_number.data,
                             create_staff_form.postal_code.data, create_staff_form.floor_number.data,
-                            create_staff_form.unit_number.data)
+                            create_staff_form.unit_number.data, create_staff_form.image.data.filename)
         staffs_dict[staff.get_staff_id()] = staff
         db['Staffs'] = staffs_dict
 
@@ -529,7 +662,7 @@ def create_staff():
 
 @app.route('/createCustomer', methods=['GET', 'POST'])
 def create_customer():
-    create_customer_form = CreateCustomerForm(request.form)
+    create_customer_form = CreateCustomerForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and create_customer_form.validate():
         customers_dict = {}
         db = shelve.open('customer.db', 'c')
@@ -539,13 +672,16 @@ def create_customer():
         except:
             print("Error in retrieving Customers from customer.db.")
 
+        create_customer_form.image.data.save(app.config['UPLOADED_PROFILE_IMAGES_DEST'] + create_customer_form.image.data.filename)
+
         today = date.today()
         customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
                                      create_customer_form.gender.data, create_customer_form.email.data,
                                      create_customer_form.address1.data, create_customer_form.address2.data,
                                      create_customer_form.password.data, create_customer_form.passwordcfm.data,
                                      today, create_customer_form.phone_number.data, create_customer_form.postal_code.data,
-                                     create_customer_form.floor_number.data, create_customer_form.unit_number.data)
+                                     create_customer_form.floor_number.data, create_customer_form.unit_number.data,
+                                     create_customer_form.image.data.filename)
         ##        customers_dict[customer.get_customer_id()] = customer
         customers_dict[customer.get_customer_id()] = customer
         db['Customers'] = customers_dict
@@ -587,7 +723,7 @@ def retrieve_customers():
 
 @app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
 def update_staff(id):
-    update_staff_form = UpdateStaffForm(request.form)
+    update_staff_form = UpdateStaffForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and update_staff_form.validate():
         staffs_dict = {}
         db = shelve.open('staff.db', 'w')
@@ -606,8 +742,12 @@ def update_staff(id):
         staff.set_floor_number(update_staff_form.floor_number.data)
         staff.set_unit_number(update_staff_form.unit_number.data)
         staff.set_status(update_staff_form.status.data)
+        staff.set_image(update_staff_form.image.data.filename)
+
+        update_staff_form.image.data.save(app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_staff_form.image.data.filename)
 
         db['Staffs'] = staffs_dict
+        session['image'] = staff.get_image()
         db.close()
 
         return redirect(url_for('retrieve_staffs'))
@@ -630,13 +770,15 @@ def update_staff(id):
         update_staff_form.floor_number.data = staff.get_floor_number()
         update_staff_form.unit_number.data = staff.get_unit_number()
         update_staff_form.status.data = staff.get_status()
+        update_staff_form.image.data = staff.get_image()
+        session['image'] = staff.get_image()
 
-        return render_template('updateStaff.html', form=update_staff_form)
+        return render_template('updateStaff.html', form=update_staff_form, staff=staff)
 
 
 @app.route('/updateCustomer/<int:id>/', methods=['GET', 'POST'])
 def update_customer(id):
-    update_customer_form = UpdateCustomerForm(request.form)
+    update_customer_form = UpdateCustomerForm(CombinedMultiDict((request.files, request.form)))
     if request.method == 'POST' and update_customer_form.validate():
         customers_dict = {}
         db = shelve.open('customer.db', 'w')
@@ -645,15 +787,19 @@ def update_customer(id):
         customer = customers_dict.get(id)
         customer.set_first_name(update_customer_form.first_name.data)
         customer.set_last_name(update_customer_form.last_name.data)
-        customer.set_gender(update_customer_form.gender.data)
         customer.set_email(update_customer_form.email.data)
         customer.set_address1(update_customer_form.address1.data)
         customer.set_address2(update_customer_form.address2.data)
+        customer.set_gender(update_customer_form.gender.data)
         customer.set_phone_number(update_customer_form.phone_number.data)
+        customer.set_postal_code(update_customer_form.postal_code.data)
         customer.set_floor_number(update_customer_form.floor_number.data)
         customer.set_unit_number(update_customer_form.unit_number.data)
-        customer.set_postal_code(update_customer_form.postal_code.data)
         customer.set_status(update_customer_form.status.data)
+        customer.set_image(update_customer_form.image.data.filename)
+
+        update_customer_form.image.data.save(
+            app.config['UPLOADED_PROFILE_IMAGES_DEST'] + update_customer_form.image.data.filename)
 
         db['Customers'] = customers_dict
         db.close()
@@ -668,193 +814,124 @@ def update_customer(id):
         customer = customers_dict.get(id)
         update_customer_form.first_name.data = customer.get_first_name()
         update_customer_form.last_name.data = customer.get_last_name()
-        update_customer_form.gender.data = customer.get_gender()
         update_customer_form.email.data = customer.get_email()
         update_customer_form.address1.data = customer.get_address1()
         update_customer_form.address2.data = customer.get_address2()
+        update_customer_form.gender.data = customer.get_gender()
         update_customer_form.phone_number.data = customer.get_phone_number()
+        update_customer_form.postal_code.data = customer.get_postal_code()
         update_customer_form.floor_number.data = customer.get_floor_number()
         update_customer_form.unit_number.data = customer.get_unit_number()
-        update_customer_form.postal_code.data = customer.get_postal_code()
         update_customer_form.status.data = customer.get_status()
+        update_customer_form.image.data = customer.get_image()
 
-        return render_template('updateCustomer.html', form=update_customer_form)
-
-
-@app.route('/deleteStaff/<int:id>', methods=['POST'])
-def delete_staff(id):
-    staffs_dict = {}
-    db = shelve.open('staff.db', 'w')
-    staffs_dict = db['Staffs']
-
-    staffs_dict.pop(id)
-
-    db['Staffs'] = staffs_dict
-    db.close()
-
-    return redirect(url_for('retrieve_staffs'))
-
-
-@app.route('/deleteCustomer/<int:id>', methods=['POST'])
-def delete_customer(id):
-    customers_dict = {}
-    db = shelve.open('customer.db', 'w')
-    customers_dict = db['Customers']
-    customers_dict.pop(id)
-
-    db['Customers'] = customers_dict
-    db.close()
-
-    return redirect(url_for('retrieve_customers'))
+        return render_template('updateCustomer.html', form=update_customer_form, customer=customer)
 
 #end of trisven portion
 
 
-#start of izwan portion
-
-@app.route('/createSuppliers', methods=['GET', 'POST'])
-def create_Suppliers():
-    create_Supplier_form = CreateSuppliersForm(request.form)
-    if request.method == 'POST' and create_Supplier_form.validate():
-        Suppliers_dict = {}
-        db = shelve.open('supplier.db', 'c')
-
-        try:
-            Suppliers_dict = db['Supplier']
-        except:
-            print("Error in retrieving info from supplier.db.")
-        today = date.today()
-        supplier = Suppliers.Suppliers(create_Supplier_form.Company_name.data,create_Supplier_form.telephone.data,create_Supplier_form.website.data,create_Supplier_form.email.data,
-                                       create_Supplier_form.Address1.data, create_Supplier_form.floor_number.data,create_Supplier_form.unit_number.data,create_Supplier_form.postal.data,
-                                       create_Supplier_form.Payment.data,create_Supplier_form.Categories_select.data,create_Supplier_form.Product_name.data,create_Supplier_form.remarks.data,
-                                       today)
-        Suppliers_dict[supplier.get_Suppliers_id()] = supplier
-        db['Supplier'] = Suppliers_dict
-
-        db.close()
-
-        return redirect(url_for('retrieve_Supplier'))
-    return render_template('createSuppliers.html', form=create_Supplier_form)
-
-@app.route('/retrieveSupplier')
-def retrieve_Supplier():
-    Suppliers_dict = {}
-    db = shelve.open('supplier.db', 'r')
-    Suppliers_dict = db['Supplier']
-    db.close()
-
-    Suppliers_list = []
-    for key in Suppliers_dict:
-        supp = Suppliers_dict.get(key)
-        Suppliers_list.append(supp)
-
-    return render_template('retrieveSupplier.html', count=len(Suppliers_list), Suppliers_list=Suppliers_list)
-
-@app.route('/updateSupplier/<int:id>/', methods=['GET', 'POST'])
-def update_Supplier(id):
-    update_Supplier_form = CreateSuppliersForm(request.form)
-    if request.method == 'POST' and update_Supplier_form.validate():
-        Suppliers_dict = {}
-        db = shelve.open('supplier.db', 'w')
-        try:
-            Suppliers_dict = db['Supplier']
-        except:
-            print("Error in retrieving Users from supplier.db for updating")
-
-        Supplier = Suppliers_dict.get(id)
-        Supplier.set_Company_name(update_Supplier_form.Company_name.data)
-        Supplier.set_telephone(update_Supplier_form.telephone.data)
-        Supplier.set_website(update_Supplier_form.website.data)
-        Supplier.set_email(update_Supplier_form.email.data)
-        Supplier.set_Address1(update_Supplier_form.Address1.data)
-        Supplier.set_floor_number(update_Supplier_form.floor_number.data)
-        Supplier.set_unit_number(update_Supplier_form.unit_number.data)
-        Supplier.set_Payment(update_Supplier_form.Payment.data)
-        Supplier.set_Categories_select(update_Supplier_form.Categories_select.data)
-        Supplier.set_Product_name(update_Supplier_form.Product_name.data)
-        Supplier.set_remarks(update_Supplier_form.remarks.data)
-
-        db['Supplier'] = Suppliers_dict
-        db.close()
-
-        return redirect(url_for('retrieve_Supplier'))
-    else:
-        Suppliers_dict = {}
-        db = shelve.open('supplier.db', 'r')
-        try:
-            Suppliers_dict = db['Supplier']
-        except:
-            print("Error in retrieving Users from supplier.db for closing")
-
-        db.close()
-
-        Supplier = Suppliers_dict.get(id)
-        update_Supplier_form.Company_name.data = Supplier.get_Company_name()
-        update_Supplier_form.telephone.data = Supplier.get_telephone()
-        update_Supplier_form.website.data = Supplier.get_website()
-        update_Supplier_form.email.data = Supplier.get_email()
-        update_Supplier_form.Address1.data = Supplier.get_Address1()
-        update_Supplier_form.floor_number.data = Supplier.get_floor_number()
-        update_Supplier_form.unit_number.data = Supplier.get_unit_number()
-        update_Supplier_form.Payment.data = Supplier.get_Payment()
-        update_Supplier_form.Categories_select.data = Supplier.get_Categories_select()
-        update_Supplier_form.Product_name.data = Supplier.get_Product_name()
-        update_Supplier_form.remarks.data = Supplier.get_remarks()
-
-        return render_template('updateSupplier.html', form=update_Supplier_form)
-
-@app.route('/deleteSupplier/<int:id>', methods=['POST'])
-def delete_Supplier(id):
-    Suppliers_dict = {}
-    db = shelve.open('supplier.db', 'w')
-    Suppliers_dict = db['Supplier']
-
-    Suppliers_dict.pop(id)
-
-    db['Supplier'] = Suppliers_dict
-    db.close()
-
-    return redirect(url_for('retrieve_Supplier'))
-
-@app.route('/createInventory', methods=['GET', 'POST'])
-def create_Inventory():
-    create_Inventory_form = CreateInventoryForm(request.form)
-    if request.method == 'POST' and create_Inventory_form.validate():
-        Inventory_dict = {}
-        db = shelve.open('Inventory.db', 'c')
-
-        try:
-            Inventory_dict = db['Inventory']
-        except:
-            print("Error in retrieving supply from Inventory.db.")
-        today = date.today()
-        supply = Inventory.Inventory(create_Inventory_form.Categories_select.data,create_Inventory_form.Product_name.data,create_Inventory_form.Qty.data,create_Inventory_form.remarks.data ,today)
-        Inventory_dict[Inventory.get_Inventory_id()] = supply
-        db['Inventory'] = Inventory_dict
-
-        db.close()
-
-        return redirect(url_for('retrieve_Inventory'))
-    return render_template('createInventory.html', form=create_Inventory_form)
-
-@app.route('/retrieveInventory')
-def retrieve_Inventory():
-    Inventory_dict = {}
-    db = shelve.open('Inventory.db', 'r')
-    Inventory_dict = db['Inventory']
-    db.close()
-
-    Inventory_list = []
-    for key in Inventory_dict:
-        supp = Inventory_dict.get(key)
-        Inventory_list.append(supp)
-
-    return render_template('retrieveInventory.html', count=len(Inventory_list), Inventory_list=Inventory_list)
-
-
-# end of izwan portion
-
 #start of azami portion
+
+@app.route("/clearDb", methods=["POST", "GET"])
+def clear_db():
+    voucher_dict = {}
+    db = shelve.open('save.db', 'w')
+    voucher_dict = db['redeemed']
+
+    used_dict = {}
+    a = shelve.open("used.db", "c")
+    used_dict = a["used"]
+
+    used_dict.clear()
+    voucher_dict.clear()
+
+    db['redeemed'] = voucher_dict
+    a["used"] = used_dict
+
+    db.close()
+    a.close()
+
+    return redirect(url_for('retrieve_vouchers'))
+
+@app.route('/useVoucher/<vouid>', methods=['POST'])
+def use_voucher(vouid):
+    voucher_dict = {}
+    db = shelve.open('save.db', 'w')
+    voucher_dict = db['redeemed']
+
+    names = voucher_dict[vouid]
+    print(names)
+    print(session["name"])
+    index = names.index(session["name"])
+    print(index)
+    names.pop(index)
+    print(names)
+    voucher_dict[vouid] = names
+    db["redeemed"] = voucher_dict
+    db.close()
+
+    vouchers = {}
+    db = shelve.open('voucher.db', 'r')
+    vouchers_dict = db['Vouchers']
+    db.close()
+
+    vouchers_list = []
+    for key in vouchers_dict:
+        voucher = vouchers_dict.get(key)
+        vouchers_list.append(voucher)
+
+    used_dict = {}
+    a = shelve.open("used.db", "c")
+    used_dict = a["used"]
+    print(used_dict)
+    if vouid in used_dict:
+        list = used_dict[vouid]
+        print(list)
+        list.append(session["name"])
+        used_dict[vouid] = list
+    else:
+        used_dict.update({vouid: [session["name"]]})
+    print(used_dict)
+
+    for k in used_dict:
+        a[k] = used_dict[k]
+    print(f"final used: {used_dict}")
+    a["used"] = used_dict
+
+    return redirect(url_for('retrieve_vouchers_account'))
+
+
+@app.route('/redeemVoucher/<vouid>', methods=['GET', 'POST'])
+def redeem_voucher(vouid):
+        vouchers = {}
+        db = shelve.open('voucher.db', 'r')
+        vouchers_dict = db['Vouchers']
+        db.close()
+
+        vouchers_list = []
+        for key in vouchers_dict:
+            voucher = vouchers_dict.get(key)
+            vouchers_list.append(voucher)
+
+        redeemed_dict = {}
+        a = shelve.open("save.db", "c")
+        redeemed_dict = a["redeemed"]
+        print(redeemed_dict)
+        if vouid in redeemed_dict:
+            list = redeemed_dict[vouid]
+            print(list)
+            list.append(session["name"])
+            redeemed_dict[vouid] = list
+        else:
+            redeemed_dict.update({vouid: [session["name"]]})
+        print(redeemed_dict)
+
+        for k in redeemed_dict:
+                a[k] = redeemed_dict[k]
+        print(redeemed_dict)
+        a["redeemed"] = redeemed_dict
+
+        return redirect(url_for('retrieve_vouchers_customer'))
 
 
 @app.route('/createVoucher', methods=['GET', 'POST'])
@@ -869,7 +946,7 @@ def create_voucher():
         except:
             print("Error in retrieving Vouchers from voucher.db.")
 
-        voucher = Voucher.Voucher(create_voucher_form.picture.data, create_voucher_form.name.data, create_voucher_form.type.data, create_voucher_form.amount.data, create_voucher_form.min_spend.data, create_voucher_form.cap.data, create_voucher_form.category.data, create_voucher_form.start.data, create_voucher_form.expiry.data, create_voucher_form.description.data, create_voucher_form.status.data)
+        voucher = Voucher.Voucher(create_voucher_form.picture.data, create_voucher_form.name.data, create_voucher_form.type.data, create_voucher_form.amount.data, create_voucher_form.min_spend.data, create_voucher_form.category.data, create_voucher_form.start.data, create_voucher_form.expiry.data, create_voucher_form.description.data, create_voucher_form.status.data)
         vouchers_dict[voucher.get_voucher_id()] = voucher
         db['Vouchers'] = vouchers_dict
 
@@ -878,12 +955,50 @@ def create_voucher():
         return redirect(url_for('retrieve_vouchers'))
     return render_template('createVoucher.html', form=create_voucher_form)
 
+@app.route('/retrieveVouchersAccount', methods=["GET", "POST"])
+def retrieve_vouchers_account():
+    redvouch_dict = {}
+    db = shelve.open('save.db', 'r')
+    redvouch_dict = db['redeemed']
+    db.close()
 
-@app.route('/retrieveVouchersCustomer')
+    vouchers_dict = {}
+    db = shelve.open('voucher.db', 'r')
+    vouchers_dict = db['Vouchers']
+    db.close()
+
+
+    redvouch_list = []
+    for key in redvouch_dict:
+        redvouch = redvouch_dict.get(key)
+        if session["name"] in redvouch:
+            print("the user who registered is", session["name"])
+            redvouch_list.append(key)
+
+    print(redvouch_list)
+    vouchers_list2 = []
+    for key in redvouch_list:
+        key1 = int(key)
+        voucher = vouchers_dict.get(key1)
+        vouchers_list2.append(voucher)
+
+    return render_template('retrieveVouchersCustomer.html', count=len(vouchers_list2), vouchers_list=vouchers_list2, vouchers_list2=vouchers_list2)
+
+@app.route('/retrieveVouchersCustomer', methods=["GET", "POST"])
 def retrieve_vouchers_customer():
     vouchers_dict = {}
     db = shelve.open('voucher.db', 'r')
     vouchers_dict = db['Vouchers']
+    db.close()
+
+    redvouch_dict = {}
+    db = shelve.open('save.db', 'r')
+    redvouch_dict = db['redeemed']
+    db.close()
+
+    used_dict = {}
+    db = shelve.open('used.db', 'r')
+    used_dict = db['used']
     db.close()
 
     vouchers_list = []
@@ -893,11 +1008,39 @@ def retrieve_vouchers_customer():
 
     vouchers_list1 = []
     for i in vouchers_list:
-        if i.get_status() == 'Active':
+        if i.get_status() == 'Active' and i.get_expiry() >= datetime.date(datetime.now()) and i.get_start() <= datetime.date(datetime.now()):
             vouchers_list1.append(i)
 
+    redvouch_list = []
+    for key in redvouch_dict:
+        redvouch = redvouch_dict.get(key)
+        if session["name"] in redvouch:
+            print("the user who registered is", session["name"])
+            redvouch_list.append(key)
 
-    return render_template('retrieveVouchersCustomer.html', count=len(vouchers_list1), vouchers_list=vouchers_list1)
+    print(redvouch_list)
+    vouchers_list2 = []
+    for key in redvouch_list:
+        key1 = int(key)
+        voucher = vouchers_dict.get(key1)
+        vouchers_list2.append(voucher)
+
+    used_list = []
+    for key in used_dict:
+        usedvoucher = used_dict.get(key)
+        if session["name"] in usedvoucher:
+            print("the user who registered is", session["name"])
+            used_list.append(key)
+
+    print(used_list)
+    vouchers_list3 = []
+    for key in used_list:
+        key1 = int(key)
+        voucher = vouchers_dict.get(key1)
+        vouchers_list3.append(voucher)
+
+    return render_template('retrieveVouchersCustomer.html', count=len(vouchers_list1), vouchers_list=vouchers_list1, vouchers_list2=vouchers_list2, vouchers_list3=vouchers_list3)
+
 
 @app.route('/retrieveVouchers')
 def retrieve_vouchers():
@@ -910,7 +1053,6 @@ def retrieve_vouchers():
     for key in vouchers_dict:
         voucher = vouchers_dict.get(key)
         vouchers_list.append(voucher)
-
 
     return render_template('retrieveVouchers.html', count=len(vouchers_list), vouchers_list=vouchers_list)
 
@@ -929,7 +1071,6 @@ def update_voucher(id):
         voucher.set_type(update_voucher_form.type.data)
         voucher.set_amount(update_voucher_form.amount.data)
         voucher.set_min_spend(update_voucher_form.min_spend.data)
-        voucher.set_cap(update_voucher_form.cap.data)
         voucher.set_category(update_voucher_form.category.data)
         voucher.set_start(update_voucher_form.start.data)
         voucher.set_expiry(update_voucher_form.expiry.data)
@@ -952,7 +1093,6 @@ def update_voucher(id):
         update_voucher_form.type.data = voucher.get_type()
         update_voucher_form.amount.data = voucher.get_amount()
         update_voucher_form.min_spend.data = voucher.get_min_spend()
-        update_voucher_form.cap.data = voucher.get_cap()
         update_voucher_form.category.data = voucher.get_category()
         update_voucher_form.start.data = voucher.get_start()
         update_voucher_form.expiry.data = voucher.get_expiry()
@@ -969,6 +1109,7 @@ def delete_voucher(id):
     vouchers_dict = db['Vouchers']
 
 #end of azami portion
+
 
 
 # start of rayden portion
@@ -1233,6 +1374,14 @@ def viewpurchaseproduct():
     return render_template('viewpurchaseproduct.html',customer = customer_list)
 
 # end of rayden portion
+
+
+#start of izwan portion
+
+
+# end of izwan portion
+
+
 @app.route('/get_map')
 def get_map():
     return render_template('map.html')
@@ -1245,6 +1394,10 @@ def page_not_found(e):
 @app.route('/img/<fname>')
 def legacy_images(fname):
     return app.redirect(app.url_for('static', filename='uploads/' + fname), code=301)
+
+@app.route('/profimg/<fname>')
+def profile_images(fname):
+    return app.redirect(app.url_for('static', filename='ProfilePic/' + fname), code=301)
 
 @app.route("/getPDF/<evename>")
 def get_pdf(evename):

@@ -3,7 +3,7 @@ class Voucher:
     count_id = 0
 
     # initializer method
-    def __init__(self, picture, name, type, amount, min_spend, cap, category, start, expiry, description, status):
+    def __init__(self, picture, name, type, amount, min_spend, category, start, expiry, description, status):
         Voucher.count_id += 1
         self.__voucher_id = Voucher.count_id
         self.__picture = picture
@@ -11,7 +11,6 @@ class Voucher:
         self.__type = type
         self.__amount = amount
         self.__min_spend = min_spend
-        self.__cap = cap
         self.__category = category
         self.__start = start
         self.__expiry = expiry
@@ -30,9 +29,6 @@ class Voucher:
 
     def get_min_spend(self):
         return self.__min_spend
-
-    def get_cap(self):
-        return self.__cap
 
     def get_name(self):
         return self.__name
@@ -68,9 +64,6 @@ class Voucher:
     def set_min_spend(self, min_spend):
         self.__min_spend = min_spend
 
-    def set_cap(self, cap):
-        self.__cap = cap
-
     def set_amount(self, amount):
         self.__amount = amount
 
@@ -91,3 +84,30 @@ class Voucher:
 
     def set_status(self, status):
         self.__status = status
+
+
+class redeemVoucher:
+    count_id = 0
+
+    def __init__(self, voucher_id, name):
+        redeemVoucher.count_id += 1
+        self.__redeemVoucher_id = redeemVoucher.count_id
+        self.__red_name = name
+        self.__voucher_id = voucher_id
+        self.__voucher = None
+
+    def set_voucher_id(self, voucher_id):
+        self.__voucher_id = voucher_id
+
+    def get_voucher_id(self):
+        return self.__voucher_id
+
+    def set_voucher(self, voucher):
+        self.__voucher = voucher
+
+    def set_red_name(self, name):
+        self.__red_name = name
+
+    def get_red_name(self):
+        return self.__red_name
+

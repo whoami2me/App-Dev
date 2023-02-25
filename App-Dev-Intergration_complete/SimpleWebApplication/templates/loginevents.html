@@ -1,11 +1,208 @@
 {% extends "base.html" %}
 {% block title%}Western Corp - Events{% endblock %}
+{% block head %}
+{{ super() }}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+        .cards-wrapper {
+          display: flex;
+          justify-content: center;
+        }
+        .card img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+        .card {
+          margin: 0 0.5em;
+          box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+          border: none;
+          border-radius: 0;
+        }
+        .carousel-inner {
+          padding: 1em;
+        }
+        .carousel-control-prev,
+        .carousel-control-next {
+          background-color: #e1e1e1;
+          width: 5vh;
+          height: 5vh;
+          border-radius: 50%;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        @media (min-width: 768px) {
+          .card img {
+            height: 11em;
+          }
+        }
+        </style>
 
+{% endblock %}
 
 {% block content%}
 
-<div>
-    <p>welcome {{ session['name'] }} to our home page</p>
+        <section class="bg-light">
+            <div class="container py-5">
+	<div class="row mb-4 align-items-center flex-lg-row-reverse">
+		<div class="col-md-6 col-xl-7 mb-4 mb-lg-0 " style="">
+			<!-- requires glightbox, please flag the option in the picostrap customizer panel-->
+
+
+			<div class="lc-block position-relative"><img class="img-fluid rounded shadow" src="{{url_for('static', filename='img/image.jpg')}}" width="3840" height="" alt="Western Corp">
+			</div>
+		</div><!-- /col -->
+		<div class="col-md-6 col-xl-5">
+			<div class="lc-block mb-3">
+				<div editable="rich">
+					<h1 class="fw-bolder display-3">Western Corporation</h1>
+				</div>
+			</div><!-- /lc-block -->
+			<!-- /lc-block -->
+
+
+			<div class="lc-block mb-4">
+				<div editable="rich">
+					<p class="lead">Weston Corporation is not just a Football Shop, We're more than a Community and United As Ever.</p>
+
+				</div>
+			</div>
+			<div class="lc-block">
+				<a class="btn btn-lg btn-primary" href="#" role="button">Discover Now</a>
+			</div><!-- /lc-block -->
+		</div><!-- /col -->
+	</div>
 </div>
+
+        </section>
+
+        <section>
+            <div class="container py-5 mb-5">
+                <div class="container my-5 text-center">
+                    <h2>What We Do?</h2>
+                <p class="text-muted mb-5">A sub-heading should come here :)</p>
+                </div>
+                <div class="row ">
+                    <div class="col-sm-6 col-lg-4 mb-3">
+                        <i class="fa fa-users" style="font-size:48px"></i>
+                        <h6>Tempor aute occaecat</h6>
+                        <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-3">
+                        <i class="fa fa-calendar" style="font-size:48px"></i>
+                        <h6>Tempor aute occaecat</h6>
+                        <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-3">
+                            <i class="fa fa-futbol" style="font-size:48px"></i>
+                            <h6>Tempor aute occaecat</h6>
+                            <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                    </div>
+          </div>
+          <div class="row">
+                <div class="col-sm-6 col-lg-4 mb-3">
+                    <i class="fa fa-rupee" style="font-size:48px"></i>
+                    <h6>Tempor aute occaecat</h6>
+                    <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-3">
+                    <i class="fa fa-rupee" style="font-size:48px"></i>
+                    <h6>Tempor aute occaecat</h6>
+                    <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-3">
+                        <i class="fa fa-rupee" style="font-size:48px"></i>
+                        <h6>Tempor aute occaecat</h6>
+                        <p class="text-muted">Tempor aute occaecat pariatur esse aute amet.</p>
+                </div>
+      </div>
+        </div>
+      </section>
+
+      <div class="py-5 bg-light">
+          <div class="container my-5 text-center">
+                    <h2>What We Do?</h2>
+                <p class="text-muted mb-5">A sub-heading should come here :)</p>
+          </div>
+          <div class="container">
+              <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <div class="cards-wrapper">
+                          <div class="card">
+                            <img src="{{url_for('static', filename='img/kits.jpg')}}" class="card-img-top" alt="Product Img">
+                            <div class="card-body">
+                              <h5 class="card-title">Products</h5>
+                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                              <a href="#" class="btn btn-primary">Take Me There</a>
+                            </div>
+                          </div>
+                          <div class="card">
+                            <img src="{{url_for('static', filename='img/vouchers.jpg')}}" class="card-img-top" alt="Vouchers Img">
+                            <div class="card-body">
+                              <h5 class="card-title">Vouchers</h5>
+                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                              <a href="#" class="btn btn-primary">Take Me There</a>
+                            </div>
+                          </div>
+                          <div class="card">
+                            <img src="{{url_for('static', filename='img/events.jpg')}}" class="card-img-top" alt="Events Img">
+                            <div class="card-body">
+                              <h5 class="card-title">Events</h5>
+                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                              <a href="#" class="btn btn-primary">Take Me There</a>
+                            </div>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+          </div>
+      </div>
+
+
+    <div class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>Western Corp</h5>
+                        <ul class="contact-info list-unstyled">
+                            <li><a href="#" class="text-dark">hs</a></li>
+                            <li><a href="#" class="text-dark">+00 000 00 000</a></li>
+                        </ul>
+                    </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5>Information</h5>
+                        <ul class="links list-unstyled">
+                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
+                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
+                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
+                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
+                        </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5>More Info</h5>
+                        <ul class="links list-unstyled">
+                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
+                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
+                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
+                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
+                        </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="py-3 bg-dark text-white">
+        <div class="container">
+            <div class="row">
+                <div class="text-center">
+                    <p class="mb-md-0">(C) Western Corporation. All rights reserved. </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

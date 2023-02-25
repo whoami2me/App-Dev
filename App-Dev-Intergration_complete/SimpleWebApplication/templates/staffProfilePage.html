@@ -1,0 +1,74 @@
+{% extends "baseStaff.html" %}
+{% block title %}{{ staff.get_first_name() }}'s Profile{% endblock %}
+{% block silly %}Account Management{% endblock %}
+
+{% block content %}
+{% if session['membership'] == 'Employee' or session ['membership'] == 'Admin'%}
+{% from "includes/_formHelper.html" import render_field %}
+<h5 class="display-5">{{ staff.get_first_name() }}'s Profile</h5>
+<hr>
+<form method="POST" action="" enctype="multipart/form-data">
+  <div class="preview-imgPP">
+	  <img id="preview" src="/profimg/{{ staff.get_image() }}" width="175px" height="175px" class="rounded-circle" alt="Image preview" />
+  </div>
+  <div class="form-group">
+	  {{ render_field(form.image, id="fileinput" , class="form-control", **{'onchange':'previewFile()'}) }}
+  </div>
+  <div class="row">
+	<div class="col-md-6">
+		<div class="form-group">
+			{{ render_field(form.first_name, class="form-control") }}
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			{{ render_field(form.last_name, class="form-control") }}
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			{{ render_field(form.email, class="form-control") }}
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			{{ render_field(form.phone_number, class="form-control") }}
+		</div>
+	</div>
+    <div class="col-md-6">
+	    <div class="form-group">
+			{{ render_field(form.address1, class="form-control") }}
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			{{ render_field(form.address2, class="form-control") }}
+		</div>
+	</div>
+    <div class="form-group row">
+		<div class="col-md-6">
+			Unit Number {{ render_field(form.floor_number, class="form-control") }}
+		</div>
+	    <div class="col-md-6">
+			{{ render_field(form.unit_number, class="form-control")}}
+	    </div>
+	</div>
+    <div class="col-md-6">
+		<div class="form-group">
+			{{ render_field(form.postal_code, class="form-control") }}
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			{{ render_field(form.gender, class="form-control") }}
+		</div>
+	</div>
+  </div>
+  <br>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+{% else %}
+<h1>Invalid Access!</h1>
+{% endif %}
+{% endblock %}
+

@@ -1,10 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}Login Page{% endblock %}
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 <head>
-	<title>Login Page</title>
    <!--Made with love by Mutiullah Samim -->
 
 	<!--Bootsrap 4 CDN-->
@@ -22,6 +21,31 @@
 </head>
 <body>
 <form method="POST" action="">
+	{% with errors = get_flashed_messages(category_filter=["error"]) %}
+        {% if errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in errors %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		{% endif %}
+        {% endwith %}
+
+	{% with fails = get_flashed_messages(category_filter=["fail"]) %}
+        {% if fails %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in fails %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endwith %}
 <div class="container">
 	<div class="d-flex justify-content-center h-100">
 		<div class="card">
@@ -54,9 +78,6 @@
 				<div class="d-flex justify-content-center links">
 					Don't have an account?<a href="/createCustomer">Sign Up</a>
 				</div>
-				<div class="d-flex justify-content-center">
-					<a href="#">Forgot your password?</a>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -64,3 +85,4 @@
 </form>
 </body>
 {% endblock %}
+
