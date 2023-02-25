@@ -38,11 +38,13 @@
                                       </div>
                                       <a href="" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
 
-                                            {% if online.get_name() in regeve_list %}
-                                            <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
-                                            {% else %}
-                                            <a href="/registerEvents/{{ online.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register</a>
-                                            {% endif %}
+                                        {% if online.get_name() in regeve_list %}
+                                        <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
+                                        {% elif user == 'client' %}
+                                        <a href="/login" class="btn btn-outline-primary rounded-0 float-end">Login First</a>
+                                        {% else %}
+                                        <a href="/registerEvents/{{ online.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register</a>
+                                        {% endif %}
                                     </div>
                                   </div>
                             </div>
@@ -95,8 +97,11 @@
               </div>
               <a href="" class="btn btn-outline-primary rounded-0 float-end">View Details</a>
 
+
                 {% if online.get_name() in regeve_list %}
                 <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
+                {% elif user == 'client' %}
+                <a href="/login" class="btn btn-outline-primary rounded-0 float-end">Login First</a>
                 {% else %}
                 <a href="/registerEvents/{{ online.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register</a>
                 {% endif %}
@@ -127,9 +132,12 @@
 
                 {% if offline.get_name() in regeve_list %}
                 <a href="#" class="btn btn-outline-primary rounded-0 float-end">Registered</a>
+                {% elif user == 'client' %}
+                <a href="/login" class="btn btn-outline-primary rounded-0 float-end">Login First</a>
                 {% else %}
                 <a href="/registerEvents/{{ offline.get_name() }}" class="btn btn-outline-primary rounded-0 float-end">Register</a>
                 {% endif %}
+
 
             </div>
           </div>

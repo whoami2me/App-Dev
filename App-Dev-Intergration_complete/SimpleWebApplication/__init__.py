@@ -22,6 +22,11 @@ geolocator = Nominatim(user_agent='app')
 
 @app.route('/')
 def user_home():
+
+    if session.get('name') is not None:
+        print(session['name'])
+    else:
+        session['name'] = 'client'
     return render_template('loginevents.html')
 
 @app.route('/AdminDashboard')
@@ -50,7 +55,7 @@ def admin_home():
 
     return render_template('home.html', events= json.dumps(events), reg_pax = json.dumps(registered))
 
-    
+
 @app.route('/contactUs')
 def contact_us():
     return render_template('contactUs.html')
@@ -66,7 +71,8 @@ def events():
     online_list = []
     for key in online_dict:
         online = online_dict.get(key)
-        if (online.get_date() <= date.today() <= online.get_end_date()) and (online.get_reg_status() == 'Active' or online.get_reg_status() == 'A'):
+        if (online.get_date() <= date.today() <= online.get_end_date()) and (
+                online.get_reg_status() == 'Active' or online.get_reg_status() == 'A'):
             online_list.append(online)
 
     offline_dict = {}
@@ -77,24 +83,29 @@ def events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
-        if (offline.get_date() <= date.today() <= offline.get_end_date()) and (offline.get_reg_pax() < offline.get_pax()) and (offline.get_reg_status() == 'Active' or offline.get_reg_status() == 'A'):
+        if (offline.get_date() <= date.today() <= offline.get_end_date()) and (
+                offline.get_reg_pax() < offline.get_pax()) and (
+                offline.get_reg_status() == 'Active' or offline.get_reg_status() == 'A'):
             offline_list.append(offline)
-
-    regeve_dict = {}
-    db = shelve.open('regeve.db', 'r')
-    regeve_dict = db['Register_Events']
-    db.close()
 
     regeve_list = []
 
-    for key in regeve_dict:
-            regeve = regeve_dict.get(key)
-            if regeve.get_first_name() == session['name']:
-                regeve_list.append(regeve.get_event_name())
+    if session['name'] != 'client':
 
-    print(regeve_list)
+        regeve_dict = {}
+        db = shelve.open('regeve.db', 'r')
+        regeve_dict = db['Register_Events']
+        db.close()
 
-    return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list, regeve_list=regeve_list)
+
+        for key in regeve_dict:
+                regeve = regeve_dict.get(key)
+                if regeve.get_first_name() == session['name']:
+                    regeve_list.append(regeve.get_event_name())
+
+        print(regeve_list)
+
+    return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list, regeve_list=regeve_list, user=session['name'])
 
 @app.route('/viewRegisteredEvents')
 def view_regeve():
@@ -135,7 +146,7 @@ def create_online():
 
         online = OnlineEvents.OnlineEvents(create_event_form.name.data, create_event_form.image.data.filename, create_event_form.description.data,
                                            create_event_form.date.data, create_event_form.end_date.data ,create_event_form.location.data,'Active', 'Active', today)
-        online_dict[online.get_event_id()] = online 
+        online_dict[online.get_event_id()] = online
         db['Online'] = online_dict
 
         db.close()
@@ -463,6 +474,8 @@ def login():
 def logout():
     session.pop('Customer', None)
     session.pop('Staff', None)
+    session.pop('name', None)
+
     return redirect(url_for('user_home'))
 
 @app.route('/profile/<int:id>/', methods=['GET', 'POST'])
@@ -1321,7 +1334,7 @@ def single_product(id):
             return render_template('singleProduct.html', product=p, form=purchase_product_form)
         else:
             totalsold = product_id.get_product_sold() + purchase_product_form.qty.data
-            product_id.set_product_sold(totalsold) 
+            product_id.set_product_sold(totalsold)
             qtyremaning = product_id.get_product_qty() - purchase_product_form.qty.data
             product_id.set_product_qty(qtyremaning)
         db['Products'] = products_dict
@@ -1332,10 +1345,10 @@ def single_product(id):
             purchaseproducts_dict = db['purchaseProducts']
         except:
             print("Error in retrieving Product from database")
-        
+
         if product_id.get_product_saleoption() == 'Active':
             price = product_id.get_product_saleprice()
-            price2 = product_id.get_product_saleprice2() 
+            price2 = product_id.get_product_saleprice2()
         else:
             price = "${:.2f}".format(product_id.get_product_price())
             price2 = "${}".format(product_id.get_product_price())
@@ -1344,12 +1357,12 @@ def single_product(id):
         calctotalprice = float(numericprice)*float(purchase_product_form.qty.data)
         totalprice = "${:.2f}".format(calctotalprice)
         custpurchase = purchaseProduct.purchaseProduct(product_id.get_product_name(),product_id.get_product_id(),price,session['Customer'],purchase_product_form.qty.data,product_id.get_product_image(),product_id.get_product_desc(),totalprice)
-        
+
         purchaseproducts_dict[custpurchase.get_tempvar()] = custpurchase
 
         db['purchaseProducts'] = purchaseproducts_dict
         db.close()
-        return render_template('purchaseProduct.html',product = p, pqty = purchase_product_form.qty.data) 
+        return render_template('purchaseProduct.html',product = p, pqty = purchase_product_form.qty.data)
     return render_template('singleProduct.html', product=p, form=purchase_product_form)
 
 @app.route('/viewpurchaseProduct')
@@ -1361,14 +1374,14 @@ def viewpurchaseproduct():
     customer_list = []
 
 
-    productdict = {}    
+    productdict = {}
     db = shelve.open('product.db','r')
     productdict = db['Products']
     db.close()
 
     for key in purchaseproductdict: #Key is tempvar (uuid)
         purchaseproduct = purchaseproductdict.get(key)
-        if purchaseproduct.get_pProduct_userid() == session['Customer']: 
+        if purchaseproduct.get_pProduct_userid() == session['Customer']:
             customer_list.append(purchaseproduct)
 
     return render_template('viewpurchaseproduct.html',customer = customer_list)
