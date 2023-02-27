@@ -21,8 +21,7 @@ def user_home():
 @app.route('/AdminDashboard')
 def admin_home():
     return render_template('home.html')
-
-
+    
 @app.route('/contactUs')
 def contact_us():
     return render_template('contactUs.html')
@@ -38,7 +37,7 @@ def events():
     online_list = []
     for key in online_dict:
         online = online_dict.get(key)
-        if online.get_date() < date.today():
+        if online.get_date() <= date.today() <= online.get_end_date():
             print('yes')
             online_list.append(online)
 
@@ -50,10 +49,9 @@ def events():
     offline_list = []
     for key in offline_dict:
         offline = offline_dict.get(key)
-        if offline.get_date() < date.today():
+        if offline.get_date() <= date.today() <= offline.get_end_date():
             print('yes')
             offline_list.append(offline)
-
 
 
     return render_template('viewEvents.html', online_list=online_list, offline_list=offline_list)
