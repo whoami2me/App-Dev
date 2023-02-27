@@ -75,30 +75,6 @@ def view_regeve():
     return render_template('userRegisteredEvents.html', regeve_list=regeve_list, count=len(regeve_list))
 
 
-#test route for counting the number of people who registered
-'''@app.route('/viewEE')
-def view_regev():
-
-
-    regeve_dict = {}
-    db = shelve.open('regeve.db', 'r')
-    regeve_dict = db['Register_Events']
-    db.close()
-
-    count = 0
-    regeve_list = []
-    for key in regeve_dict:
-        regeve = regeve_dict.get(key)
-        if regeve.get_event_name() == 'messi':
-            count += 1
-            regeve_list.append(regeve)
-
-    print(count)
-
-    return render_template('test.html', regeve_list=regeve_list, count_regeve=len(regeve_list))
-'''
-
-
 @app.route('/createOnlineEvent', methods=['GET', 'POST'])
 def create_online():
 
